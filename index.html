@@ -1,0 +1,128 @@
+<head>
+    <meta charset="utf-8">    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">    
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css"> -->    
+    
+    
+    <!-- Resources -->
+    <script src="https://cdn.jsdelivr.net/npm/ramda@0.28.0/dist/ramda.min.js"></script>    
+    <script type="module" src="https://vanjs.org/code/van-0.11.10.nomodule.min.js"></script>       
+    
+    <script type="module" src="./display.js"></script>    
+    <style>
+     
+
+     #selected-country, #selected-region {
+         font-size: 1.0em;
+         font-weight: bold;
+     }
+
+     #header {
+         /* background-color: olive; */
+         /* background-color: #e1f2f1; */
+         border-style: solid;
+         border-width: 2px;
+         /* color: white; */
+         /* padding: 0.5em 0.5em 0.5em 1.5em; */
+         text-align: center;
+         /* margin-left: 1em; */
+         /* margin-right: 1em */
+     }
+     
+
+     #regions {
+         background-color: lightgray;
+         text-align: center;
+         /* font-weight: bold; */
+     }
+
+     #countries {
+         background-color: #f5f6f7;
+         text-align: center;
+         /* font-weight: bold; */
+     }
+
+     #content {
+         text-align: center;         
+     }
+
+     @media screen and (min-width: 480px) {
+         #content, #regions-and-countries {
+             border-style: solid;
+             border-width: 1px;
+             border-radius: 15px;
+             padding: 1em;
+         },
+         
+     }
+
+     #regions a {
+         margin-left: 0.5em;
+         margin-right: 0.5em;
+         /* color: white; */
+     }
+
+     #ulitsa  a {
+         font-size: 1.6em;
+         font-weight: bold;
+         font-family: "Lucida Console";
+         letter-spacing: 0.65rem;
+     }
+
+     .person, .country {
+         margin-right: 15px;         
+     }
+
+     sup {
+         /* font-weight: bold; */
+         /* font-size: 60%; */
+         color: dimgray
+     }
+
+     a {
+         text-decoration: none;
+         color: black
+     }
+
+     #github {
+         text-align: right;
+     }
+
+     #totals {
+         display: flex;
+         justify-content: space-between;
+     }
+     
+    </style>
+</head>
+
+
+<body>
+    <div id="totals">        
+        <span id="github">Github</span>
+        <span id="search"></span>
+    </div>
+    
+    <div id="header">
+        <div id="ulitsa"></div>
+        <!-- <div id="summary">Eponymous street names database</div>         -->
+        <!-- <div id="summary">Eponymous street names and landmarks database</div>         -->
+        <!-- <div id="summary">Popular eponymous street names worldwide</div>         -->
+        <div id="summary">Eponymous streets and landmarks frequency worldwide</div>        
+    </div>
+    
+    <div id="regions-and-countries">
+        <div id="regions"></div>
+        <div id="countries"></div>
+    </div>
+
+    
+    <div id="content">        
+        <div id="persons"></div>
+    </div>
+    
+</body>
+
+
