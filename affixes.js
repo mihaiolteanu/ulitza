@@ -118,7 +118,7 @@ const affixes = {
   tanzania               : / (road|street)$/i,
   thailand               : /^(ถนน|moo)| (road)$/i,
   tunisia                : /نهج|شارع/i,
-  turkey                 : /(caddesi|bulvarı|sokağı|sokak|cd.|cd|cad.)$/i,    
+  turkey                 : /^([0-9]+.*)|(yolu |)(caddesi|bulvarı|bulv.|blv.|blv|sokağı|sokak|cd.|cd|cad.|yolu|փողոց|խճուղի)$/i,
   turkmenistan           : / (köçesi|şaýoly|ýoly)$/i,
   uganda                 : /^(jinja|mbale) | (road|street|highway|jinja|mbale)$/i,
   ukraine                : /^(вулиця|улица|проспект) | (вулиця|улица|бульвар|провулок|проспект|шоссе)$/i,

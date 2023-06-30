@@ -4688,19 +4688,34 @@ const equivalents = {
     ["Avenue des Martyrs",  "الشهداء"],
     ["منجي سلي",            "المنجي سليم"]],
 
-  
+  // TR
   "turkey": [
-    ["Ahmet Yesevi",        "Hoca Ahmet Yesevi"],
-    ["Atatürk",             "Mustafa Kemal Atatürk",
-                            "Mustafa Kemal"],
-    ["Fatih",               "Fatih Sultan Mehmet"],
-    ["Fevzi Çakmak",        "Mareşal Fevzi Çakmak"],
-    ["Güneş",               "Turan Güneş"],
-    ["Yavuz Sultan Selim",  "Yavuz Selim",
-                            "Sultan Selim"],
-    ["Yıldırım Beyazıt",    "Yıldırım"],
-    ["Ziya Gökalp",         "Gökalp"],
-    ["İnönü",               "İsmet İnönü"]
+    ["Ahmet Yesevi",           "Hoca Ahmet Yesevi"],
+    ["Atatürk",                "Mustafa Kemal Atatürk",
+                               "Mustafa Kemal",
+                               "Mustafa Kemal Paşa",
+                               "Gazi Mustafa Kemal"],
+    ["Fatih",                  "Fatih Sultan Mehmet"],
+    ["Fevzi Çakmak",           "Mareşal Fevzi Çakmak",
+                               "Fevzi Paşa",
+                               "Fevzipaşa"],
+    ["Güneş",                  "Turan Güneş"],
+    ["Yavuz Sultan Selim",     "Yavuz Selim",
+                               "Sultan Selim"],
+    ["Yıldırım Beyazıt",       "Yıldırım"],
+    ["Ziya Gökalp",            "Gökalp"],
+    ["İnönü",                  "İsmet İnönü",
+                               "İsmet Paşa"],
+    ["Necip Fazıl Kısakürek",  "Necip Fazıl"],
+    ["Muammer Aksoy",          "Prof. Muammer Aksoy"],
+    ["Osman Gazi",             "Osmangazi"],
+    ["Yılmaz Güney",           "Güney"],
+    ["Gazi Osman Paşa",        "Gazi Paşa"],
+    ["Mehmet Akif Ersoy",      "Mehmet Akif"],
+    ["Եղիշե Չարենցի",          "Չարենցի"],
+    ["Talat Paşa",             "Talatpaşa"],
+    ["Adnan Menderes",         "Menderes"],
+    ["Mithatpaşa",             "Mithat Paşa"]
   ],
   
 

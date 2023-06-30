@@ -1,5 +1,6 @@
-node_modules/*
-osm_data/*
+node_modules
+osm_data
 package.json
 package-lock.json
-out/raw/*
+out/unsorted
+.log
