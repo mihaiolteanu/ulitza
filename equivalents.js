@@ -4809,8 +4809,10 @@ const equivalents = {
   
   "venezuela": [
     ["Andrés Bello",  "Andres Bello"],
+    ["Ayacucho",      "Gran Mariscal de Ayacucho"],
     ["Bolívar",       "Bolivar",
-                      "Simón Bolívar"]],
+                      "Simón Bolívar"]
+  ],
 
   
   "vietnam": [
