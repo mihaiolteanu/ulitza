@@ -123,7 +123,7 @@ const affixes = {
   uganda                 : /^(jinja|mbale) | (road|street|highway|jinja|mbale)$/i,
   ukraine                : /^(вулиця|улица|проспект) | (вулиця|улица|бульвар|провулок|проспект|шоссе)$/i,
   uruguay                : /^(calle|avenida|camino|general|bulevar) (de los |los |del |general|)|^(las|los|general) /i,
-  us                     : /^(east|west|north|south)|(street|road|avenue|drive|lane|ridge|court| hill| highway| way| boulevard| view| place|side)$/ig,
+  us                     : /^(east|west|north|south|via)|([0-9]+.*)|^((avenida|paseo|calle|rue) (de la|de las|de l'|del|de|du|la|))|(street|road|avenue|drive|lane|ridge|court| hill| highway| way| boulevard| view| place|side| circle| trails| trail| rd| parkway)( east| west| north| south|)$/ig,
   uzbekistan             : /( (shoh |)(ko'chasi|ko'shesi|ko‘chasi|shoh|maydoni))$/ig,
   venezuela              : /^(calle|avenida|carretera|av.|intercomunal|autopista) ([0-9]* |intercomunal |)|^([0-9]*(a |ª | |)(transversal|av.) (de los| los| de |))/i,
   vietnam                : /^(Đường|Phố|Cầu) /i,  

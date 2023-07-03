@@ -4775,7 +4775,29 @@ const equivalents = {
     ["Martin Luther King Jr",  "Martin Luther King",
                                "Martin Luther King Junior"],
     ["Warren",                 "Harding"],
-    ["Wilson",                 "Woodrow"]
+    ["Wilson",                 "Woodrow"],
+    ["Reagan",                 "Ronald Reagan",
+                               "Ronald W Reagan"
+    ],
+    ["Washington",             "George Washington"],
+    ["Lewis and Clark",        "Lewis And Clark"],
+    ["Saint John",             "Saint Johns"],
+    ["Saint Paul",             "Saint Pauls"],
+    ["Saint Marks",            "Saint Mark",
+                               "Saint Mark's"],
+    ["Martin Luther King Jr",  "Dr Martin Luther King Jr",
+                               "Doctor Martin Luther King Junior",
+                               "Martin Luther King Jr.",
+                               "Dr. Martin Luther King Jr.",
+                               "Dr Martin Luther King",
+                               "Martin Luther King, Junior",
+                               "Doctor Martin Luther King",],
+    ["Saint Luke",             "Saint Lukes",
+                               "Saint Luke's"],
+    ["Lewis",                  "Francis Lewis"],
+    ["Saint Michael",          "Saint Michaels"],
+    ["Columbus",               "Christopher Columbus"],
+    ["Da Vinci",               "Davinci"]
   ],
 
   
