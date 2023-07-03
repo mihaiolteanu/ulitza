@@ -122,7 +122,7 @@ const affixes = {
   turkmenistan           : / (köçesi|şaýoly|ýoly)$/i,
   uganda                 : /^(jinja|mbale) | (road|street|highway|jinja|mbale)$/i,
   ukraine                : /^(вулиця|улица|проспект) | (вулиця|улица|бульвар|провулок|проспект|шоссе)$/i,
-  uruguay                : /^(calle|avenida|camino|general|bulevar) (de los |los |del |general|)|^(las|los|general) /i,
+  uruguay                : /^(calle|avenida|camino|general|bulevar|rambla) (de los |los |del |general|)|^(las|los|general)|^INE .*|^ruta [0-9]*( |)(perimetral|interbalnearia|)|^ute .+|^oficial [0-9]+/i,
   us                     : /^(east|west|north|south|via)|([0-9]+.*)|^((avenida|paseo|calle|rue) (de la|de las|de l'|del|de|du|la|))|(street|road|avenue|drive|lane|ridge|court| hill| highway| way| boulevard| view| place|side| circle| trails| trail| rd| parkway)( east| west| north| south|)$/ig,
   uzbekistan             : /( (shoh |)(ko'chasi|ko'shesi|ko‘chasi|shoh|maydoni))$/ig,
   venezuela              : /^(calle|avenida|carretera|carrera|av.|intercomunal|autopista) ([0-9]* |intercomunal |principal |)(de los |los |de |)|^([0-9]*(a |ª | |)(transversal|av.) (de los| los| de |))/i,
