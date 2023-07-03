@@ -4661,6 +4661,11 @@ const equivalents = {
     ["Gabriel Miró",                   "Gabriel Miro"                  ]
   ],
 
+  
+  "suriname": [
+    
+  ],
+
   // SV
   "sweden": [
     
