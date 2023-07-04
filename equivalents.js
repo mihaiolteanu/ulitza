@@ -1660,9 +1660,12 @@ const equivalents = {
   ] ,
 
   "haiti-and-domrep": [
-    ["Duarte",                "Juan Pablo Duarte"],
-    ["Sanchez",               "Maria Trinidad Sanchez", "Sánchez"],
-    ["Toussaint Louverture",  "Louverture"]
+    ["Antonio Guzman Fernandez",  "Antonio Guzmán"],
+    ["Colón",                     "Colon"],
+    ["Duarte",                    "Juan Pablo Duarte"],
+    ["Gregorio Luperón", ]
+    ["Sanchez",                   "Maria Trinidad Sanchez", "Sánchez"],
+    ["Toussaint Louverture",      "Louverture"]    
   ],
   
 
