@@ -3320,10 +3320,16 @@ const equivalents = {
 
   
   "paraguay": [
-    ["Díaz",                             "José Eduvigis Díaz"],
-    ["Mariscal Estigarribia",            "Mariscal José Félix Estigarribia"],
-    ["Mariscal Francisco Solano López",  "Mariscal López"],
-    ["San Martín",                       "José de San Martín"]
+    ["Andrés Guacurarí",                  "Comandante Andresito"],
+    ["Carlos Antonio López",              "Carlos Antônio López"],
+    ["Díaz",                              "José Eduvigis Díaz"],
+    ["Eusebio Ayala",                     "Doctor Eusebio Ayala"],
+    ["Juan Bautista Alberdi",             "Alberdi"],
+    ["Mariscal Estigarribia",             "Mariscal José Félix Estigarribia"],
+    ["Mariscal Francisco Solano López",   "Mariscal López",
+                                          "mariscal Francisco Solano López"],
+    ["San Martín",                        "José de San Martín"],    
+    ["San Roque González de Santa Cruz",  "Roque González"]
   ],
 
   
