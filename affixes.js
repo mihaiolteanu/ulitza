@@ -48,7 +48,7 @@ const affixes = {
   germany                : /((-|)(straße|weg|platz|allee|gasse))$|( ring|-ring| siedlung|-siedlung|-hof)$|^(am|im) |^((an|auf|unterer|untere|unter|oberer|oberes|obere|in|alter|alte|zum|zur|zu|in|im) (der |den |dem |))|^(straße (der |des |zum |am |))/ig,
   "great-britain"        : /^(the|west|western|north|east|eastern|south)|('s |)(street|road|lane|avenue|hill|way|place|park|square|drive|crescent|court|gardens|terrace|grove|close|walk|end|fields|view|bridge|cottages|parade|mews|hall|side|north|east|west|south|high|gate)$/ig,
   greece                 : /^(Λεωφόρος) /i,
-  guatemala              : /^([0-9]*(a | |)(calle|carretera|avenida|calzada)( zona[1-9]*|))| avenida| calle/i,
+  guatemala              : /^([0-9]*(a | |)(calle|carretera|avenida|calzada)( a |)( zona[1-9]*|))| avenida| calle|[0-9]*$/i,
   guyana                 : / (road|highway|street|drive)$/i,
   "haiti-and-domrep"     : /^(avenida|calle|carretera|autopista|boulevard|rue) /i,
   honduras               : /^(calle|carretera (del |))/i,

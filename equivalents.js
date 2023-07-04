@@ -1657,8 +1657,12 @@ const equivalents = {
                                        "Αλέξανδρου Παπαναστασίου"],
     ["Σολωμού",                        "Διονυσίου Σολωμού"],
     ["Στρατάρχου Αλέξανδρου Παπάγου",  "Παπάγου"]
-  ] ,
+  ],
 
+
+  "guatemala": [],
+
+  
   "haiti-and-domrep": [
     ["Antonio Guzman Fernandez",  "Antonio Guzmán"],
     ["Colón",                     "Colon"],
