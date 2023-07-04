@@ -77,7 +77,7 @@ const affixes = {
   macedonia              : /^(Булевар|Улица) /i,
   "malaysia-singapore-brunei" : /^(jalan) | (street( [0-9]*|)$)/i,
   malta                  : /^(triq) (il-|)/i,
-  mexico                 : /^(calle|avenida|boulevard|calzada| sur|av(.|)|blvd|blvd.|paseo| (de los|de las|de la|del|de|) )|^(de los|de las|de la|del|de) |( sur| oriente)$/i,
+  mexico                 : /^(calle|avenida|boulevard|carretera|periférico|carr.|vía|calzada| sur|av.|av|blvd.|blvd|paseo|prolongación|plaza|plan) (Vía |via |)(de los|de las|de la|del|de|a |)|^(de los|de las|de la|del|de) | (sur|oriente|poniente)$/ig,
   moldova                : /^(strada|stradela|aleea|bulevardul|calea|drumul|piața|intrarea|șoseaua|улица|переулок|ул.|str.) |(переулок|улица)$/i,
   monaco                 : /^(boulevard|avenue|rue|chemin|quai|place) (de la|des|de l'|de|)/i,
   mongolia               : /( зам| өргөн чөлөө| гудамж|'s street)$/i,
