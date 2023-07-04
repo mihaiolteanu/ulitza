@@ -792,6 +792,9 @@ const equivalents = {
     ["Velasco Ibarra",           "Ibarra"],
     ["Vicente Rocafuerte",       "Rocafuerte"]
   ],
+
+
+  "el-salvador": [],
   
 
   "estonia": [
