@@ -36,7 +36,7 @@ const affixes = {
   cyprus                 : / (avenue|street|ave.)$/i,
   cuba                   : /^(calle|avenida|carretera) | (avenida)$/i,
   denmark                : /^(gammel|vester|vestre|Østre|Øster|nordre|Nørre)|(vejen|gårdsvej|vej|gade|vænget|vang| alle| lande| strand|have|høj|parken|mose|holm|gårds|gård|minde| allé| boulevard|borg)$/i,
-  ecuador                : /^(avenida|calle|vía|via) /i,
+  ecuador                : /^(avenida|calle|vía|via|troncal) (de la |de las |del |a |)/i,
   egypt                  : /^(نهج|شارع|طريق)/i,
   "el-salvador"          : /^([0-9]*(a |ª | |)(calle|carretera|avenida|boulevard|pasaje) (el |del |))| avenida| calle|(norte)$/ig,  
   estonia                : / (tee|mnt|põik|pst|allee)$/i,
