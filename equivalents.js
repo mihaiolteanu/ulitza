@@ -3358,6 +3358,8 @@ const equivalents = {
     ["Victoria", "Queen"]
   ],
 
+
+  "nicaragua": [],
   
   "norway": [
     ["Aasmund Vinjes",    "Åsmund Vinjes"],

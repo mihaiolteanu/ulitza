@@ -88,7 +88,7 @@ const affixes = {
   nepal                  : / (highway|road|राज्मार्ग्|rajmarg)$/i,
   netherlands            : /^(oude|korte|het) |(-| |)(straat|weg|laan|plein|kade|pad|dijk|park|plantsoen|singel|hof|zuid)$/i,
   "new-zealand"          : / (road|street|avenue|lane|place|drive)$/i,
-  nicaragua              : /^(carretera|avenida|calle) /i,
+  nicaragua              : /^[1-9]*(a | |)(carretera|avenida|calle) /i,
   nigeria                : / (way|road|crescent|avenue|street|ave|st)$/i,
   norway                 : /^(gamle|nedre|Øvre)|(veien|vegen|gata|gaten| gate| vei| veg)$/i,
   pakistan               : /^(street) | (road|highway|روڈ)$/i,
