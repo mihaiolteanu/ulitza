@@ -521,6 +521,12 @@ const equivalents = {
     ["Latorre",             "Juan José Latorre"]
   ],
 
+
+  "costa-rica": [
+    ["Fernández Oreamuno",  "Próspero Fernández"],
+    ["General Cañas",       "José María Cañas"]    
+  ],
+
   
   "croatia": [
     ["Alojzija Stepinca",          "Kardinala Alojzija Stepinca"],

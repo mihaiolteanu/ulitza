@@ -30,7 +30,7 @@ const affixes = {
   china                  : /(路|道|北|南|东|街)$/i,
   colombia               : /^avenida carrera |^(carrera|calle|avenida) /i,
   "congo-democratic-republic": /^(avenue|boulevard|avenue|rue|route) (du |de la |de l'|des |)/i,
-  "costa-rica"           : /^(calle|avenida|carretera|autopista|boulevard) /i,
+  "costa-rica"           : /^(calle|avenida|carretera|autopista|boulevard|radial|corredor) (interamericana|pacífica|)|.* [0-9]+$|^(avenida|calle|este|paseo|rincon|ruta|boulevard (de las |de la |la |las |del ))/i,
   croatia                : /^(ulica|trg|dr.|obala|cesta|put|bana) (kralja |dr. |bana |kneza |)|^(kralja|bana|kneza) | (ulica|cesta|trg)$/i,
   "czech-republic"       : /^(náměstí|nám.|za|U|V|K|nad|ke|pod|třída|na|ve) |( náměstí|nám.|ská| třída| alej| sady)$|((-|)(straße))$/i,
   cyprus                 : / (avenue|street|ave.)$/i,
