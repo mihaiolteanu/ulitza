@@ -522,6 +522,9 @@ const equivalents = {
   ],
 
 
+  "colombia": [],
+
+
   "costa-rica": [
     ["Fernández Oreamuno",  "Próspero Fernández"],
     ["General Cañas",       "José María Cañas"]    
