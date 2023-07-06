@@ -26,7 +26,7 @@ const affixes = {
   bulgaria               : /^(бул.|бул|Св. Св.|Св.|ул.|пл.)| (шосе|път)/i,
   cameroon               : /^(rue|route|boulevard) (de |du |de la |)| (avenue|street)$/i,
   canada                 : /^(rue|highway|county road|chemin|rang) (de la |des |de l'|du |)| (street|avenue|road|rang)$/i,
-  chile                  : /^(avenida|pasaje|las|los|almirante) /i,
+  chile                  : /^(gran |)(avenida|pasaje|almirante|diagonal|camino|puerto|lago|isla|volcán|alcalde|calle|ruta|las|los) (central |alcalde |[0-9]+ |)|^(cruce|corral) .*| (sur|norte)$/ig,
   china                  : /(路|道|北|南|东|街)$/i,
   colombia               : /^avenida carrera |^(carrera|calle|avenida|transversal|calle|vía) ([0-9]*)| (sur|bis|norte)$/ig,
   "congo-democratic-republic": /^(avenue|boulevard|avenue|rue|route) (du |de la |de l'|des |)/i,
