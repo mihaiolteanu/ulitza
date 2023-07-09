@@ -25,7 +25,7 @@ const affixes = {
   burundi                : /^(avenue|route|boulevard|chausseée|chausée|chaussée|blvd) (de la |de l'|de |du |des |de |)/i,
   bulgaria               : /^(бул.|бул|Св. Св.|Св.|ул.|пл.)| (шосе|път)/i,
   cameroon               : /^(rue|route|boulevard) (de |du |de la |)| (avenue|street)$/i,
-  canada                 : /^(rue|highway|county road|chemin|rang) (de la |des |de l'|du |)| (street|avenue|road|rang)$/i,
+  canada                 : /^([0-9]+(e|er|ere|th|) |)(rue|highway|boulevard|avenue|autoroute|county road|chemin|rang|old|route|north|south|east|west|montée|lac-|lac|bay) (de la |des |de l'|du |de |)| (street|avenue|highway|way|road|boulevard|line|rang|ouest|est|north|nord|south|sud|rd.|rd|drive|SE|NW|NE|SW|station|lane|place|run|crescent|court|perimeter|lake|river|creek)( north| south| east| west| SE| SW| NW| NE|)$|^[a-z][a-z]-[0-9]+.*|^[0-9]+.*|^township .*|^range road .*| (.*[0-9]+)$/ig,
   chile                  : /^(gran |)(avenida|pasaje|almirante|diagonal|camino|puerto|lago|isla|volcán|alcalde|calle|ruta|las|los) (central |alcalde |[0-9]+ |)|^(cruce|corral) .*| (sur|norte)$/ig,
   china                  : /(路|道|北|南|东|街)$/i,
   colombia               : /^avenida carrera |^(carrera|calle|avenida|transversal|calle|vía) ([0-9]*)| (sur|bis|norte)$/ig,
