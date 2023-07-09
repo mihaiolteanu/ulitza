@@ -8,7 +8,7 @@ export const equivalentStreet = (country) => (street) =>
     R.head,    
   )(equivalents[country])
 
-const duplicates = (country) =>
+export const equivalentDuplicates = (country) =>
   R.pipe(
     R.flatten,
     R.groupBy(R.identity),
@@ -19,7 +19,7 @@ const duplicates = (country) =>
 
 const allDuplicates = () =>
   R.pipe(
-    R.map(country => [country, duplicates(country)]),    
+    R.map(country => [country, equivalentDuplicates(country)]),    
     R.reject(R.compose(R.equals([]), R.prop(1)))
   )(R.keys(equivalents))
 
@@ -5267,7 +5267,8 @@ const equivalents = {
     ["Arthur",                 "Chester"],
     ["Cleveland",              "Grover"],
     ["Columbus",               "Christopher Columbus"],
-    ["Da Vinci",               "Davinci"]
+    ["Da Vinci",               "Davinci"],
+    ["Elvis",                  "Elvis Presley"],
     ["Hamilton",               "Alexander"],
     ["Lewis",                  "Francis Lewis"],
     ["MacArthur",              "Macarthur"],
@@ -5282,9 +5283,7 @@ const equivalents = {
                                "Martin Luther King, Junior",
                                "Doctor Martin Luther King"],
     ["Reagan",                 "Ronald Reagan",
-                               "Ronald W Reagan"
-    ],
-    
+                               "Ronald W Reagan"],    
     ["Lewis and Clark",        "Lewis And Clark"],
     ["Saint John",             "Saint Johns"],
     ["Saint Paul",             "Saint Pauls"],
