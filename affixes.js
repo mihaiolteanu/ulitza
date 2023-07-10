@@ -20,7 +20,7 @@ const affixes = {
   bolivia                : /^(calle|avenida) /i,
   "bosnia-herzegovina"   : /^(ulica|trg) /i,
   botswana               : / (street|road|rd)$/i,
-  brazil                 : /^(Avenida|Rua)/i,
+  brazil                 : /^(avenida|av.|rua|rodovia|estrada|praça|travessa|largo|rio) (das |dos |do |de |da |federal |)|[a-z][a-z]-[0-9]+.*| (do Sul)/ig,
   "burkina-faso"         : /^(rue|avenue|route|boulevard) (du |des |de la |de l'|)/i,
   burundi                : /^(avenue|route|boulevard|chausseée|chausée|chaussée|blvd) (de la |de l'|de |du |des |de |)/i,
   bulgaria               : /^(бул.|бул|Св. Св.|Св.|ул.|пл.)| (шосе|път)/i,
