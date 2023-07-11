@@ -17,7 +17,7 @@ const affixes = {
   belgium                : /^((rue|place|avenue|chaussée|route|chemin|oude|allée) (de la |de l'|du |des |de |))|((-|)(straat|straße|plein|dreef|laan|weg|steenweg|steen|weg|baan))$/i,
   belize                 : / (highway|road|street|drive)$/i,
   benin                  : /^(boulevard|rue) (de la |des |de l'|)/i,
-  bolivia                : /^(calle|avenida) /i,
+  bolivia                : /^(calle|avenida|camino|carretera) (de las |de la |del |a |)|^RN[0-9]+.*|^Doble Vía .*/i,
   "bosnia-herzegovina"   : /^(ulica|trg) /i,
   botswana               : / (street|road|rd)$/i,
   brazil                 : /^(avenida|av.|rua|rodovia|estrada|praça|travessa|largo|rio) (das |dos |do |de |da |federal |)|[a-z][a-z]-[0-9]+.*| (do Sul)/ig,

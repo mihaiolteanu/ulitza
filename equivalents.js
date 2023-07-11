@@ -455,9 +455,10 @@ const equivalents = {
 
   
   "bolivia": [
-    ["Bolivar", "Bolívar",
-                 "Simón Bolívar"
-    ]
+    ["Bolivar",       "Bolívar",
+                      "Simón Bolívar"],
+    ["Colón",         "Colon"],
+    ["Méndez Arcos",  "Mendez Arcos"]
   ],
 
   
