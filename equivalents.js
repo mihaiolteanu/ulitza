@@ -453,6 +453,9 @@ const equivalents = {
     ["Volders",             "Jean Volders"]
   ],
 
+
+  "belize": [],
+
   
   "bolivia": [
     ["Bolivar",       "Bolívar",
