@@ -4920,14 +4920,14 @@ const equivalents = {
 
   // SL
   "slovenia": [
-    ["Župančičeva",     "Otona Župančiča"],
     ["Cirila Kosmača",  "Kosmačeva"],
-    ["Rozmanova",       "Staneta Rozmana"],
-    ["Nikole Tesle",    "Teslova"],
     ["Gubčeva",         "Matije Gubca"],
-    ["Kvedrova",        "Dušana Kvedra"],
     ["Ivana Regenta",   "Regentova"],
-    ["Rozmanova",       "Staneta Rozmana"]
+    ["Kvedrova",        "Dušana Kvedra"],   
+    ["Nikole Tesle",    "Teslova"],
+    ["Rozmanova",       "Staneta Rozmana"],   
+    ["Župančičeva",     "Otona Župančiča"],
+    ["Valvasor",        "Valvazor"]
   ],
   
 
