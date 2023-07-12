@@ -6,7 +6,7 @@ export const equivalentStreet = (country) => (street) =>
     // Return the street name as is, if no equivalent found.
     R.defaultTo([street]),
     R.head,    
-  )(equivalents[country])
+  )(R.propOr([], country, equivalents))
 
 export const equivalentDuplicates = (country) =>
   R.pipe(
@@ -15,7 +15,7 @@ export const equivalentDuplicates = (country) =>
     R.mapObjIndexed(R.length),
     R.toPairs,
     R.reject(R.compose(R.equals(1), R.prop(1))),    
-  )(equivalents[country])
+  )(R.propOr([], country, equivalents))
 
 const allDuplicates = () =>
   R.pipe(
@@ -732,9 +732,6 @@ const equivalents = {
     ["Volders",             "Jean Volders"]
   ],
 
-
-  "belize": [],
-
   
   "bolivia": [
     ["Bolivar",       "Bolívar",
@@ -1335,9 +1332,6 @@ const equivalents = {
   ],
 
 
-  "colombia": [],
-
-
   "costa-rica": [
     ["Fernández Oreamuno",  "Próspero Fernández"],
     ["General Cañas",       "José María Cañas"]    
@@ -1614,9 +1608,6 @@ const equivalents = {
     ["Velasco Ibarra",           "Ibarra"],
     ["Vicente Rocafuerte",       "Rocafuerte"]
   ],
-
-
-  "el-salvador": [],
   
 
   "estonia": [
@@ -2483,9 +2474,6 @@ const equivalents = {
     ["Σολωμού",                        "Διονυσίου Σολωμού"],
     ["Στρατάρχου Αλέξανδρου Παπάγου",  "Παπάγου"]
   ],
-
-
-  "guatemala": [],
 
   
   "haiti-and-domrep": [
@@ -4191,8 +4179,6 @@ const equivalents = {
     ["Saint Andrews", "St Andrews"]
   ],
 
-
-  "nicaragua": [],
   
   "norway": [
     ["Aasmund Vinjes",    "Åsmund Vinjes"],
