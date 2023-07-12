@@ -11,7 +11,7 @@ const affixes = {
   armenia                : /^((փողոց |)[0-9]*-(րդ|ին)) |(փողոց|խճուղի|պողոտա|st)$/ig,
   australia              : /^(south|east|west|north) | (street|highway|road|parade|avenue|crescent|terrace|place|court|close|way|creek|head|drive)$/i,
   austria                : /^(am|im) |^((an|auf|unterer|untere|unter|oberer|oberes|obere) (der |den |dem |))|((-|)(straße|gasse|platz|weg|allee| haupt))$/i,
-  azerbaijan             : / (prospekti|küçəsi|küç.)$/i,
+  azerbaijan             : / (prospekti|küçəsi|şossesi|küç.)$/i,
   bangladesh             : /^(road) | (road|highway)$/i,
   belarus                : /^(вуліца|плошча|завулак) | (вуліца|завулак)$/i,
   belgium                : /^((rue|place|avenue|chaussée|route|chemin|oude|allée) (de la |de l'|du |des |de |))|((-|)(straat|straße|plein|dreef|laan|weg|steenweg|steen|weg|baan))$/i,
