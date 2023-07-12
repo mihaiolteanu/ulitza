@@ -56,7 +56,7 @@ const affixes = {
   hungary                : /(utca|körút|sétány|köz|út|útja|tere|tér|lakótelep|sor|liget)$/i,
   iceland                : /(gata|vegur|braut)$/i,
   india                  : /^(main) | (road|highway|main|street|marg|nagar( road|))$/i,
-  indonesia              : /^(jalan|jl.)( raya| bypass| by pass|) /i,
+  indonesia              : /^(jalan|jl.)( raya| bypass| by pass|boulevard |bulevar |) /i,
   iran                   : /^(بلوار|خیابان|میدان|آیت|شهید)/i,
   iraq                   : /^(شارع|شەقامی|جادەیا|ڕێگای) | (boulevard|road|street)$/i,
   "ireland-and-northern-ireland": /^(the) |('s|) (street|road|drive|avenue|square|hill|terrace|place|lane|view)$|(view)$/i,
