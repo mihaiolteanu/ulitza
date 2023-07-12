@@ -2616,6 +2616,7 @@ const equivalents = {
     ["Swami Vivekananda",  "Vivekananda"]
   ],
 
+  
   "indonesia": [
     ["Agus Salim",                   "Kyai Haji Agus Salim",
                                      "Haji Agus Salim"],
@@ -2628,7 +2629,8 @@ const equivalents = {
     ["Arif Rahman Hakim",            "Arief Rachman Hakim"],
     ["Basuki Rahmat",                "Jenderal Basuki Rachmat"],
     ["Brigjen Katamso",              "Brigjend. Katamso",
-                                     "Brigadir Jenderal Katamso"],
+                                     "Brigadir Jenderal Katamso",
+                                     "Kolonel Sugiono"],
     ["D.I. Panjaitan",               "DI Panjaitan"],
     ["Dewi Sri",                     "Dewi Sri I",
                                      "Dewi Sri II",
@@ -2645,14 +2647,14 @@ const equivalents = {
     ["HOS Cokroaminoto",             "HOS. Cokroaminoto",
                                      "Haji Oemar Said Cokroaminoto",
                                      "Cokroaminoto"],
-    ["Hasanuddin",                   "Sultan Hasanuddin"],
-    ["Hasanudin",                    "Sultan Hasanudin",
-                                     "Maulana Hasanudin"],
+    ["Hasanuddin",                   "Sultan Hasanuddin",
+                                     "Hasanudin",
+                                     "Sultan Hasanudin",
+                                     "Maulana Hasanudin"],    
     ["Ir. H. Juanda",                "Insinyur Haji Juanda",
                                      "Ir. H.Djuanda",
                                      "Ir. Haji Juanda",
-                                     "Ir H Juanda",
-                                     "Ir. H.Djuanda",
+                                     "Ir H Juanda",                                     
                                      "Juanda"],
     ["Ir. Sutami",                   "Ir Sutami"],
     ["Jenderal Sudirman",            "Jend. Sudirman",
@@ -2709,7 +2711,8 @@ const equivalents = {
                                      "TB Simatupang"],
     ["Untung Suropati",              "Untung Surapati",
                                      "Surapati"],
-    ["Urip Sumoharjo",               "Jenderal Urip Sumoharjo"],
+    ["Urip Sumoharjo",               "Jenderal Urip Sumoharjo",
+                                     "Urip Sumohardjo"],
     ["WR. Supratman",                "WR Supratman"],
     ["Wolter Monginsidi",            "Monginsidi"]
   ],
