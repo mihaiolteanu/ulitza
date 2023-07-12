@@ -97,7 +97,7 @@ const affixes = {
   "papua-new-guinea"     : / (drive|avenue|road|street|highway)$/i,
   paraguay               : /^(avenida|ruta nacional|ruta|general) (general |)/i,
   peru                   : /^(avenida|jirón|calle|prolongación|malecón|pasaje|paseo) (almirante |mariscal |las |los |de la |de |)/i,
-  philippines            : / (extension|highway|avenue|street|road|boulevard|drive)$|^(purok) /ig,
+  philippines            : / (national |)(extension|highway|avenue|street|road|boulevard|drive|st.)$|^(purok) |^(barangay|road [0-9]+) .*/ig,
   poland                 : /^(plac|aleja|aleje|trakt|przy|osiedle|rynek|stary|pod|na) |(ego|ski|-Straße| Straße)$/i,
   portugal               : /^(rua|largo|avenida|travessa|estrada|praça|praceta|av.|caminho|vale|quinta|bairropParque) (caminho |)(de |dos |do |das |da |)/i,
   romania                : /^(strada|aleea|bulevardul|calea|drumul|piața|piata|intrarea|șoseaua|str.|splaiul)( lui|)|( utca)$/i,
