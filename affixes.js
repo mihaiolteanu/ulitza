@@ -85,7 +85,7 @@ const affixes = {
   montenegro             : /^(bulevar|ulica) /i,
   morocco                : /^(avenue|route|rue|boulevard|place|chemin|شارع) (des |de la |de l'|du |de |d' |)|(شارع)$/i,
   mozambique             : /^(avenida|av.|estrada|rua) (da |des |de |dos |das |)/i,
-  myanmar                : /^(ဗိုလ်ချုပ်လမ်း) |( road| street|လမ်း| rd)$/ig,
+  myanmar                : /^(ဗိုလ်ချုပ်လမ်း|jalan|jl.) (by pass |bypass |)|( road| street|လမ်း| rd| boulevard)$/ig,
   nepal                  : / (highway|road|राज्मार्ग्|rajmarg)$/i,
   netherlands            : /^(oude|korte|het) |(-| |)(straat|weg|laan|plein|kade|pad|dijk|park|plantsoen|singel|hof|zuid)$/i,
   "new-zealand"          : / (road|street|avenue|lane|place|drive)$/i,

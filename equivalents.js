@@ -3488,9 +3488,30 @@ const equivalents = {
   
 
   "myanmar": [
-    ["Bayint Naung",  "ဘုရင့်နောင်"],
-    ["Bogyoke",       "ဗိုလ်ချုပ်",
-                      "Aung San"]
+    ["Ahmad Yani",         "Jend. Ahmad Yani",
+                           "Jendral Ahmad Yani",
+                           "Jenderal Achmad Yani",
+                           "Jenderal Ahmad Yani",
+                           "A. Yani"],
+    ["Basuki Rahmat",      "Jenderal Basuki Rachmat"]
+    ["Bayint Naung",       "ဘုရင့်နောင်"],
+    ["Bogyoke",            "ဗိုလ်ချုပ်",
+                           "Aung San"],
+    ["Gatot Subroto",      "Jenderal Gatot Subroto",
+                           "Jend. Gatot Subroto"],
+    ["HOS. Cokroaminoto",  "HOS Cokroaminoto"],
+    ["Ir. H. Juanda",      "Ir. Haji Juanda",
+                           "Insinyur Haji Juanda",
+                           "Ir H Juanda",
+                           "Ir. H.Djuanda"],
+    ["Jenderal Sudirman",  "Jend. Sudirman",
+                           "Jendral Sudirman",
+                           "Panglima Besar Sudirman",
+                           "P.B. Sudirman",
+                           "Jend Sudirman"],
+    ["Mayjend Sungkono",   "Mayjend. Sungkono"],
+    ["M.H. Thamrin",       "MH Thamrin"],
+    ["MT Haryono",         "Letnan Jenderal MT Haryono"]
   ],
 
   
