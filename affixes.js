@@ -9,7 +9,7 @@ const affixes = {
   angola                 : /^(avenida|rua|estrada)/i,
   argentina              : /^(([0-9]+ - |)avenida|boulevard|bulevar|boulevar|general|nacional|peatonal|avda.|autopista|pasaje|vuelta|camino|autovía|diagonal|paseo|av.) (general|del |de |[0-9]+ - |)|^ruta (provincial|nacional) [0-9]*|^calle [0-9]+.*| (sur|norte)$| \/ .*$/ig,
   armenia                : /^((փողոց |)[0-9]*-(րդ|ին)) |(փողոց|խճուղի|պողոտա|st)$/ig,
-  australia              : /^(south|east|west|north) | (street|highway|road|parade|avenue|crescent|terrace|place|court|close)$/i,
+  australia              : /^(south|east|west|north) | (street|highway|road|parade|avenue|crescent|terrace|place|court|close|way|creek|head|drive)$/i,
   austria                : /^(am|im) |^((an|auf|unterer|untere|unter|oberer|oberes|obere) (der |den |dem |))|((-|)(straße|gasse|platz|weg|allee| haupt))$/i,
   azerbaijan             : / (prospekti|küçəsi|küç.)$/i,
   bangladesh             : /^(road) | (road|highway)$/i,

@@ -364,10 +364,12 @@ const equivalents = {
 
   
   "australia": [
-    ["Elizabeth",  "Queen"],
-    ["Flinders",   "Matthew Flinders"],
-    ["George",     "King Georges"],
-    ["William",    "Williams",
+    ["Elizabeth",   "Queen"],
+    ["Flinders",    "Matthew Flinders"],
+    ["George",      "King Georges"],
+    ["St Georges",  "St. George"],
+    ["St Johns",    "St John"]
+    ["William",     "Williams",
                     "King William"]
   ],
 
