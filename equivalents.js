@@ -4187,7 +4187,8 @@ const equivalents = {
   
 
   "new-zealand": [
-    ["Victoria", "Queen"]
+    ["Victoria", "Queen"],
+    ["Saint Andrews", "St Andrews"]
   ],
 
 
