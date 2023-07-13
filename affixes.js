@@ -101,7 +101,7 @@ const affixes = {
   poland                 : /^(plac|aleja|aleje|trakt|przy|osiedle|rynek|stary|pod|na) |(ego|ski|-Straße| Straße)$/i,
   portugal               : /^(rua|largo|avenida|travessa|estrada|praça|praceta|av.|caminho|vale|quinta|bairropParque) (caminho |)(de |dos |do |das |da |)/i,
   romania                : /^(strada|aleea|bulevardul|calea|drumul|piața|piata|intrarea|șoseaua|str.|splaiul)( lui|)|( utca)$/i,
-  russia                 : /^(улица|переулок|проезд|проспект|Площадь|бульвар|(улица |)([1-9])-(я|й|го) )|(ская улица|ский переулок|ский проезд|улица|переулок|проезд|проспект|Площадь| бульвар)$/ig,
+  russia                 : /^(улица|переулок|проезд|проспект|Площадь|бульвар|Большая|(улица |дорога |аллея )([1-9])-(я|й|го|е) )|^[0-9]+-.*|(ская улица|ский переулок|ский проезд|улица|переулок|проезд|проспект|Площадь| бульвар| шоссе| тракт)$/ig,
   scotland               : / (street|road)$/i,
   serbia                 : /^(Трг|Булевар) | (пут|друм|ulica)$/i,
   slovakia               : /^(námestie|pri|pod|nad|na|za) |(ova| námestie| rad| utca| cesta)$/i,
