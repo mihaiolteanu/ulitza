@@ -5873,6 +5873,11 @@ const equivalents = {
     ["Gabriel Miró",                   "Gabriel Miro"                  ]
   ],
 
+
+  "sri-lanka": [
+    ["Anagarika Dharmapala", "Srimath Anagarika Dharmapala"]
+  ],
+
   
   "suriname": [
     

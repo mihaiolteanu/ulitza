@@ -109,7 +109,7 @@ const affixes = {
   "south-africa"         : /1st|2nd|3rd|4th|5th|6th|7th|8th|11th|12th|east|north|west|south|(road|street|drive|avenue|straat)$/ig,
   "south-korea"          : /(대로)$/i,
   spain                  : /^((kale|plaza|plaça|avenida|camino|camiño|camí|calle|carrer|carretera|rúa|autovía|barrio|avinguda|ronda|travesía|paseo|estrada|cuesta|praza|passeig) (de la |de las |de los |de les |de ses |dels |de l'|del |el |da |dos |do |des |de |la |las |d'|))|(kalea| plaza|(kalea|)\/.*)$/ig,
-  "sri-lanka"            : / (road|street)$/i,
+  "sri-lanka"            : / (road|street|mawatha)$/i,
   suriname               : /(straat|weg)$/i,
   syria                  : /^(شارع)/i,
   sweden                 : /^(Östra|norra|västra|gamla) |(gatan|vägen| väg|stigen|torget|torg| esplanaden)$/i,
