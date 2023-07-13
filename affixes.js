@@ -136,5 +136,6 @@ const affixes = {
   venezuela              : /^(calle|avenida|carretera|carrera|av.|intercomunal|autopista) ([0-9]* |intercomunal |principal |)(de los |los |de |)|^([0-9]*(a |ª | |)(transversal|av.) (de los| los| de |))/i,
   vietnam                : /^(Đường|Phố|Cầu) | [0-9]+$/ig,
   yemen                  : /^(شارع|الشارع)/i,
+  zambia                 : / (road|street|avenue|boulevard)$/i,
   zimbabwe               : / (street|road|avenue)$/i
 }
