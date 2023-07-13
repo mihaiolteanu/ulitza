@@ -6078,7 +6078,9 @@ const equivalents = {
   "vietnam": [
     ["Nguyễn Thị Minh Khai",  "Minh Khai"],
     ["Nguyễn Đình Chiểu",     "Nguyễn Ðình Chiểu"],
-    ["Quang Trung",           "Nguyễn Huệ"]
+    ["Nguyễn Tất Thành",      "Hồ Chí Minh"],
+    ["Quang Trung",           "Nguyễn Huệ"],
+    ["Trần Hưng Đạo",         "Tran Hung Dao"]    
   ]
 }
 
