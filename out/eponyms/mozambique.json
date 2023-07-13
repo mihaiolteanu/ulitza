@@ -1,13 +1,13 @@
 [
-  ["Marginal", 5, ""],
-  ["Samora Machel", 5, "https://en.wikipedia.org/wiki/Samora_Machel"],
-  ["Julius Nyerere", 3, "https://en.wikipedia.org/wiki/Julius_Nyerere"],
-  ["Nacional numero 01", 3, ""],
-  ["24 de Julho", 3, ""],
-  ["25 de Setembro", 3, ""],
-  ["F.P.L.M.", 3, ""],
-  ["nacional numero 01", 3, ""],
-  ["Patrice Lumumba", 3, "https://en.wikipedia.org/wiki/Patrice_Lumumba"],
-  ["Igreja", 3, ""],
-  ["Bombas", 3, ""]
+  ["Marginal",            5, ""],
+  ["Samora Machel",       5, "https://en.wikipedia.org/wiki/Samora_Machel"],
+  ["Julius Nyerere",      3, "https://en.wikipedia.org/wiki/Julius_Nyerere"],
+  ["Nacional numero 01",  3, ""],
+  ["24 de Julho",         3, ""],
+  ["25 de Setembro",      3, ""],
+  ["F.P.L.M.",            3, ""],
+  ["nacional numero 01",  3, ""],
+  ["Patrice Lumumba",     3, "https://en.wikipedia.org/wiki/Patrice_Lumumba"],
+  ["Igreja",              3, ""],
+  ["Bombas",              3, ""]
 ]
