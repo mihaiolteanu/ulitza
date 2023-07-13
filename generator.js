@@ -79,12 +79,19 @@ const inspect = (regex) => new Transform({
 })
 
 const parseOsmData = (country) => {
-  const streets = []
+  const streets = fs.createWriteStream(unsortedFile(country))
+  streets.write("[[\"ignore\", \"ignore\"]")
   fs.createReadStream(osm(country))
     .pipe(new osm_parser())
-    .pipe(extractStreets)
-    .on("data", R.map(s => streets.push(s)))
-    .on("finish", () => writeUnsorted(country)(streets))
+    .pipe(extractStreets)        
+    .on("data", R.pipe(
+      uniqBy(join("-")),
+      R.map(s => streets.write(",\n" + stringify(s)))
+    ))
+    .on("finish", () => {
+      streets.write("]")
+      streets.close()
+    })
 }
 
 const parseUnsorted = (country) =>
@@ -205,8 +212,8 @@ const findDuplicateURLs = (country) =>
     R.groupBy(R.prop(2)),
     R.mapObjIndexed(R.length),
     R.toPairs,
-    R.reject(R.compose(R.equals(1), R.prop(1))),
-    console.log
+    R.reject(R.propEq(1, 1)),    
+    R.reject(R.propEq('', 0)),
   )(country)
 
 statistics()

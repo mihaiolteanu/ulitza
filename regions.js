@@ -174,7 +174,7 @@ const regions = [
       "poland",
       "portugal",
       "romania",
-      // "russia",
+      "russia",
       "serbia",
       "slovakia",
       "slovenia",
