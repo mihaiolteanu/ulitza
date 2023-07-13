@@ -5496,9 +5496,14 @@ const equivalents = {
   
 
   "south-africa": [
+    ["Gray",            "Sir George Grey"],
+    ["Louis Botha",     "Botha"],
+    ["Naude",           "Beyers Naude"],
     ["Nelson Mandela",  "Mandela",
                         "Nelson Mandela Dr"],
     ["Paul Kruger",     "Kruger"],
+    ["Pretorius",       "Andries Pretorius"],
+    ["Sarel Cilliers",  "Cilliers"],
     ["Theron",          "Danie Theron"],
     ["Victoria",        "Queen Victoria",
                         "Victoria Walk"],
