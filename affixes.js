@@ -116,6 +116,7 @@ const affixes = {
   "south-sudan"          : / (road|highway|street|avenue)$/i,
   spain                  : /^((kale|plaza|plaça|avenida|camino|camiño|camí|calle|carrer|carretera|rúa|autovía|barrio|avinguda|ronda|travesía|paseo|estrada|cuesta|praza|passeig) (de la |de las |de los |de les |de ses |dels |de l'|del |el |da |dos |do |des |de |la |las |d'|))|(kalea| plaza|(kalea|)\/.*)$/ig,
   "sri-lanka"            : / (road|street|mawatha)$/i,
+  sudan                  : / (road|highway|street|avenue)$/i,
   suriname               : /(straat|weg)$/i,
   syria                  : /^(شارع)/i,
   sweden                 : /^(Östra|norra|västra|gamla) |(gatan|vägen| väg|stigen|torget|torg| esplanaden)$/i,
