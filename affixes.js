@@ -103,7 +103,7 @@ const affixes = {
   peru                   : /^(avenida|jirón|calle|prolongación|malecón|pasaje|paseo) (almirante |mariscal |las |los |de la |de |)/i,
   philippines            : / (national |)(extension|highway|avenue|street|road|boulevard|drive|st.)$|^(purok) |^(barangay|road [0-9]+) .*/ig,
   poland                 : /^(plac|aleja|aleje|trakt|przy|osiedle|rynek|stary|pod|na) |(ego|ski|-Straße| Straße)$/i,
-  portugal               : /^(rua|largo|avenida|travessa|estrada|praça|praceta|av.|caminho|vale|quinta|bairropParque) (caminho |)(de |dos |do |das |da |)/i,
+  portugal               : /^(rua|largo|avenida|travessa|estrada|praça|praceta|av.|caminho|vale|quinta|bairpropParque) (caminho |)(de |dos |do |das |da |)/i,
   romania                : /^(strada|aleea|bulevardul|calea|drumul|piața|piata|intrarea|șoseaua|str.|splaiul)( lui|)|( utca)$/i,
   russia                 : /^(улица|переулок|проезд|проспект|Площадь|бульвар|Большая|(улица |дорога |аллея )([1-9])-(я|й|го|е) )|^[0-9]+-.*|(ская улица|ский переулок|ский проезд|улица|переулок|проезд|проспект|Площадь| бульвар| шоссе| тракт)$/ig,
   scotland               : / (street|road)$/i,

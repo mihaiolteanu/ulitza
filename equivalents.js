@@ -2006,6 +2006,7 @@ const equivalents = {
                               "Dr.-Külz"],
     ["Droste-Hülshoff",       "Annette-von-Droste-Hülshoff",
                               "Von-Droste-Hülshoff"],
+    ["Delbrück",              "Max-Delbrück"]
     ["Edison",                "Thomas-Edison"],
     ["Einstein",              "Albert-Einstein"],
     ["Emil-Nolde",            "Nolde"],

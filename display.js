@@ -1,8 +1,8 @@
-const { p, div, a, sup, span, button, input } = van.tags
+const { p, div, a, sup, span, button, input, b } = van.tags
 
 import regions from "./regions.js"
 
-const statistics = await fetch("http://192.168.1.8:8085/out-statistics/statistics4.json")
+const statistics = await fetch("http://192.168.1.8:8085/out/all.json")
   .then(s => s.json())
 
 const regionsNames = R.map(R.head, regions)
@@ -69,6 +69,13 @@ const persons      = R.lensIndex(3)
 const selectedRegion = van.state("")
 const selectedCountry = van.state("")
 
+document.getElementById("statistics").appendChild(
+  div(
+    b(worldTotal[0].toLocaleString('en', {useGrouping:true})),
+    span(` eponyms from `),
+    b(worldTotal[1].toLocaleString('en', {useGrouping:true})),
+    span(" streets")),
+)
 
 // display persons
 document.getElementById("persons").appendChild(
@@ -77,11 +84,6 @@ document.getElementById("persons").appendChild(
     if (country)
       return span(
         div(R.view(name, country)),
-        div(          
-          span("👥 " + R.view(peopleCount, country)),
-          span(" 🛣 " + R.view(streetsCount, country)),
-        ),
-        
         R.map(person =>
           span({ class: "person" },
             a({
@@ -92,10 +94,6 @@ document.getElementById("persons").appendChild(
           R.view(persons, country)
         ))
     return span(
-      div(
-        span("👥 " + worldTotal[0]),
-        span(" 🛣 " + worldTotal[1]),
-      ),
       R.map(person =>
         span({ class: "person" },
           a({
