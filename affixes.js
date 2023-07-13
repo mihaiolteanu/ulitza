@@ -66,6 +66,7 @@ const affixes = {
   italy                  : /^(viale|via|corso|piazzale|piazzetta|piazza|lungomare|autostrada|strada|traversa|largo|contrada|salita|vicolo|vico|monte|campo|borgo) (provinciale |statale |)([0-9]* |)(dell'|della |delle |dello |degli |del |dei |di |al |)| (sud|nord|vecchia|antica)$/ig,
   "isle-of-man"          : / (road|promenade|street|main)$/i,
   "israel-and-palestine" : /^(نهج|شارع|طريق|שדרות)/i,  
+  "ivory-coast"          : /^(boulevard|avenue|rue) (de la |des |de |du |du |)/i,
   jordan                 : /^(شارع الشهيد|شارع|الشارع)| (street|highway)$/i,
   kazakhstan             : /^(улица|проспект|бульвар) | (улица|проспект)$/i,
   kenya                  : / (road|highway|avenue|bypass)$/i,
