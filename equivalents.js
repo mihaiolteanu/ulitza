@@ -1248,6 +1248,11 @@ const equivalents = {
     ["Émile-Nelligan",           "Nelligan"]
   ],
 
+
+  "canary-islands": [
+    ["Colón", "Cristóbal Colón"]
+  ],
+
   
   "chile": [
     ["Amunátegui",                  "Amunategui"],
