@@ -810,7 +810,7 @@
   ["Guaviyu",                          3, ""],
   ["Cerrillos",                        3, ""],
   ["Toledo",                           3, ""],
-  ["Cervantes",                        3, ""],
+  ["Cervantes",                        3, "https://en.wikipedia.org/wiki/Miguel_de_Cervantes"],
   ["Braniff",                          3, ""],
   ["Louis Pasteur",                    3, "https://en.wikipedia.org/wiki/Louis_Pasteur"],
   ["Doctor Lorenzo Carnelli",          3, "https://en.wikipedia.org/wiki/Lorenzo_Carnelli"],

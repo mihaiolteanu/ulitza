@@ -103,12 +103,13 @@ const equivalents = {
     ["Cipolletti",              "Ingeniero César Cipolletti"],
     ["Colón",                   "Cristóbal Colón",
                                 "Cristobal Colón"],
-    ["Comandante Andresito",    "Andrés Guacurarí",
+    ["Comandcante Andresito",    "Andrés Guacurarí",
                                 "Andresito"],
     ["Constancio C. Vigil",     "Constancio Vigil"],
     ["Coronel Falcón",          "Coronel Ramón Lorenzo Falcón"],
     ["Del Barco Centenera",     "Centenera"],
     ["Deán Funes",              "Dean Funes"],
+    ["Diego de Almagro",        "Almagro"],
     ["Doctor Ricardo Balbín",   "Ricardo Balbín",
                                 "Doctor Ricardo Balbin",
                                 "Balbín"],
@@ -572,6 +573,7 @@ const equivalents = {
     ["Petzold",             "Alfons Petzold",
                             "Alfons-Petzold"],
     ["Pichler",             "Adolf Pichler"],
+    ["Porsche",             "Ferdinand-Porsche"],
     ["Pregl",               "Fritz-Pregl"],
     ["Prinz-Eugen",         "Prinz Eugen",
                             "Eugen"],
@@ -1064,6 +1066,7 @@ const equivalents = {
     ["Henri-Dunant",             "Dunant"],
     ["Hébert",                   "Louis-Hébert"],
     ["Jean-Paul-Riopelle",       "Riopelle"],
+    ["Rousseau",                 "Jacques-Rousseau"],
     ["Jeanne-Le Ber",            "Le Ber"],
     ["Jeanne-Mance",             "Mance"],
     ["Jeanne-d'Arc",             "Sainte-Jeanne-d'Arc"],
@@ -1770,6 +1773,7 @@ const equivalents = {
     ["Horace Vernet",                   "Vernet"],
     ["Impératrice Eugénie",             "Eugénie"],
     ["Ingres",                          "Dominique Ingres"],
+    ["Isaac Newton",                    "Newton"],
     ["Jacquard",                        "Joseph Jacquard",
                                         "Joseph-Marie Jacquard"],
     ["Jean Charcot",                    "Docteur Charcot"],
@@ -1780,6 +1784,7 @@ const equivalents = {
                                         "Jean-Baptiste Lulli"],
     ["Jean-François Le Gonidec",        "Le Gonidec"],
     ["Jean-Jacques Rousseau",           "Jean Jacques Rousseau"],
+    ["Jean Mermoz",                     "Mermoz"],
     ["Jean-Paul Sartre",                "Jean Paul Sartre"],
     ["Jean-Pierre Timbaud",             "Jean Pierre Timbaud"],
     ["Jean-Sébastien Bach",             "Jean Sébastien Bach"],
@@ -1868,6 +1873,7 @@ const equivalents = {
                                         "John Kennedy",
                                         "Président J.F. Kennedy",
                                         "Président John F. Kennedy"],
+    ["Président Wilson",                "Wilson"],
     ["Rabelais",                        "François Rabelais"],
     ["Raspail",                         "Benjamin Raspail"],
     ["René Coty",                       "Président Coty",
@@ -1959,6 +1965,7 @@ const equivalents = {
     ["Alice-Salomon",            "Salomon"],
     ["Altdorfer",                "Albrecht-Altdorfer"],
     ["Ampère",                   "Ampere"],
+    ["Amundsen",                 "Roald-Amundsen"],
     ["Andersen",                 "Hans-Christian-Andersen"],
     ["Andreas",                  "St.-Andreas",
                                  "Sankt-Andreas",
@@ -1972,6 +1979,7 @@ const equivalents = {
     ["Anzengruber",              "Ludwig-Anzengruber"],
     ["Arndt",                    "Ernst-Moritz-Arndt"],
     ["Astrid-Lindgren",          "Lindgren"],
+    ["August-Bebel",             "Bebel"],
     ["August-Horch",             "Horch"],
     ["August-Thyssen",           "Thyssen"],
     ["Augustinus",               "Sankt-Augustinus"],
@@ -2077,6 +2085,7 @@ const equivalents = {
     ["Ebner-Eschenbach",         "Von-Ebner-Eschenbach"],
     ["Eckener",                  "Dr.-Eckener",
                                  "Hugo-Eckener"],
+    ["Edison",                   "Thomas-Edison"],
     ["Eichendorff",              "Von-Eichendorff",
                                  "Joseph-von-Eichendorff",
                                  "Freiherr-von-Eichendorff",
@@ -2292,6 +2301,7 @@ const equivalents = {
     ["Karl-Bröger",              "Bröger"],
     ["Karl-Carstens",            "Carstens"],
     ["Karl-Leisner",             "Leisner"],
+    ["Karl-Liebknecht",          "Liebknecht"],
     ["Karl-Marx",                "Marx"],
     ["Karl-Stieler",             "Stieler"],
     ["Keller",                   "Gottfried-Keller"],
@@ -2356,6 +2366,7 @@ const equivalents = {
     ["Linné",                    "Carl-von-Linné"],
     ["Lise-Meitner",             "Meitner"],
     ["Liselotte-Herrmann",       "Lilo-Herrmann"],
+    ["Liszt",                    "Franz-Liszt"],
     ["Litt",                     "Theodor-Litt"],
     ["Lochner",                  "Stephan-Lochner",
                                  "Stefan-Lochner"],
@@ -2423,6 +2434,7 @@ const equivalents = {
     ["Mörike",                   "Eduard-Mörike"],
     ["Münster",                  "Sebastian-Münster"],
     ["Nachtigal",                "Gustav-Nachtigal"],
+    ["Nansen",                   "Fridtjof-Nansen"],
     ["Napoleon",                 "Napoleons"],
     ["Neil-Armstrong",           "Armstrong"],
     ["Nell-Breuning",            "Breuning",
@@ -2430,6 +2442,7 @@ const equivalents = {
                                  "Oswald-von-Nell-Breuning"],
     ["Nepomuk",                  "St.-Nepomuk",
                                  "Sankt-Nepomuk"],
+    ["Niels-Bohr",               "Bohr"],
     ["Nietzsche",                "Friedrich-Nietzsche"],
     ["Nikolaus",                 "Sankt-Nikolaus",
                                  "St.-Nikolaus",
@@ -2531,6 +2544,7 @@ const equivalents = {
                                  "St.-Sebastian",
                                  "St. Sebastian"],
     ["Seidel",                   "Heinrich-Seidel"],
+    ["Selma-Lagerlöf",           "Lagerlöf"],    
     ["Semmelweis",               "Dr.-Semmelweis",
                                  "Ignaz-Semmelweis"],
     ["Senefelder",               "Alois-Senefelder"],
@@ -2541,6 +2555,7 @@ const equivalents = {
                                  "Werner-Siemens"],
     ["Sigmund-Freud",            "Freud"],
     ["Silcher",                  "Friedrich-Silcher"],
+    ["Simon-Bolivar",            "Bolivar"],
     ["Simons",                   "Menno-Simons"],
     ["Slevogt",                  "Max-Slevogt"],
     ["Sohnrey",                  "Heinrich-Sohnrey"],
@@ -2571,6 +2586,7 @@ const equivalents = {
     ["Stöcker",                  "Helene-Stöcker"],
     ["Sudermann",                "Hermann-Sudermann"],
     ["Syrlin",                   "Jörg-Syrlin"],
+    ["Tesla",                    "Nikola-Tesla"],
     ["Thaddäus-Troll",           "Troll"],
     ["Theis",                    "Pastor-Theis"],
     ["Theodor",                  "Karl-Theodor",
@@ -2688,6 +2704,7 @@ const equivalents = {
                          "St Francis"],
     ["George",           "King George"],
     ["Gibbon",           "Gibbons"],
+    ["Hadrian",          "Hadrians"],
     ["Hardy",            "Hardys"],
     ["Henry",            "King Henry"],
     ["Hilda",            "St Hilda"],
@@ -2742,7 +2759,8 @@ const equivalents = {
                          "Saint Barnabas"],
     ["St Bartholomew",   "Bartholomew"],
     ["St Benedict",      "St Benedicts"],
-    ["St Brides",        "St. Bride"],
+    ["St Brides",        "St. Bride",
+                         "Kildare"],
     ["St Chad",          "St Chads",
                          "Chad"],
     ["St Christopher",   "Christopher",
@@ -2839,6 +2857,8 @@ const equivalents = {
                          "Saint Thomas",
                          "St Thomas'"],
     ["Victoria",         "Queen Victoria"],
+    ["Watt",             "James Watt",
+                         "Watts"]
     ["Wallis",           "Barnes Wallis"],
     ["Wellington",       "Duke of Wellington"],    
   ],
@@ -2909,6 +2929,7 @@ const equivalents = {
     ["Balassa Bálint",       "Balassa"],
     ["Balázs Béla",          "Balázs"],
     ["Baross Gábor",         "Baross"],
+    ["Bartók Béla",          "Bartók"],
     ["Batsányi János",       "Batsányi"],
     ["Batthyány",            "Batthyány Lajos"],
     ["Bem",                  "Bem József"],
@@ -3993,6 +4014,7 @@ const equivalents = {
     ["Bach",                       "Johann Sebastian Bach",
                                    "J.S. Bach"],
     ["Baden Powell",               "Baden-Powell"],
+    ["Bartok",                     "Bartók"],
     ["Banckert",                   "Joost Banckert"],
     ["Bart van der Leck",          "Van der Leck"],
     ["Beatrix",                    "Prinses Beatrix",
@@ -4167,6 +4189,7 @@ const equivalents = {
     ["Handels",                    "Händel",
                                    "Handel"],
     ["Hans Memling",               "Memling"],
+    ["Hammarskjöld",               "Dag Hammarskjöld"]
     ["Harry Bannink",              "Bannink",
                                    "Banninks"],
     ["Haya van Someren",           "Haya van Someren-Downer"],
@@ -4897,6 +4920,8 @@ const equivalents = {
                                                       "Stanisława Wigury"],
     ["Franklina Delano Roosevelta",                   "Franklina Roosevelta",
                                                       "Roosevelta"],
+    ["Fryderyka Chopina",                             "Fryderyka Szopena",
+                                                      "Chopina"],
     ["Fryderyka Skarbka",                             "Skarbka"],
     ["Fryderyka Szopena",                             "Szopena"],
     ["Gabriela Narutowicza",                          "Prezydenta Gabriela Narutowicza"],
@@ -6307,7 +6332,7 @@ const equivalents = {
 
 
   "switzerland": [
-    
+    ["Jean-Jacques Rousseau", "Rousseau"]
   ],
   
   
@@ -6445,6 +6470,7 @@ const equivalents = {
   
   "us": [
     ["Andrews",                "Andrew"],
+    ["Armstrong",              "Neil Armstrong"],
     ["Arthur",                 "Chester"],
     ["Cleveland",              "Grover"],
     ["Columbus",               "Christopher Columbus"],
@@ -6475,7 +6501,8 @@ const equivalents = {
     ["Saint Michael",          "Saint Michaels"],    
     ["Warren",                 "Harding"],
     ["Washington",             "George Washington"],
-    ["Wilson",                 "Woodrow"]    
+    ["Wilson",                 "Woodrow"],
+    ["Zola",                   "Emile Zola"]
   ],
 
   
@@ -6485,10 +6512,11 @@ const equivalents = {
 
   
   "venezuela": [
-    ["Andrés Bello",  "Andres Bello"],
-    ["Ayacucho",      "Gran Mariscal de Ayacucho"],
+    ["Andrés Bello",  "Andres Bello"],    
     ["Bolívar",       "Bolivar",
-                      "Simón Bolívar"]
+                      "Simón Bolívar"],
+    ["Sucre",         "Ayacucho",
+                      "Gran Mariscal de Ayacucho"]    
   ],
 
   
