@@ -48,7 +48,7 @@ const affixes = {
   france                 : /^(rue|place|avenue|impasse|route|chemin|allée|boulevard|cours|chaussée|faubourg|quai|esplanade|square|traverse|clos|parvis) (du |des |de la |de l'|d'|de |)| rue$|^le /i,
   "gcc-states"           : /^(نهج|شارع|طريق|street) |(جادة|road|street)$|[1-9]/ig,
   georgia                : /^(улица) | (ქუჩა|გამზირი|улица|st)$/i,
-  germany                : /((-|)(straße|weg|platz|allee|gasse))$|( ring|-ring| siedlung|-siedlung|-hof)$|^(am|im) |^((an|auf|unterer|untere|unter|oberer|oberes|obere|in|alter|alte|zum|zur|zu|in|im) (der |den |dem |))|^(straße (der |des |zum |am |))/ig,
+  germany                : /((-|)(straße|weg|platz|allee|gasse|chaussee|promenade|park|hain|höhe|garten))$|( ring|-ring| siedlung|-siedlung|-hof)$|^(am|im) |^((an|auf|unterer|untere|unter|oberer|oberes|obere|in|alter|alte|zum|zur|zu|in|im) (der |den |dem |))|^(straße (der |des |zum |am |))/ig,
   ghana                  : / (road|ridge|region)$/i,
   "great-britain"        : /^(the|west|western|north|east|eastern|south)|('s |)(street|road|lane|avenue|hill|way|place|park|square|drive|crescent|court|gardens|terrace|grove|close|walk|end|fields|view|bridge|cottages|parade|mews|hall|side|north|east|west|south|high|gate)$/ig,
   greece                 : /^(Λεωφόρος) /i,
