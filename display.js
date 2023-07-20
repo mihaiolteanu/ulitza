@@ -1,4 +1,4 @@
-const { p, div, a, sup, span, button, input, b } = van.tags
+const { p, div, a, sup, span, h3, input, b } = van.tags
 
 import regions from "./regions.js"
 
@@ -26,23 +26,41 @@ const regionCountryNames = region =>
     R.filter(countryHasData),
   )(regions)
 
-const countryDetails = country =>
+const countryData = country =>
   R.filter(R.compose(R.equals(country), R.head), statistics)[0]
 
-const displayName = (link) =>
-  R.compose(R.join(" "), R.split("_"), R.last, R.split("/"), decodeURI)(link)
+// const displayName = (link) =>
+//   R.compose(R.join(" "), R.split("_"), R.last, R.split("/"), decodeURI)(link)
 
-const worldFrequency = () =>
+const displayName = (link) =>
+  R.pipe(
+    decodeURI,
+    R.split("/"),
+    R.last,
+    // Add non-line-breaking spaces and dashes to display the person name on a
+    // single line
+    R.split("_"),
+    R.join(" "),
+    R.replace(/-/g, "‑")
+  )(link)
+
+const allPersons = R.memoizeWith(R.identity, () =>
   R.pipe(
     R.chain(R.prop(3)),
     R.map(R.prop(2)),
-    R.groupBy(R.identity),
+    R.groupBy(R.identity),    
     R.mapObjIndexed(R.length),
     R.toPairs,
-    // Keep persons appearing at least three or more times
-    R.reject(R.compose(R.gt(3), R.prop(1))),
-    R.sortWith([R.descend(R.prop(1))]),    
-  )(statistics)
+    R.sortWith([R.descend(R.prop(1))]),
+  )(statistics))
+
+// Keep persons appearing at least three or more times only.
+const frontPagePersons = R.memoizeWith(R.identity, () =>
+  R.reject(R.compose(R.gt(3), R.prop(1)), allPersons()))
+
+const searchResultPersons = (regex) => 
+  R.filter(R.compose(R.prop(0), R.match(new RegExp(regex, "i")), R.prop(0)),
+           allPersons())  
 
 const worldTotal = 
   R.pipe(
@@ -50,81 +68,107 @@ const worldTotal =
     R.reduce((acc, elem) => [acc[0] + elem[0], acc[1] + elem[1]], [0, 0]),
   )(statistics)
 
+const capitalize = R.replace(/^./, R.toUpper)
 
-const L = {
-  country: {
-    name: R.lensIndex(0),
-    peopleCount: R.lensIndex(1),
-    streetsCount: R.lensIndex(2),
-    persons: R.lensIndex(3)
-  }
-}
-
-// Country lenses
-const name         = R.lensIndex(0)
-const peopleCount  = R.lensIndex(1)
-const streetsCount = R.lensIndex(2)
-const persons      = R.lensIndex(3)
-
-const selectedRegion = van.state("")
+const selectedRegion  = van.state("")
 const selectedCountry = van.state("")
+const searchStr       = van.state(".*")
 
 document.getElementById("statistics").appendChild(
   div(
-    b(worldTotal[0].toLocaleString('en', {useGrouping:true})),
-    span(` eponyms from `),
-    b(worldTotal[1].toLocaleString('en', {useGrouping:true})),
-    span(" streets")),
+    b("🚹🚺 " + worldTotal[0].toLocaleString('en', { useGrouping: true }))
+  )
 )
 
-// display persons
+const personCountries = (name) =>
+  R.pipe(
+    R.filter(country =>
+      R.find(R.compose(R.equals(name), R.prop(2)), country[3])),
+    R.map(R.head),
+    R.map(capitalize)
+  )(statistics)
+
+// https://stackoverflow.com/questions/72704941/how-do-i-close-dialog-by-clicking-outside-of-it
+const dialog = document.getElementById("showCountries")
+dialog.addEventListener("click", ({ target: dialog }) => {
+  if (dialog.nodeName === 'DIALOG')
+    dialog.close('dismiss')
+})    
+
+const Persons = (persons) =>
+  span(
+    R.map(person =>
+      span({ class: "person" },
+        a({
+          href: person[0],
+          target: "_blank"
+        }, displayName(person[0])),
+        a({
+          class: "personcount",          
+          onclick: () => {
+            dialog.innerText = personCountries(person[0]).join("   ")
+            dialog.showModal()
+          }
+        },
+          // "(" + person[1] + ") ",
+          sup(person[1]),
+          " "
+        )),
+      persons))
+
+const FrontPagePersons = R.memoizeWith(R.identity, () =>
+  span(
+    b("🚹🚺 " + worldTotal[0].toLocaleString('en', { useGrouping: true })),
+    h3("Worldwide"),
+    Persons(frontPagePersons())
+  ))
+
+const SearchResultPersons = (regex) =>
+  Persons(searchResultPersons(regex))
+
+const CountryPersons = R.memoizeWith(R.identity, name => {
+  const country = countryData(name)
+  return span(
+    div(h3(capitalize(country[0]))),
+    Persons(country[3]))
+})
+
+const RegionCountries = R.memoizeWith(R.identity, (region) => span(
+  R.map(country =>
+    span({ class: "country" },
+      a({
+        onclick: () => {
+          selectedCountry.val = country,
+          selectedRegion.val = ""
+        },
+        href: `#${country}`,
+        id: {
+          deps: [selectedCountry],
+          f: R.ifElse(
+            R.equals(country), R.always("selected-country"), R.always("")
+          )
+        }
+      }, capitalize(country) + " ")),
+    regionCountryNames(region))))
+
+
+// Display persons on country change
+// If no country selected, display all persons
 document.getElementById("persons").appendChild(
-  van.bind(selectedCountry, (selectedCountry) => {
-    const country = countryDetails(selectedCountry)
-    if (country)
-      return span(
-        div(R.view(name, country)),
-        R.map(person =>
-          span({ class: "person" },
-            a({
-              href: person[2],
-              target: "_blank"
-            }, displayName(person[2])),
-            sup(person[1] + " ")),
-          R.view(persons, country)
-        ))
-    return span(
-      R.map(person =>
-        span({ class: "person" },
-          a({
-            href: person[0],
-            target: "_blank"
-          }, displayName(person[0])),
-          sup(person[1] + " ")),
-        worldFrequency()
-      )
-    )
+  van.bind(selectedCountry, searchStr, (selectedCountry, searchStr) => {    
+    if (searchStr !== ".*")
+      return SearchResultPersons(searchStr)
+    else if (selectedCountry !== "")
+      return CountryPersons(selectedCountry)
+    else return FrontPagePersons()
   }))
 
 
-// display countries
+// Display countries on region change
 document.getElementById("countries").appendChild(
   van.bind(selectedRegion, (selectedRegion) =>
-    span(
-      R.map(country =>
-        span({ class: "country" },
-          a({
-            onclick: () => selectedCountry.val = country,
-            href: `#${country}`,
-            id: {
-              deps: [selectedCountry],
-              f: R.ifElse(
-                R.equals(country), R.always("selected-country"), R.always("")
-              )
-            }
-          }, country + " ")),
-        regionCountryNames(selectedRegion)))))
-
+    RegionCountries(selectedRegion)
+))
 
 // display regions
 document.getElementById("regions").appendChild(
@@ -134,10 +178,8 @@ document.getElementById("regions").appendChild(
         href: `#${region}`,
         onclick: () => {
           if (selectedRegion.val === region) {
-            selectedRegion.val = ""
-            selectedCountry.val = ""
-          }
-            
+            selectedRegion.val = ""            
+          }            
           else
             selectedRegion.val = region
         },
@@ -147,14 +189,21 @@ document.getElementById("regions").appendChild(
             R.equals(region), R.always("selected-region"), R.always("")
           )
         }
-      }, region),
+      }, capitalize(region)),
     regionsNames)))
 
 // display search
 document.getElementById("search").appendChild(
   input({
     type: "search",    
-    oninput: t => console.log(t.target.value)
+    oninput: t => {
+      const value = t.target.value
+      if (value.length > 2) {
+        searchStr.val = t.target.value        
+      }
+      // Reset
+      else searchStr.val = ".*"
+    },    
   })
 )
 
@@ -162,8 +211,9 @@ document.getElementById("ulitsa").appendChild(
   a({
     href: "#",
     onclick: () => {
-      selectedRegion.val = ""
-      selectedCountry.val = ""      
+      selectedRegion.val  = ""
+      selectedCountry.val = ""
+      searchStr.val       = ".*"
     }
   }, "ulitza")
 )
