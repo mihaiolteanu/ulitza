@@ -58,16 +58,15 @@ const selectedRegion  = van.state("")
 const selectedCountry = van.state("")
 const searchStr       = van.state(".*")
 
-// Total number of eponyms documented thus far.  A useless, but nice piece of
-// info for the curious.
-const EponymsN = R.pipe(
-  R.map(R.props([1, 2])),
-  R.reduce((acc, elem) => [acc[0] + elem[0], acc[1] + elem[1]], [0, 0]),
-  R.prop(0),
-  v => v.toLocaleString('en', { useGrouping: true }),
-  b
-)(statistics)
-document.getElementById("statistics").appendChild(EponymsN)
+document.getElementById("eponyms-total").appendChild(
+  R.pipe(
+    R.map(R.props([1, 2])),
+    R.map(R.prop(0)),
+    R.reduce(R.add, 0),    
+    v => v.toLocaleString('en', { useGrouping: true }),
+    b
+  )(statistics)
+)
 
 // Return a list of countries where the given eponym appears in.
 const eponymOccurence = (eponym) =>
