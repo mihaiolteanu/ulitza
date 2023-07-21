@@ -48,8 +48,11 @@ const allEponyms = R.memoizeWith(R.identity, () =>
     R.map(R.prop(2)),
     R.groupBy(R.identity),    
     R.mapObjIndexed(R.length),
-    R.toPairs,
-    R.sortWith([R.descend(R.prop(1))]),    
+    R.toPairs,    
+    R.sortWith([R.descend(R.prop(1))]),
+    // Force the [eponym, count, link] format.
+    R.map(v => [v[0], v[1], v[0]]),
+    R.tap(console.log)
   )(statistics))
 
 const capitalize = R.replace(/^./, R.toUpper)
@@ -58,15 +61,12 @@ const selectedRegion  = van.state("")
 const selectedCountry = van.state("")
 const searchStr       = van.state(".*")
 
-document.getElementById("eponyms-total").appendChild(
+document.getElementById("eponyms-total-unique").appendChild(
   R.pipe(
-    R.map(R.props([1, 2])),
-    R.map(R.prop(0)),
-    R.reduce(R.add, 0),    
-    v => v.toLocaleString('en', { useGrouping: true }),
+    R.length,
+    e => e.toLocaleString('en', { useGrouping: true }),
     b
-  )(statistics)
-)
+  )(allEponyms()))
 
 // Return a list of countries where the given eponym appears in.
 const eponymOccurence = (eponym) =>
@@ -107,9 +107,9 @@ const Eponyms = (title, eponyms) =>
     R.map(eponym =>
       span({ class: "eponym" },
         a({
-          href: eponym[0],
+          href: eponym[2],
           target: "_blank"
-        }, displayName(eponym[0])),
+        }, displayName(eponym[2])),
         a({
           class: "eponymcount",
           onclick: () => {
