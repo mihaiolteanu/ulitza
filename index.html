@@ -33,11 +33,17 @@
          background-color: #d7e0f7;
          text-align: center;  
          /* font-weight: bold; */
-     }     
+     }
+
+     #regions {
+         font-size: 1.1em;
+     }
 
      #content, #countries {
          text-align: center;
          line-height: 2.35em;
+         padding-left: 0.5em;
+         padding-right: 0.5em;
      }
 
      dialog {
@@ -46,8 +52,7 @@
      
      @media screen and (min-width: 480px) {
          #content {
-             border-style: solid;
-             border-width: 1px;
+             border: 2px solid lightgray;             
              /* border-radius: 15px; */
              /* padding: 1em; */
          }
@@ -76,7 +81,7 @@
          color: #f7efd5
      }
 
-     .person, .country {
+     .eponym {
          margin-right: 4px;
          font-size: 1.15em;
          border-radius: 12px;
@@ -84,11 +89,19 @@
          padding: 5px;
      }
 
-     .person:hover {
+     .eponym:hover {
          background-color: #edeff5;
      }
 
-     sup, .personcount {
+     .country {
+         margin-right: 4px;
+         /* font-size: 1.15em; */
+         border-radius: 12px;
+         border: 2px solid #5f78c2;
+         padding: 5px;
+     }
+
+     sup, .eponymcount {
          /* font-weight: bold; */
          /* font-size: 0.70em; */
          color: dimgray
@@ -114,7 +127,7 @@
          padding-top: 5px;
      }
 
-     #persons-title {
+     #eponyms-title {
          font-size: 1.55em;
          font-weight: bold;
          padding: 0.95em;

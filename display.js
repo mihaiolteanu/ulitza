@@ -1,5 +1,4 @@
-const { p, div, a, sup, span, h3, input, b } = van.tags
-
+const { div, a, sup, span, input, b } = van.tags
 import regions from "./regions.js"
 
 const statistics = await fetch("http://192.168.1.8:8085/out/all.json")
@@ -7,30 +6,28 @@ const statistics = await fetch("http://192.168.1.8:8085/out/all.json")
 
 const regionsNames = R.map(R.head, regions)
 
-// Returns true if `country` has at least one street name, false otherwise
-const countryHasData = (country) =>
+// Return the `region` countries with at least one eponym
+const countries = R.memoizeWith(R.identity, region =>
   R.pipe(
-    R.map(R.head),
-    R.find(R.equals(country)),
-    R.complement(R.isNil)    
-  )(statistics)
-
-// All relevant country names for the given `region`
-const regionCountryNames = region =>
-  R.pipe(
-    R.filter(R.compose(R.equals(region), R.head)),    
+    R.filter(R.compose(R.equals(region), R.head)),
     R.flatten,
-    // The first entry is the region name
+    // Pick all the countries
     R.tail,
-    // Keep only countries that have some persons
-    R.filter(countryHasData),
-  )(regions)
+    // Keep only countries that have at least one eponym
+    R.filter(country =>
+      R.pipe(
+        R.map(R.head),
+        R.find(R.equals(country)),
+        R.complement(R.isNil)
+      )(statistics)),
+  )(regions))
 
-const countryData = country =>
-  R.filter(R.compose(R.equals(country), R.head), statistics)[0]
-
-// const displayName = (link) =>
-//   R.compose(R.join(" "), R.split("_"), R.last, R.split("/"), decodeURI)(link)
+const countryEponyms = R.memoizeWith(R.identity, country =>
+  R.pipe(
+    R.filter(R.compose(R.equals(country), R.head)),
+    R.prop(0),
+    R.prop(3),    
+  )(statistics)) 
 
 const displayName = (link) =>
   R.pipe(
@@ -44,29 +41,16 @@ const displayName = (link) =>
     R.replace(/-/g, "‑")
   )(link)
 
-const allPersons = R.memoizeWith(R.identity, () =>
+// Return a list of all unique eponyms from all countries.
+const allEponyms = R.memoizeWith(R.identity, () =>
   R.pipe(
     R.chain(R.prop(3)),
     R.map(R.prop(2)),
     R.groupBy(R.identity),    
     R.mapObjIndexed(R.length),
     R.toPairs,
-    R.sortWith([R.descend(R.prop(1))]),
+    R.sortWith([R.descend(R.prop(1))]),    
   )(statistics))
-
-// Keep persons appearing at least three or more times only.
-const frontPagePersons = R.memoizeWith(R.identity, () =>
-  R.reject(R.compose(R.gt(3), R.prop(1)), allPersons()))
-
-const searchResultPersons = (regex) => 
-  R.filter(R.compose(R.prop(0), R.match(new RegExp(regex, "i")), R.prop(0)),
-           allPersons())  
-
-const worldTotal = 
-  R.pipe(
-    R.map(R.props([1, 2])),
-    R.reduce((acc, elem) => [acc[0] + elem[0], acc[1] + elem[1]], [0, 0]),
-  )(statistics)
 
 const capitalize = R.replace(/^./, R.toUpper)
 
@@ -74,16 +58,22 @@ const selectedRegion  = van.state("")
 const selectedCountry = van.state("")
 const searchStr       = van.state(".*")
 
-document.getElementById("statistics").appendChild(
-  span(
-    b(worldTotal[0].toLocaleString('en', { useGrouping: true }))
-  )
-)
+// Total number of eponyms documented thus far.  A useless, but nice piece of
+// info for the curious.
+const EponymsN = R.pipe(
+  R.map(R.props([1, 2])),
+  R.reduce((acc, elem) => [acc[0] + elem[0], acc[1] + elem[1]], [0, 0]),
+  R.prop(0),
+  v => v.toLocaleString('en', { useGrouping: true }),
+  b
+)(statistics)
+document.getElementById("statistics").appendChild(EponymsN)
 
-const personCountries = (name) =>
+// Return a list of countries where the given eponym appears in.
+const eponymOccurence = (eponym) =>
   R.pipe(
     R.filter(country =>
-      R.find(R.compose(R.equals(name), R.prop(2)), country[3])),
+      R.find(R.compose(R.equals(eponym), R.prop(2)), country[3])),
     R.map(R.head),
     R.map(capitalize)
   )(statistics)
@@ -112,40 +102,43 @@ const Search = input({
   },
 })
 
-const Persons = (title, persons) =>
+const Eponyms = (title, eponyms) =>
   span(
-    PersonsTitle(title),
-    R.map(person =>
-      span({ class: "person" },
+    div({ id: "eponyms-title" }, title),
+    R.map(eponym =>
+      span({ class: "eponym" },
         a({
-          href: person[0],
+          href: eponym[0],
           target: "_blank"
-        }, displayName(person[0])),
+        }, displayName(eponym[0])),
         a({
-          class: "personcount",          
+          class: "eponymcount",
           onclick: () => {
-            dialog.innerText = personCountries(person[0]).join("   ")
+            dialog.innerText = eponymOccurence(eponym[0]).join("   ")
             dialog.showModal()
           }
-        },
-          // "(" + person[1] + ") ",
-          sup(person[1]),
-          " "
-        )),
-      persons))
+        }, sup(eponym[1]), " ")),
+      eponyms))
 
-const PersonsTitle = (country) => div({id: "persons-title"}, country)
+const EponymsWorldwide = R.memoizeWith(R.identity, () =>
+  Eponyms(
+    "Worldwide",
+    // Keep eponyms appearing in at least three countries only.
+    R.reject(
+      R.compose(R.gt(3), R.prop(1)),
+      allEponyms())))
 
-const FrontPage = R.memoizeWith(R.identity, () =>
-  Persons("Worldwide", frontPagePersons()))
+const EponymsSearch = (regex) =>
+  Eponyms(
+    "Searching...",    
+    R.filter(
+      R.compose(R.prop(0), R.match(new RegExp(regex, "i")), R.prop(0)),
+      allEponyms()))
 
-const SearchResult = (regex) =>
-  Persons("Searching...", searchResultPersons(regex))
-
-const CountryPersons = R.memoizeWith(R.identity, name =>  {
-  const country = countryData(name)
-  return Persons(capitalize(country[0]), country[3])
-})
+const EponymsCountry = R.memoizeWith(R.identity, name =>    
+  Eponyms(
+    capitalize(name),
+    countryEponyms(name)))
 
 const RegionCountries = R.memoizeWith(R.identity, (region) => span(
   R.map(country =>
@@ -163,7 +156,7 @@ const RegionCountries = R.memoizeWith(R.identity, (region) => span(
           )
         }
       }, capitalize(country) + " ")),
-    regionCountryNames(region))))
+    countries(region))))
 
 
 // Display persons on country change
@@ -171,10 +164,10 @@ const RegionCountries = R.memoizeWith(R.identity, (region) => span(
 document.getElementById("persons").appendChild(
   van.bind(selectedCountry, searchStr, (selectedCountry, searchStr) => {    
     if (searchStr !== ".*")
-      return SearchResult(searchStr)
+      return EponymsSearch(searchStr)
     else if (selectedCountry !== "")
-      return CountryPersons(selectedCountry)
-    else return FrontPage()
+      return EponymsCountry(selectedCountry)
+    else return EponymsWorldwide()
   }))
 
 
@@ -199,7 +192,8 @@ const Regions = span(
     }, capitalize(region)),
     regionsNames),
   a({
-    onclick: () => document.getElementById("regions").replaceChildren(Search)
+    onclick: () =>
+      document.getElementById("regions").replaceChildren(Search)
   },
     b("S"))
 )
