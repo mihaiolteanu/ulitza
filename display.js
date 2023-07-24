@@ -1,4 +1,4 @@
-const { div, a, sup, span, input, b } = van.tags
+const { div, a, sup, span, input, b, button } = van.tags
 import regions from "./regions.js"
 
 const statistics = await fetch("http://192.168.1.8:8085/out/all.json")
@@ -22,12 +22,16 @@ const countries = R.memoizeWith(R.identity, region =>
       )(statistics)),
   )(regions))
 
-const countryEponyms = R.memoizeWith(R.identity, country =>
+const countryEponyms = country =>
   R.pipe(
     R.filter(R.compose(R.equals(country), R.head)),
     R.prop(0),
-    R.prop(3),    
-  )(statistics)) 
+    R.prop(3),
+    R.sortWith([vSort.val(R.prop(1))]),    
+  )(statistics) 
+
+const eponymDisplayFormat = (eponym) =>  
+  vLanguage.val === "EN" ? displayName(eponym[2]) : eponym[0]
 
 const displayName = (link) =>
   R.pipe(
@@ -37,8 +41,8 @@ const displayName = (link) =>
     // Add non-line-breaking spaces and dashes to display the person name on a
     // single line
     R.split("_"),
-    R.join(" "),
-    R.replace(/-/g, "‑")
+    R.join(" "),
+    // R.replace(/-/g, "‑")
   )(link)
 
 // Return a list of all unique eponyms from all countries.
@@ -46,20 +50,22 @@ const allEponyms = R.memoizeWith(R.identity, () =>
   R.pipe(
     R.chain(R.prop(3)),
     R.map(R.prop(2)),
-    R.groupBy(R.identity),    
+    R.groupBy(R.identity),
     R.mapObjIndexed(R.length),
-    R.toPairs,    
-    R.sortWith([R.descend(R.prop(1))]),
+    R.toPairs,
+    // R.sortWith([vSort.val(R.prop(1))]),
     // Force the [eponym, count, link] format.
-    R.map(v => [v[0], v[1], v[0]]),
-    R.tap(console.log)
+    // There is no translation for worlwide eponyms
+    R.map(v => [(displayName(v[0])), v[1], v[0]]),
   )(statistics))
 
 const capitalize = R.replace(/^./, R.toUpper)
 
-const selectedRegion  = van.state("")
-const selectedCountry = van.state("")
-const searchStr       = van.state(".*")
+const vRegion    = van.state("")
+const vCountry   = van.state("")
+const vLanguage  = van.state("EN")
+const vSort      = van.state(R.descend)
+const vSearchStr = van.state(".*")
 
 document.getElementById("eponyms-total-unique").appendChild(
   R.pipe(
@@ -84,32 +90,15 @@ dialog.addEventListener("click", ({ target: dialog }) => {
     dialog.close('dismiss')
 })    
 
-const Search = input({
-  type: "search",  
-  size: "15",
-  autofocus: "true",  
-  oninput: t => {    
-    const value = t.target.value
-    if (value.length > 2) {
-      searchStr.val = t.target.value
-    }
-    else if (value.length === 0) {
-      document.getElementById("regions").replaceChildren(Regions)
-    }
-    // Reset
-    else searchStr.val = ".*"
-  },
-})
-
 const Eponyms = (title, eponyms) =>
   span(
-    div({ id: "eponyms-title" }, title),
+    div({ id: "eponyms-title" }, title),    
     R.map(eponym =>
       span({ class: "eponym" },
         a({
           href: eponym[2],
           target: "_blank"
-        }, displayName(eponym[2])),
+        }, eponymDisplayFormat(eponym)),
         a({
           class: "eponymcount",
           onclick: () => {
@@ -119,37 +108,40 @@ const Eponyms = (title, eponyms) =>
         }, sup(eponym[1]), " ")),
       eponyms))
 
-const EponymsWorldwide = R.memoizeWith(R.identity, () =>
+const EponymsWorldwide = () =>
   Eponyms(
     "Worldwide",
     // Keep eponyms appearing in at least three countries only.
-    R.reject(
-      R.compose(R.gt(3), R.prop(1)),
-      allEponyms())))
+    R.pipe(
+      R.reject(R.compose(R.gt(3), R.prop(1))),
+      R.sortWith([vSort.val(R.prop(1))]),      
+    )(allEponyms())
+  )
 
 const EponymsSearch = (regex) =>
   Eponyms(
     "Searching...",    
     R.filter(
       R.compose(R.prop(0), R.match(new RegExp(regex, "i")), R.prop(0)),
+      R.sortWith([vSort.val(R.prop(1))]),
       allEponyms()))
 
-const EponymsCountry = R.memoizeWith(R.identity, name =>    
+const EponymsCountry = country =>
   Eponyms(
-    capitalize(name),
-    countryEponyms(name)))
+    capitalize(country),
+    countryEponyms(country))
 
 const RegionCountries = R.memoizeWith(R.identity, (region) => span(
   R.map(country =>
     span({ class: "country" },
       a({
         onclick: () => {
-          selectedCountry.val = country,
-          selectedRegion.val = ""
+          vCountry.val = country,
+          vRegion.val = ""
         },
         href: `#${country}`,
         id: {
-          deps: [selectedCountry],
+          deps: [vCountry],
           f: R.ifElse(
             R.equals(country), R.always("selected-country"), R.always("")
           )
@@ -161,29 +153,56 @@ const RegionCountries = R.memoizeWith(R.identity, (region) => span(
 // Display persons on country change
 // If no country selected, display all persons
 document.getElementById("persons").appendChild(
-  van.bind(selectedCountry, searchStr, (selectedCountry, searchStr) => {    
-    if (searchStr !== ".*")
-      return EponymsSearch(searchStr)
-    else if (selectedCountry !== "")
-      return EponymsCountry(selectedCountry)
+  van.bind(vCountry, vSearchStr, vLanguage, vSort, (country, str) => {
+    console.log(vSort.val)
+    if (str !== ".*")
+      return EponymsSearch(str)
+    else if (country !== "")
+      return EponymsCountry(country)
     else return EponymsWorldwide()
   }))
 
 
 // Display countries on region change
 document.getElementById("countries").appendChild(
-  van.bind(selectedRegion, (selectedRegion) =>
-    RegionCountries(selectedRegion)
+  van.bind(vRegion, (vRegion) =>
+    RegionCountries(vRegion)
 ))
 
-const Regions = span(  
+
+document.getElementById("language")
+  .addEventListener("click", () => vLanguage.val = vLanguage.val === "EN" ? "Native" : "EN"
+)
+
+document.getElementById("sort")
+  .addEventListener("click", () => vSort.val = vSort.val === R.descend ? R.ascend : R.descend
+)
+
+const Search = input({
+  type: "search",
+  size: "15",
+  autofocus: "true",
+  oninput: t => {
+    const value = t.target.value
+    if (value.length > 2) {
+      vSearchStr.val = t.target.value
+    }
+    else if (value.length === 0) {
+      document.getElementById("regions").replaceChildren(Regions)
+    }
+    // Reset
+    else vSearchStr.val = ".*"
+  },
+})
+
+const Regions = span(
   R.map(region =>
     a({
       href: `#${region}`,
-      onclick: () => selectedRegion.val =
-        selectedRegion.val === region ? "" : region,
+      onclick: () => vRegion.val =
+        vRegion.val === region ? "" : region,
       id: {
-        deps: [selectedRegion],
+        deps: [vRegion],
         f: R.ifElse(
           R.equals(region), R.always("selected-region"), R.always("")
         )
@@ -200,9 +219,9 @@ const Regions = span(
 const Logo = a({
   href: "#",
   onclick: () => {
-    selectedRegion.val = ""
-    selectedCountry.val = ""
-    searchStr.val = ".*"
+    vRegion.val    = ""
+    vCountry.val   = ""
+    vSearchStr.val = ".*"
   }
 }, "ulitza")
 
