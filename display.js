@@ -27,7 +27,7 @@ const countryEponyms = country =>
     R.filter(R.compose(R.equals(country), R.head)),
     R.prop(0),
     R.prop(3),
-    R.sortWith([vSort.val(R.prop(1))]),    
+    R.sortWith([sortDirection()(R.prop(1))]),    
   )(statistics) 
 
 const eponymDisplayFormat = (eponym) =>  
@@ -64,15 +64,11 @@ const capitalize = R.replace(/^./, R.toUpper)
 const vRegion    = van.state("")
 const vCountry   = van.state("")
 const vLanguage  = van.state("EN")
-const vSort      = van.state(R.descend)
+const vSort      = van.state("down")
 const vSearchStr = van.state(".*")
 
-document.getElementById("eponyms-total-unique").appendChild(
-  R.pipe(
-    R.length,
-    e => e.toLocaleString('en', { useGrouping: true }),
-    b
-  )(allEponyms()))
+const sortDirection = () =>
+  vSort.val === "up" ? R.ascend : R.descend
 
 // Return a list of countries where the given eponym appears in.
 const eponymOccurence = (eponym) =>
@@ -114,17 +110,17 @@ const EponymsWorldwide = () =>
     // Keep eponyms appearing in at least three countries only.
     R.pipe(
       R.reject(R.compose(R.gt(3), R.prop(1))),
-      R.sortWith([vSort.val(R.prop(1))]),      
+      R.sortWith([sortDirection()(R.prop(1))]),      
     )(allEponyms())
   )
 
 const EponymsSearch = (regex) =>
   Eponyms(
-    "Searching...",    
-    R.filter(
-      R.compose(R.prop(0), R.match(new RegExp(regex, "i")), R.prop(0)),
-      R.sortWith([vSort.val(R.prop(1))]),
-      allEponyms()))
+    "Searching...",
+    R.pipe(
+      R.filter(R.compose(R.prop(0), R.match(new RegExp(regex, "i")), R.prop(0))),
+      R.sortWith([sortDirection()(R.prop(1))]),
+    )(allEponyms()))
 
 const EponymsCountry = country =>
   Eponyms(
@@ -149,47 +145,14 @@ const RegionCountries = R.memoizeWith(R.identity, (region) => span(
       }, capitalize(country) + " ")),
     countries(region))))
 
-
-// Display persons on country change
-// If no country selected, display all persons
-document.getElementById("persons").appendChild(
-  van.bind(vCountry, vSearchStr, vLanguage, vSort, (country, str) => {
-    console.log(vSort.val)
-    if (str !== ".*")
-      return EponymsSearch(str)
-    else if (country !== "")
-      return EponymsCountry(country)
-    else return EponymsWorldwide()
-  }))
-
-
-// Display countries on region change
-document.getElementById("countries").appendChild(
-  van.bind(vRegion, (vRegion) =>
-    RegionCountries(vRegion)
-))
-
-
-document.getElementById("language")
-  .addEventListener("click", () => vLanguage.val = vLanguage.val === "EN" ? "Native" : "EN"
-)
-
-document.getElementById("sort")
-  .addEventListener("click", () => vSort.val = vSort.val === R.descend ? R.ascend : R.descend
-)
-
 const Search = input({
-  type: "search",
-  size: "15",
-  autofocus: "true",
-  oninput: t => {
+  type: "search",  
+  autofocus: "false",
+  oninput: t => {    
     const value = t.target.value
     if (value.length > 2) {
       vSearchStr.val = t.target.value
-    }
-    else if (value.length === 0) {
-      document.getElementById("regions").replaceChildren(Regions)
-    }
+    }    
     // Reset
     else vSearchStr.val = ".*"
   },
@@ -199,6 +162,7 @@ const Regions = span(
   R.map(region =>
     a({
       href: `#${region}`,
+      // Show/hide region on click
       onclick: () => vRegion.val =
         vRegion.val === region ? "" : region,
       id: {
@@ -208,12 +172,7 @@ const Regions = span(
         )
       }
     }, capitalize(region)),
-    regionsNames),
-  a({
-    onclick: () =>
-      document.getElementById("regions").replaceChildren(Search)
-  },
-    b("S"))
+    regionsNames)  
 )
 
 const Logo = a({
@@ -225,6 +184,59 @@ const Logo = a({
   }
 }, "ulitza")
 
-// display regions
-document.getElementById("regions").appendChild(Regions)
-document.getElementById("ulitsa").appendChild(Logo)
+
+const id = (id) => document.getElementById(id)
+
+// Display a unique count of eponyms
+id("eponyms-total-unique").appendChild(
+  R.pipe(
+    R.length,
+    e => e.toLocaleString('en', { useGrouping: true }),
+    b
+  )(allEponyms()))
+
+id("regions").appendChild(Regions)
+id("ulitsa").appendChild(Logo)
+id("search").replaceChildren(Search)
+id("countries").appendChild(
+  // Update shown countries on region change
+  van.bind(vRegion, (vRegion) =>
+    RegionCountries(vRegion)
+))
+
+id("language").addEventListener("click", () => {  
+  if (vLanguage.val === "EN") {    
+    id("english").style.display = "none"
+    id("native").style.display = "inline"
+    vLanguage.val = "native"    
+  } else {
+    id("english").style.display = "inline"
+    id("native").style.display = "none"
+    vLanguage.val = "EN"
+  }
+})
+
+id("sort").addEventListener("click", () => {
+    if (vSort.val === "down") {      
+      id("arrow-up").style.display = "none"
+      id("arrow-down").style.display = "inline"
+      vSort.val = "up"
+    }
+    else {
+      id("arrow-up").style.display = "inline"
+      id("arrow-down").style.display = "none"
+      vSort.val = "down"
+    }    
+  }
+)
+
+// Display persons on country change
+// If no country selected, display all persons
+id("persons").appendChild(
+  van.bind(vCountry, vSearchStr, vLanguage, vSort, (country, str) => {    
+    if (str !== ".*")
+      return EponymsSearch(str)
+    else if (country !== "")
+      return EponymsCountry(country)
+    else return EponymsWorldwide()
+  }))

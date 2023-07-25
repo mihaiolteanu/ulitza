@@ -29,7 +29,7 @@
          text-align: center;         
      }
      
-     #regions, #countries {
+     #regions, #countries, #search-bar {
          background-color: #d7e0f7;
          text-align: center;  
          /* font-weight: bold; */
@@ -118,6 +118,7 @@
      }
 
      #totals, #info {
+         padding-top: 0.5em;
          display: flex;
          justify-content: space-between;
      }
@@ -133,8 +134,10 @@
          padding-bottom: 0.55em;
      }
 
-     #search {
-         padding-top: 0.5em;
+     input {         
+         background-color: #d7e0f7;
+         border-radius: 12px;
+         border: 2px solid #edeff5;
      }
 
      img {
@@ -169,23 +172,32 @@
         <div id="summary">Eponymous streets and landmarks worldwide</div>        
     </div>
     
-    <div id="regions-and-countries">
-        <div id="regions"></div>        
+    <div id="regions-and-countries">        
+        <div id="search-bar">
+            <span id="search">
+            </span>
+        </div>
+        <div id="regions"></div>
         <div id="countries"></div>
     </div>
     
     <div id="content">
         <div id="info">
             <span>                
-                <span type="button" id="language">
-                    <img src="./language_icons/language.svg" width="30px">
+                <span id="language">
+                    <img id="english" src="./language_icons/english.svg" style="display:inline" width="30px">
+                    <img id="native" src="./language_icons/letter-chinese.svg" style="display:none" width="30px">
                 </span>
                 <span id="sort">
-                    <img src="./language_icons/sort-vertical.svg" width="30px">
+                    <img id="arrow-up"   src="./language_icons/crowd2.svg"   style="display:inline" width="30px">
+                    <img id="arrow-down" src="./language_icons/person.svg" style="display:none"   width="30px">
                 </span>
             </span>
+            <!-- <input id="search" type="text" placeholder="Search.."> -->
+            
             <span>
-                <img src="./language_icons/surprise.svg" width="30px">
+                <img src="./language_icons/edit.svg" title="Edit this country" width="30px">                
+                <img src="./language_icons/surprise.svg" title="Surprise me!" width="30px">                
             </span>
             
         </div>
