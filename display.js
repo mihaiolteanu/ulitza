@@ -6,37 +6,24 @@ const statistics = await fetch("http://192.168.1.8:8085/out/all.json")
 
 const regionsNames = R.map(R.head, regions)
 
-// Return the `region` countries with at least one eponym
+// Return all the countries in the given `region`
 const countries = R.memoizeWith(R.identity, region =>
   R.pipe(
-    R.filter(R.compose(R.equals(region), R.head)),
-    R.flatten,
-    // Pick all the countries
-    R.tail,
-    // Keep only countries that have at least one eponym
-    R.filter(country =>
-      R.pipe(
-        R.map(R.head),
-        R.find(R.equals(country)),
-        R.complement(R.isNil)
-      )(statistics)),
+    R.filter(R.propEq(0, region)),
+    R.path([0, 1]),
+    R.defaultTo([]),
+    // Keep countries that have at least one eponym.
+    countries => R.innerJoin(
+      (a, b) => a[0] === b,
+      countries,
+      R.map(R.head, statistics))    
   )(regions))
-
-const countryEponyms = country =>
-  R.pipe(
-    R.filter(R.compose(R.equals(country), R.head)),
-    R.prop(0),
-    R.prop(3),
-    R.sortWith([sortDirection()(R.prop(1))]),    
-  )(statistics) 
 
 const eponymDisplayFormat = (eponym) =>  
   vLanguage.val === "EN" ? displayName(eponym[2]) : eponym[0]
 
 const displayName = (link) =>
-  R.pipe(
-    decodeURI,
-    R.split("/"),
+  R.pipe(    
     R.last,
     // Add non-line-breaking spaces and dashes to display the person name on a
     // single line
@@ -47,16 +34,15 @@ const displayName = (link) =>
 
 // Return a list of all unique eponyms from all countries.
 const allEponyms = R.memoizeWith(R.identity, () =>
-  R.pipe(
-    R.chain(R.prop(3)),
+  R.pipe(    
+    R.chain(R.prop(1)),    
     R.map(R.prop(2)),
     R.groupBy(R.identity),
     R.mapObjIndexed(R.length),
-    R.toPairs,
-    // R.sortWith([vSort.val(R.prop(1))]),
-    // Force the [eponym, count, link] format.
-    // There is no translation for worlwide eponyms
-    R.map(v => [(displayName(v[0])), v[1], v[0]]),
+    R.toPairs,    
+    // Force the [[lang, eponym], count, [lang, eponym]] format.
+    // There is no translation for worlwide eponyms    
+    R.map(v => [(R.last(R.split(",", v[0]))), v[1], R.split(",", v[0])])
   )(statistics))
 
 const capitalize = R.replace(/^./, R.toUpper)
@@ -72,9 +58,9 @@ const sortDirection = () =>
 
 // Return a list of countries where the given eponym appears in.
 const eponymOccurence = (eponym) =>
-  R.pipe(
+  R.pipe(    
     R.filter(country =>
-      R.find(R.compose(R.equals(eponym), R.prop(2)), country[3])),
+      R.find(R.propEq(2, eponym[2]), country[1])),
     R.map(R.head),
     R.map(capitalize)
   )(statistics)
@@ -86,19 +72,22 @@ dialog.addEventListener("click", ({ target: dialog }) => {
     dialog.close('dismiss')
 })    
 
+const buildLink = l => `https://${l[0]}.wikipedia.org/wiki/${l[1]}`
+
 const Eponyms = (title, eponyms) =>
-  span(
-    div({ id: "eponyms-title" }, title),    
+  span(    
+    div({ id: "eponyms-title" }, title),
+    id("info"),
     R.map(eponym =>
       span({ class: "eponym" },
         a({
-          href: eponym[2],
+          href: buildLink(eponym[2]),
           target: "_blank"
         }, eponymDisplayFormat(eponym)),
         a({
           class: "eponymcount",
           onclick: () => {
-            dialog.innerText = eponymOccurence(eponym[0]).join("   ")
+            dialog.innerText = eponymOccurence(eponym).join("   ")
             dialog.showModal()
           }
         }, sup(eponym[1]), " ")),
@@ -125,34 +114,37 @@ const EponymsSearch = (regex) =>
 const EponymsCountry = country =>
   Eponyms(
     capitalize(country),
-    countryEponyms(country))
+    R.pipe(
+      R.filter(R.compose(R.equals(country), R.head)),
+      R.path([0, 1]),
+      R.sortWith([sortDirection()(R.prop(1))]),
+    )(statistics))
 
 const RegionCountries = R.memoizeWith(R.identity, (region) => span(
   R.map(country =>
     span({ class: "country" },
       a({
         onclick: () => {
-          vCountry.val = country,
+          vCountry.val = country[0],
           vRegion.val = ""
         },
-        href: `#${country}`,
+        href: `#${country[0]}`,
         id: {
           deps: [vCountry],
           f: R.ifElse(
-            R.equals(country), R.always("selected-country"), R.always("")
+            R.equals(country[0]), R.always("selected-country"), R.always("")
           )
         }
-      }, capitalize(country) + " ")),
+      }, country[1] + " ")),
     countries(region))))
 
 const Search = input({
-  type: "search",  
-  autofocus: "false",
-  oninput: t => {    
-    const value = t.target.value
-    if (value.length > 2) {
+  type: "search",
+  // id: "search-input",
+  autofocus: "true",  
+  oninput: t => {        
+    if (t.target.value.length > 2)
       vSearchStr.val = t.target.value
-    }    
     // Reset
     else vSearchStr.val = ".*"
   },
@@ -197,12 +189,32 @@ id("eponyms-total-unique").appendChild(
 
 id("regions").appendChild(Regions)
 id("ulitsa").appendChild(Logo)
-id("search").replaceChildren(Search)
 id("countries").appendChild(
   // Update shown countries on region change
   van.bind(vRegion, (vRegion) =>
     RegionCountries(vRegion)
 ))
+
+// Replace the regions with a search input
+id("search-button").addEventListener("click", () => {
+  id("regions").style.display = "none"
+  id("search-input").style.display = "inline"
+  id("search-input").focus()
+})
+
+// Replace the search input with the regions
+id("search-input").addEventListener("focusout", () => {
+  id("regions").style.display = "block"
+  id("search-input").style.display = "none"
+  vSearchStr.val = ".*"
+})
+
+id("search-input").addEventListener("input", (t) => {
+  if (t.target.value.length > 2)
+      vSearchStr.val = t.target.value
+    // Reset
+  else vSearchStr.val = ".*"
+})
 
 id("language").addEventListener("click", () => {  
   if (vLanguage.val === "EN") {    

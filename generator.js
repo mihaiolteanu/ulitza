@@ -5,7 +5,7 @@ import osm_parser from 'osm-pbf-parser'
 import stringify from "json-stringify-pretty-compact"
 import * as R from "ramda"
 import * as S from "sanctuary"
-import {equivalentStreet} from "./equivalents.js"
+import {equivalentStreet, equivalentDuplicates} from "./equivalents.js"
 import {stripAffixes} from "./affixes.js"
 
 const { pipe, map, join, uniqBy, groupBy, mapObjIndexed, length, toPairs} = R
@@ -17,6 +17,8 @@ const osm = country => path.resolve("osm_data", country + "-latest.osm.pbf")
 // Save `data` object containing streets info to the given `file` location
 const write = file => data =>
   fs.writeFileSync(file, stringify(data, { maxLength: 120 }))
+const writeMin = file => data => 
+  fs.writeFileSync(file, JSON.stringify(data))
 
 // Read and parse a json file 
 const read = R.compose(JSON.parse, fs.readFileSync)
@@ -34,6 +36,7 @@ const writeEponyms  = country => write(eponymsFile(country))
 const readEponyms   = country => read(eponymsFile(country))
 
 const writeStats    = write(path.resolve("out", "all.json"))
+const writeStatsMin = writeMin(path.resolve("out", "all.min.json"))
 
 const extractStreets = new Transform({
   objectMode: true,
@@ -188,19 +191,22 @@ const statistics = R.pipe(
     R.pipe(
       readCountry,
       R.filter(R.compose(R.startsWith("http"), R.prop(2))),
-      names => [
-        country,
-        // Unique number of persons for this country
-        names.length,
-        // Total number of streets with person names
-        R.reduce((acc, elem) => acc + elem[1], 0, names),
-        // The streets themselves
-        names
-      ]
+      // To reduce the output file size, replace the wikipedia link,
+      // "https://en.wikipedia.org/wiki/Stephen_the_Great" with the page language
+      // and person name only, [en, Stephen_the_Great].  
+      R.map(R.evolve({
+        "2": R.pipe(
+          R.split("/"),
+          R.props([2, 4]),
+          v => [R.split(".", v[0])[0], v[1]],
+        )
+      })),
+      eponyms => [country, eponyms]
     )(country)),
   // Only include countries with at least one street
-  R.reject(R.propEq(0, 1)),
-  writeStats
+  R.reject(R.propEq([], 1)),
+  R.tap(writeStats),
+  writeStatsMin
 )
 
 // Check the `country`.json file for same link assigned to multiple entries.  If

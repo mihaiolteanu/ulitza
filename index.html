@@ -28,15 +28,14 @@
          padding: 5px;         
          text-align: center;         
      }
-     
-     #regions, #countries, #search-bar {
-         background-color: #d7e0f7;
-         text-align: center;  
-         /* font-weight: bold; */
-     }
 
+     #regions-and-countries {
+         text-align: center;
+         background-color: #d7e0f7;
+     }
+     
      #regions {
-         font-size: 1.1em;
+         font-size: 1.09em;
      }
 
      #content, #countries {
@@ -104,21 +103,16 @@
      sup, .eponymcount {
          /* font-weight: bold; */
          /* font-size: 0.70em; */
-         color: dimgray
-         
+         color: dimgray   
      }
 
      a, a:visited, a:hover {
          text-decoration: none;
          color: #333d54
-     }
-
-     #github {
-         text-align: right;
-     }
+     }     
 
      #totals, #info {
-         padding-top: 0.5em;
+         /* padding-top: 0.5em; */
          display: flex;
          justify-content: space-between;
      }
@@ -131,24 +125,19 @@
      #eponyms-title {
          font-size: 1.55em;
          font-weight: bold;
-         padding-bottom: 0.55em;
+         padding-top: 0.75em;
      }
 
-     input {         
-         background-color: #d7e0f7;
-         border-radius: 12px;
-         border: 2px solid #edeff5;
+     input {
+         margin-bottom: 0px;
+         font-size: 1.09em;
      }
 
      img {
          margin-bottom: 0rem;
-     }
+     }     
 
-     button {
-         background-color: white;
-     }
-
-     #language, #sort {
+     #language, #sort, #search-button, #surprise, #edit-me {
          cursor: pointer
      }
      
@@ -173,16 +162,13 @@
     </div>
     
     <div id="regions-and-countries">        
-        <div id="search-bar">
-            <span id="search">
-            </span>
-        </div>
-        <div id="regions"></div>
+        <div id="regions"></div>        
+        <input id="search-input" type="search" size="12em" style="display:none"/>
         <div id="countries"></div>
     </div>
     
-    <div id="content">
-        <div id="info">
+    <div id="content">        
+        <div id="info">            
             <span>                
                 <span id="language">
                     <img id="english" src="./language_icons/english.svg" style="display:inline" width="30px">
@@ -192,12 +178,13 @@
                     <img id="arrow-up"   src="./language_icons/crowd2.svg"   style="display:inline" width="30px">
                     <img id="arrow-down" src="./language_icons/person.svg" style="display:none"   width="30px">
                 </span>
-            </span>
-            <!-- <input id="search" type="text" placeholder="Search.."> -->
+            </span>            
             
             <span>
-                <img src="./language_icons/edit.svg" title="Edit this country" width="30px">                
-                <img src="./language_icons/surprise.svg" title="Surprise me!" width="30px">                
+                <img id="edit-me" src="./language_icons/edit.svg" title="Edit this country" width="30px">
+                <img id="search-button" src="./language_icons/search.svg" style="display:inline" width="30px">
+                <!-- <img src="./language_icons/surprise.svg" title="Surprise me!" width="30px">                 -->
+                <img id="surprise" src="./language_icons/gift-orange.svg" title="Surprise me!" width="30px">                
             </span>
             
         </div>
