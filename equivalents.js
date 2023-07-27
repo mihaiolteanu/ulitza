@@ -2921,12 +2921,13 @@ const equivalents = {
   "hungary": [
     ["Álmos",                "Álmos vezér"],
     ["Árpád",                "Árpád fejedelem",
-                             "Árpád vezér"]
+                             "Árpád vezér"],
     ["Asztalos Sándor",      "Asztalos"],
     ["Aulich Lajos",         "Aulich"],
     ["Bajcsy-Zsilinszky",    "Bajcsy-Zsilinszky Endre"],
-    ["Bajza",                "Bajza József"],
-    ["Balassa Bálint",       "Balassa"],
+    ["Bajza",                "Bajza József"],    
+    ["Balassi Bálint",       "Balassa Bálint",
+                             "Balassa"],
     ["Balázs Béla",          "Balázs"],
     ["Baross Gábor",         "Baross"],
     ["Bartók Béla",          "Bartók"],
@@ -3028,6 +3029,7 @@ const equivalents = {
     ["Toldi Miklós",         "Toldi"],
     ["Tompa Mihály",         "Tompa"],
     ["Táncsics Mihály",      "Táncsics"],
+    ["Vak Bottyán",          "Bottyán János"],
     ["Vasvári Pál",          "Vasvári"],
     ["Váci Mihály",          "Váci"],
     ["Vásárhelyi Pál",       "Vásárhelyi"],
@@ -3036,7 +3038,7 @@ const equivalents = {
     ["Wesselényi",           "Wesselényi Miklós"],
     ["Zrínyi Miklós",        "Zrínyi"],
     ["Zsigmond",             "Zsigmond király"],
-  ] ,
+  ],
 
   "india": [
     ["Ashok",              "Ashoka"],
