@@ -3959,6 +3959,7 @@ const equivalents = {
     ["Mircea cel Bătrân",         "Mircea cel Bătrîn"],
     ["Mitropolit Dosoftei",       "Mitropolitul Dosoftei"],
     ["Mitropolit Varlaam",        "Mitropolitul Varlaam"],
+    ["Serghei Lazo",              "Сергея Лазо"],
     ["Sfântul Nicolae",           "Sfîntul Nicolae"],
     ["Tineretului",               "Молодёжная"],
     ["Ștefan cel Mare și Sfânt",  "Ștefan cel Mare și Sfînt",
