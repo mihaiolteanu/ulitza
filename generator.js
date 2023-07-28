@@ -157,10 +157,6 @@ const parseUnsorted = (country) =>
     statistics,
   )(country)
 
-
-const allCountries = () =>
-  R.compose(R.map(R.replace(".json", "")), fs.readdirSync)(eponymsPath)
-
 const readCountry = R.pipe(
   eponymsFile,
   fs.readFileSync,
@@ -185,8 +181,8 @@ const hydrateStreets = (country) => streets =>
     )(country)
     : streets
 
-const statistics = R.pipe(
-  allCountries,
+const statistics = () => R.pipe(
+  R.compose(R.map(R.replace(".json", "")), fs.readdirSync),
   R.map(country =>
     R.pipe(
       readCountry,
@@ -207,7 +203,7 @@ const statistics = R.pipe(
   R.reject(R.propEq([], 1)),
   R.tap(writeStats),
   writeStatsMin
-)
+)(eponymsPath)
 
 // Check the `country`.json file for same link assigned to multiple entries.  If
 // found, these should be included under a single person in the equivalents
