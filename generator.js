@@ -188,15 +188,13 @@ const statistics = () => R.pipe(
       readCountry,
       R.filter(R.compose(R.startsWith("http"), R.prop(2))),
       // To reduce the output file size, replace the wikipedia link,
-      // "https://en.wikipedia.org/wiki/Stephen_the_Great" with the page language
-      // and person name only, [en, Stephen_the_Great].  
-      R.map(R.evolve({
-        "2": R.pipe(
-          R.split("/"),
-          R.props([2, 4]),
-          v => [R.split(".", v[0])[0], v[1]],
-        )
-      })),
+      // "https://en.wikipedia.org/wiki/Stephen_the_Great" with the page
+      // language and person name only, [en, Stephen_the_Great].
+      R.map(R.adjust(2, R.pipe(
+        R.split("/"),
+        R.props([2, 4]),
+        v => [R.split(".", v[0])[0], v[1]])
+      )),
       eponyms => [country, eponyms]
     )(country)),
   // Only include countries with at least one street
