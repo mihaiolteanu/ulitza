@@ -14,13 +14,23 @@ const { pipe, map, join, uniqBy, groupBy, mapObjIndexed, length, toPairs} = R
 // from https://download.geofabrik.de/
 const osm = country => path.resolve("osm_data", country + "-latest.osm.pbf")
 
-// Save `data` object containing streets info to the given `file` location
+// Save json `data` in `file`
 const write = file => data =>
   fs.writeFileSync(file, stringify(data, { maxLength: 120 }))
-const writeMin = file => data => 
-  fs.writeFileSync(file, JSON.stringify(data))
 
-// Read and parse a json file 
+// Save json `data` in `file` and export it as `name`
+const writeExport = (file, name) => data =>
+  fs.writeFileSync(
+    file,
+    `export const ${name} =` + stringify(data, { maxLength: 120 }))
+
+// ...minified version
+const writeExportMin = (file, name) => data =>
+  fs.writeFileSync(
+    file,
+    `export const ${name} =` + JSON.stringify(data))
+
+// Read a json file 
 const read = R.compose(JSON.parse, fs.readFileSync)
 
 // Extracted pbf data, but unprocessed and  without equivalents or stripped affixes.
