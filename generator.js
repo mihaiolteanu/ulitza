@@ -66,6 +66,8 @@ const extractStreets = new Transform({
     )(chunk)
 })
 
+// Explore the osm data.  I've used this to explore what osm fields contain
+// street data.
 const inspect = (regex) => new Transform({
   objectMode: true,
   transform: (chunk, encoding, callback) =>
@@ -73,9 +75,10 @@ const inspect = (regex) => new Transform({
       R.map(JSON.stringify),
       R.filter(R.test(regex)),
       R.map(JSON.parse),
+      // Ignore non-interesting fields
       R.map(R.omit(["id", "lat", "lon", "info", "refs"])),
       out => out.length > 0 ?
-        fs.appendFileSync("./test-india.json", JSON.stringify(out, null, 2))
+        fs.appendFileSync("./out/inspect-result.json", JSON.stringify(out, null, 2))
         : "ignore",
       () => callback(null, null)
     )(chunk)
@@ -83,10 +86,11 @@ const inspect = (regex) => new Transform({
 
 const parseOsmData = (country) => {
   const streets = fs.createWriteStream(unsortedFile(country))
-  streets.write("[[\"ignore\", \"ignore\"]")
+  // Add metadata; only the osm last modified date, for now
+  streets.write(`[["${modifiedDateOSM(country)}"]`)
   fs.createReadStream(osm(country))
     .pipe(new osm_parser())
-    .pipe(extractStreets)        
+    .pipe(extractStreets)
     .on("data", R.pipe(
       uniqBy(join("-")),
       R.map(s => streets.write(",\n" + stringify(s)))
@@ -100,6 +104,8 @@ const parseOsmData = (country) => {
 const parseUnsorted = (country) =>
   R.pipe(
     readUnsorted,
+    // Skip the osm modified date
+    R.tail, 
     // Keep the city name unchanged and clean up the street name (remove
     // affixes and find one single equivalent street for all streets that
     // name the same person)
@@ -114,7 +120,7 @@ const parseUnsorted = (country) =>
     // that country).  This is a fair defense against instances with a
     // single Street M, but tagged multiple times with slightly different
     // affixes or equivalents like Dr. M, King M, etc. Plus, some names are
-    // indeed misspelled, as I cannot imagine official documents nameing
+    // indeed misspelled, as I cannot imagine official documents naming
     // streets in honor of this or that person spells wrongly their
     // names. Allowing just one person per city, together with the stripping
     // of affixes and replacing of equivalents fixes that.
@@ -153,6 +159,8 @@ const parseUnsorted = (country) =>
     // Sort by most frequent street names first.
     R.sortWith([R.descend(R.prop(1))]),
     hydrateStreets(country),
+    // Add back the osm modified date
+    R.prepend(R.head(readUnsorted(country))),
     writeEponyms(country),
     statistics,
   )(country)
@@ -186,6 +194,8 @@ const statistics = () => R.pipe(
   R.map(country =>
     R.pipe(
       readCountry,
+      // Skip the osm modified date
+      R.tail,
       R.filter(R.compose(R.startsWith("http"), R.prop(2))),
       // To reduce the output file size, replace the wikipedia link,
       // "https://en.wikipedia.org/wiki/Stephen_the_Great" with the page
@@ -194,11 +204,15 @@ const statistics = () => R.pipe(
         R.split("/"),
         R.props([2, 4]),
         v => [R.split(".", v[0])[0], v[1]])
-      )),
-      eponyms => [country, eponyms]
+      )),      
+      eponyms => [
+        country,
+        // // osm modified date
+        R.head(readCountry(country)),
+        eponyms]
     )(country)),
   // Only include countries with at least one street
-  R.reject(R.propEq([], 1)),
+  R.reject(R.propEq([], 2)),
   R.tap(writeStats),
   writeStatsMin
 )(eponymsPath)
