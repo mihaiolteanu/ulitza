@@ -9,25 +9,30 @@ const taplog = R.tap(console.log)
 
 const regionsNames = R.map(R.head, regions)
 
-const countryPrettyName = (country) =>
+const countryPrettyName = R.memoizeWith(R.identity, country =>
   R.pipe(
-    R.chain(R.prop(1)),
+    R.chain(R.tail),              // get sub-regions  
+    R.chain(R.tail),              // get countries
+    R.reduce(R.concat, []),
+    taplogv(country),
     R.find(R.propEq(0, country)),
-    R.last,    
-  )(regions)
+    R.last,
+  )(regions)) 
 
 // Return all the countries in the given `region`; each country is an array of
 // raw and pretty name: ([el-salvador, El Salvador]), for example
 const countries = R.memoizeWith(R.identity, region =>
   R.pipe(
     R.filter(R.propEq(0, region)),
-    R.path([0, 1]),
-    R.defaultTo([]),
+    R.chain(R.tail),              // get sub-regions  
+    R.chain(R.tail),              // get countries
+    R.reduce(R.concat, []),
     // Keep countries that have at least one eponym.
     countries => R.innerJoin(
       (a, b) => a[0] === b,
       countries,
-      R.map(R.head, statistics))    
+      R.map(R.head, statistics)),
+    R.sortWith([(R.ascend(R.prop(1)))])    
   )(regions))
 
 const eponymDisplay = R.compose(R.replace(/_/g, " "), R.last)
@@ -120,28 +125,28 @@ const EponymsSearch = (regex) =>
     )(allEponyms()))
 
 const EponymsCountry = country =>
-  Eponyms(
-    countryPrettyName(country),
-    R.pipe(
-      R.filter(R.compose(R.equals(country), R.head)),
+  Eponyms(    
+    country[1],
+    R.pipe(      
+      R.filter(R.compose(R.equals(country[0]), R.head)),
       R.path([0, 2]),
       R.sortWith([sortDirection()(R.prop(1))]),
     )(statistics),
-    R.find(R.propEq(0, country), metadata)[1])
+    R.find(R.propEq(0, country[0]), metadata)[1])
 
-const RegionCountries = R.memoizeWith(R.identity, (region) => span(
+const RegionCountries = R.memoizeWith(R.identity, region => span(
   R.map(country =>
     span({ class: "country" },
       a({
         onclick: () => {
-          vCountry.val = country[0],
+          vCountry.val = country,
           vRegion.val = ""
         },
         href: `#${country[0]}`,
         id: {
           deps: [vCountry],
           f: R.ifElse(
-            R.equals(country[0]), R.always("selected-country"), R.always("")
+            R.equals(country), R.always("selected-country"), R.always("")
           )
         }
       }, country[1] + " ")),
