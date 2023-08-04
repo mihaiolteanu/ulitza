@@ -1,5 +1,5 @@
 const regions = [
-  ["africa", [
+  ["Africa", [
     ["algeria",                                      "Algeria"],
     ["angola",                                       "Angola"],
     ["benin",                                        "Benin"],
@@ -57,7 +57,7 @@ const regions = [
     ["zimbabwe",                                     "Zimbabwe"]
   ]],
 
-  ["americas", [
+  ["Americas", [
     ["argentina",         "Argentina"],
     ["bahamas",           "Bahamas"],
     ["belize",            "Belize"],
@@ -87,7 +87,7 @@ const regions = [
     ["venezuela",         "Venezuela"]
   ]],
 
-  ["asia", [
+  ["Asia", [
     ["afghanistan",                "Afghanistan"],
     ["armenia",                    "Armenia"],
     ["azerbaijan",                 "Azerbaijan"],
@@ -129,7 +129,7 @@ const regions = [
     ["yemen",                      "Yemen"],
   ]],
 
-  ["europe", [
+  ["Europe", [
     ["albania",                       "Albania"],
     ["andorra",                       "Andorra"],
     ["austria",                       "Austria"],
@@ -182,7 +182,7 @@ const regions = [
     ["ukraine",                       "Ukraine"],
   ]],
 
-  ["oceania", [
+  ["Oceania", [
     ["american-oceania",     "American Oceania"],
     ["australia",            "Australia"],
     ["cook-islands",         "Cook Islands"],
@@ -192,8 +192,8 @@ const regions = [
     ["marshall-islands",     "Marshall Islands"],
     ["micronesia",           "Micronesia"],
     ["nauru",                "Nauru"],
-    ["new-caledonia",        "New-caledonia"],
-    ["new-zealand",          "New-zealand"],
+    ["new-caledonia",        "New Caledonia"],
+    ["new-zealand",          "New Zealand"],
     ["niue",                 "Niue"],
     ["palau",                "Palau"],
     ["papua-new-guinea",     "Papua New Guinea"],
