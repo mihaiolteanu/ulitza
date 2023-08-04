@@ -1,12 +1,23 @@
 const { div, a, sup, span, input, b, button } = van.tags
 import regions from "./regions.js"
+import { metadata } from "./out/metadata.js"
+import { statistics } from "./out/all.min.js"
+// const statistics = await fetch("http://192.168.1.8:8085/out/all.json")
+//   .then(s => s.json())
 
-const statistics = await fetch("http://192.168.1.8:8085/out/all.json")
-  .then(s => s.json())
+const taplog = R.tap(console.log) 
 
 const regionsNames = R.map(R.head, regions)
 
-// Return all the countries in the given `region`
+const countryPrettyName = (country) =>
+  R.pipe(
+    R.chain(R.prop(1)),
+    R.find(R.propEq(0, country)),
+    R.last,    
+  )(regions)
+
+// Return all the countries in the given `region`; each country is an array of
+// raw and pretty name: ([el-salvador, El Salvador]), for example
 const countries = R.memoizeWith(R.identity, region =>
   R.pipe(
     R.filter(R.propEq(0, region)),
@@ -19,33 +30,27 @@ const countries = R.memoizeWith(R.identity, region =>
       R.map(R.head, statistics))    
   )(regions))
 
-const eponymDisplayFormat = (eponym) =>  
-  vLanguage.val === "EN" ? displayName(eponym[2]) : eponym[0]
+const eponymDisplay = R.compose(R.replace(/_/g, " "), R.last)
 
-const displayName = (link) =>
-  R.pipe(    
-    R.last,
-    // Add non-line-breaking spaces and dashes to display the person name on a
-    // single line
-    R.split("_"),
-    R.join(" "),
-    // R.replace(/-/g, "‑")
-  )(link)
+const eponymDisplayFormat = (eponym) =>  
+  vLanguage.val === "EN" ? eponymDisplay(eponym[2]) : eponym[0]
 
 // Return a list of all unique eponyms from all countries.
 const allEponyms = R.memoizeWith(R.identity, () =>
-  R.pipe(    
-    R.chain(R.prop(1)),    
+  R.pipe(
+    R.chain(R.prop(2)),    
     R.map(R.prop(2)),
     R.groupBy(R.identity),
     R.mapObjIndexed(R.length),
     R.toPairs,    
-    // Force the [[lang, eponym], count, [lang, eponym]] format.
-    // There is no translation for worlwide eponyms    
-    R.map(v => [(R.last(R.split(",", v[0]))), v[1], R.split(",", v[0])])
+    // There is no translation for worlwide eponyms, so keep a 
+    // [epony, count, [lang, eponym]] structure
+    R.map(v => [
+      eponymDisplay(R.split("|", R.replace(",", "|", v[0]))),
+      v[1],
+      R.split("|", R.replace(",", "|", v[0]))
+    ]),    
   )(statistics))
-
-const capitalize = R.replace(/^./, R.toUpper)
 
 const vRegion    = van.state("")
 const vCountry   = van.state("")
@@ -58,11 +63,12 @@ const sortDirection = () =>
 
 // Return a list of countries where the given eponym appears in.
 const eponymOccurence = (eponym) =>
-  R.pipe(    
+  R.pipe(
     R.filter(country =>
-      R.find(R.propEq(2, eponym[2]), country[1])),
+      R.find(R.propEq(2, eponym[2]), country[2])),    
     R.map(R.head),
-    R.map(capitalize)
+    R.map(countryPrettyName),
+    R.join(", ")
   )(statistics)
 
 // https://stackoverflow.com/questions/72704941/how-do-i-close-dialog-by-clicking-outside-of-it
@@ -72,26 +78,28 @@ dialog.addEventListener("click", ({ target: dialog }) => {
     dialog.close('dismiss')
 })    
 
-const buildLink = l => `https://${l[0]}.wikipedia.org/wiki/${l[1]}`
+const buildLink = l => `https://${l[2][0]}.wikipedia.org/wiki/${l[2][1]}`
 
-const Eponyms = (title, eponyms) =>
-  span(    
-    div({ id: "eponyms-title" }, title),
+const Eponyms = (title, eponyms, date) =>
+  span(
+    div({ id: "eponyms-country" }, title),
     id("info"),
     R.map(eponym =>
       span({ class: "eponym" },
         a({
-          href: buildLink(eponym[2]),
+          href: buildLink(eponym),
           target: "_blank"
         }, eponymDisplayFormat(eponym)),
         a({
           class: "eponymcount",
           onclick: () => {
-            dialog.innerText = eponymOccurence(eponym).join("   ")
+            dialog.innerText = eponymOccurence(eponym)
             dialog.showModal()
           }
         }, sup(eponym[1]), " ")),
-      eponyms))
+      eponyms),
+    div(date ? "Osm data from: " + date : "")
+  )
 
 const EponymsWorldwide = () =>
   Eponyms(
@@ -99,7 +107,7 @@ const EponymsWorldwide = () =>
     // Keep eponyms appearing in at least three countries only.
     R.pipe(
       R.reject(R.compose(R.gt(3), R.prop(1))),
-      R.sortWith([sortDirection()(R.prop(1))]),      
+      R.sortWith([sortDirection()(R.prop(1))]),
     )(allEponyms())
   )
 
@@ -113,12 +121,13 @@ const EponymsSearch = (regex) =>
 
 const EponymsCountry = country =>
   Eponyms(
-    capitalize(country),
+    countryPrettyName(country),
     R.pipe(
       R.filter(R.compose(R.equals(country), R.head)),
-      R.path([0, 1]),
+      R.path([0, 2]),
       R.sortWith([sortDirection()(R.prop(1))]),
-    )(statistics))
+    )(statistics),
+    R.find(R.propEq(0, country), metadata)[1])
 
 const RegionCountries = R.memoizeWith(R.identity, (region) => span(
   R.map(country =>
@@ -138,18 +147,6 @@ const RegionCountries = R.memoizeWith(R.identity, (region) => span(
       }, country[1] + " ")),
     countries(region))))
 
-const Search = input({
-  type: "search",
-  // id: "search-input",
-  autofocus: "true",  
-  oninput: t => {        
-    if (t.target.value.length > 2)
-      vSearchStr.val = t.target.value
-    // Reset
-    else vSearchStr.val = ".*"
-  },
-})
-
 const Regions = span(
   R.map(region =>
     a({
@@ -163,7 +160,7 @@ const Regions = span(
           R.equals(region), R.always("selected-region"), R.always("")
         )
       }
-    }, capitalize(region)),
+    }, region),
     regionsNames)  
 )
 
@@ -203,7 +200,8 @@ id("search-button").addEventListener("click", () => {
 })
 
 // Replace the search input with the regions
-id("search-input").addEventListener("focusout", () => {
+id("search-input").addEventListener("focusout", (ev) => {
+  console.log(ev.target.class)
   id("regions").style.display = "block"
   id("search-input").style.display = "none"
   vSearchStr.val = ".*"
