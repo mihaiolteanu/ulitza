@@ -4,8 +4,7 @@ import fs from 'fs'
 import osm_parser from 'osm-pbf-parser'
 import stringify from "json-stringify-pretty-compact"
 import * as R from "ramda"
-import * as S from "sanctuary"
-import {equivalentStreet, equivalentDuplicates} from "./equivalents.js"
+import {equivalent, equivalentDups, equivalentDupsAll} from "./equivalents.js"
 import {stripAffixes} from "./affixes.js"
 
 const { pipe, map, join, uniqBy, groupBy, mapObjIndexed, length, toPairs} = R
@@ -14,39 +13,37 @@ const { pipe, map, join, uniqBy, groupBy, mapObjIndexed, length, toPairs} = R
 // from https://download.geofabrik.de/
 const osm = country => path.resolve("osm_data", country + "-latest.osm.pbf")
 
-// Save json `data` in `file`
+// RW json data
 const write = file => data =>
   fs.writeFileSync(file, stringify(data, { maxLength: 120 }))
-
-// Save json `data` in `file` and export it as `name`
-const writeExport = (file, name) => data =>
-  fs.writeFileSync(
-    file,
-    `export const ${name} =` + stringify(data, { maxLength: 120 }))
-
-// ...minified version
-const writeExportMin = (file, name) => data =>
-  fs.writeFileSync(
-    file,
-    `export const ${name} =` + JSON.stringify(data))
-
-// Read a json file 
 const read = R.compose(JSON.parse, fs.readFileSync)
 
-// Extracted pbf data, but unprocessed and  without equivalents or stripped affixes.
+// RW out files
 const unsortedPath  = path.resolve("out", "unsorted") 
 const unsortedFile  = country => path.resolve(unsortedPath, country + ".json")
 const writeUnsorted = country => write(unsortedFile(country))
 const readUnsorted  = country => read(unsortedFile(country))
-
-// Processed data, containing counts and urls for eponymous streets
 const eponymsPath   = path.resolve("out", "eponyms") 
 const eponymsFile   = country => path.resolve(eponymsPath, country + ".json")
 const writeEponyms  = country => write(eponymsFile(country))
 const readEponyms   = country => read(eponymsFile(country))
 
-const writeStats    = write(path.resolve("out", "all.json"))
-const writeStatsMin = writeMin(path.resolve("out", "all.min.json"))
+const writeStats = (data) =>
+  fs.writeFileSync(
+    path.resolve("out", "all.js"),
+    `export const statistics =` + stringify(data, { maxLength: 120 }))
+
+const writeStatsMin = data =>
+  fs.writeFileSync(
+    path.resolve("out", "all.min.js"),
+    `export const statistics=` + JSON.stringify(data))
+
+// Return the file modified date
+export const modifiedDateOSM = country => R.pipe(
+  unsortedFile,
+  fs.statSync,
+  f => f.mtime.toDateString().substring(4),
+)(country)
 
 const extractStreets = new Transform({
   objectMode: true,
@@ -115,41 +112,29 @@ const parseUnsorted = (country) =>
   R.pipe(
     readUnsorted,
     // Skip the osm modified date
-    R.tail, 
-    // Keep the city name unchanged and clean up the street name (remove
-    // affixes and find one single equivalent street for all streets that
-    // name the same person)
-    map(R.evolve({
-      "0": R.identity,
-      "1": R.compose(equivalentStreet(country), stripAffixes(country))
-    })),
-    // Join city and street name (by "-") and only allow a single person
-    // name per city.  For example, if city C has Street M, Str M, School M,
-    // etc., we will consider that the city only has one instance of M
-    // (granted that Street, Str and School are all specified as affixes for
-    // that country).  This is a fair defense against instances with a
-    // single Street M, but tagged multiple times with slightly different
-    // affixes or equivalents like Dr. M, King M, etc. Plus, some names are
-    // indeed misspelled, as I cannot imagine official documents naming
-    // streets in honor of this or that person spells wrongly their
-    // names. Allowing just one person per city, together with the stripping
-    // of affixes and replacing of equivalents fixes that.
-
-    // Slight disadvantage: there might officially indeed be different
-    // streets named after the same person, or the same person M names
-    // streets, bridges, piazzas, schools, etc. and this approach will lump
-    // them all togheter.
+    R.tail,
+    // Strip affixes and replace with equivalents;  keep city unchanged
+    R.map(R.adjust(1, R.compose(equivalent(country), stripAffixes(country)))),
+    // Even without the previous step, but moreso after it, there will be
+    // identical [city, name] entries. I've decided to allow only a single
+    // eponym per city, even though there might be eponyms for streets, squares
+    // or other landmarks representing the same person, all in the same city.
+    // This is a fair defense against misspelled streets or ones tagged multiple
+    // times with slightly different affixes or equivalents, all in the same
+    // city.  Counting all these would be a mistake.  Still, in some instances,
+    // the city names themselves are spelled differently (with or without
+    // cedilla, for example).
     uniqBy(join("-")),
-    // Discard the city; keep only the street name
+    // The city name has server its purpose, discard it
     map(R.prop(1)),
     // Count identical street names.
     groupBy(R.identity),
     mapObjIndexed(length),
     // Transform to [streetName, count] array
     R.toPairs,
-    // Remove streets composed of numbers, letters or other names less than
-    // 3 characters; most than likely these do not designate persons.  Note:
-    // it might not apply for China/Korea/Taiwan/etc.
+    // Remove streets composed of numbers, letters or other names less than 3
+    // characters to reduce the output file size; most than likely these do not
+    // designate persons.  Note: it might not apply for China/Korea/Taiwan/etc.
     R.reject(R.compose(
       R.gte(3),
       R.length,
@@ -163,7 +148,7 @@ const parseUnsorted = (country) =>
     // well-tagged countries, there are still meaningful person names in the
     // list.        
     R.reject(R.compose(
-      R.gte(2),
+      R.gte(1),
       R.prop(1))
     ),
     // Sort by most frequent street names first.
@@ -230,7 +215,7 @@ const statistics = () => R.pipe(
 // Check the `country`.json file for same link assigned to multiple entries.  If
 // found, these should be included under a single person in the equivalents
 // section.
-const findDuplicateURLs = (country) =>
+const linkDups = (country) =>
   R.pipe(
     readCountry,    
     R.groupBy(R.prop(2)),
@@ -240,12 +225,12 @@ const findDuplicateURLs = (country) =>
     R.reject(R.propEq('', 0)),
   )(country)
 
-statistics()
-// parseOsm("spain")
-// findDuplicateURLs("turkey")
+const linkDupsAll = () => R.pipe(  
+  R.compose(R.map(R.replace(".json", "")), fs.readdirSync),
+  R.map(R.juxt([R.identity, linkDups])),  
+  R.reject(R.propEq([], 1))
+)(eponymsPath)
 
-// parseOsmData("turkey")
-// parseUnsorted("turkey")
 
 // console.log(
 //   eponymsFile("romania")
