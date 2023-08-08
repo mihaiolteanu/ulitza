@@ -4,14 +4,13 @@ import fs from 'fs'
 import osm_parser from 'osm-pbf-parser'
 import stringify from "json-stringify-pretty-compact"
 import * as R from "ramda"
-import {equivalent, equivalentDups, equivalentDupsAll} from "./equivalents.js"
+import { equivalentStreet } from "./equivalents.js"
 import {stripAffixes} from "./affixes.js"
 
 const { pipe, map, join, uniqBy, groupBy, mapObjIndexed, length, toPairs} = R
 
-// osm pbf file for the given country.  The file must be downloaded manually
-// from https://download.geofabrik.de/
-const osm = country => path.resolve("osm_data", country + "-latest.osm.pbf")
+export const osmPath = country => path.resolve("osm_data", country + "-latest.osm.pbf")
+const inspectPath = country => path.resolve("out", country + "-inspect.json") 
 
 // RW json data
 const write = file => data =>
@@ -21,7 +20,6 @@ const read = R.compose(JSON.parse, fs.readFileSync)
 // RW out files
 const unsortedPath  = path.resolve("out", "unsorted") 
 const unsortedFile  = country => path.resolve(unsortedPath, country + ".json")
-const writeUnsorted = country => write(unsortedFile(country))
 const readUnsorted  = country => read(unsortedFile(country))
 const eponymsPath   = path.resolve("out", "eponyms") 
 const eponymsFile   = country => path.resolve(eponymsPath, country + ".json")
@@ -38,66 +36,70 @@ const writeStatsMin = data =>
     path.resolve("out", "all.min.js"),
     `export const statistics=` + JSON.stringify(data))
 
-// Return the file modified date
-export const modifiedDateOSM = country => R.pipe(
+// Get the file modified date from the OS; good enough to get a glimpse of the
+// freshness of osm data; the alternative is to extract the modified date from
+// the osm file (more complicated)
+const modifiedDateOSM = country => R.pipe(
   unsortedFile,
   fs.statSync,
   f => f.mtime.toDateString().substring(4),
 )(country)
 
-const extractStreets = new Transform({
-  objectMode: true,
-  transform: (chunk, _encoding, callback) =>
-    pipe(
-      // Keep only pbf entries of type `node` and `way`.  If other pbf entries
-      // are found to contain relevant street name data, include them here.      
-      R.filter(R.compose(
-        R.includes(R.__, ["node", "way"]),
-        R.prop("type")
-      )),      
-      // Extract the `tags` key. If it exists, this key contains the street
-      // names.  If not, ignore this entry.
-      R.filter(R.prop("tags")),
-      R.map(R.prop("tags")),
-      // There are multiple keys that contain the city+street name duo. Check
-      // all known combinations on each entry and keep the ones that are valid.
-      // If, in the future, other combinations are found to contain relevant
-      // street name data, include them here.      
-      R.chain(R.juxt([
-        R.props(["is_in:city", "name"]),
-        R.props(["addr:city", "addr:street"])
-      ])),
-      R.reject(R.any(R.isNil)),
-      // Pass the transformed chunk to the next stage.      
-      out => callback(null, out)
-    )(chunk)
-})
-
 // Explore the osm data.  I've used this to explore what osm fields contain
 // street data.
-const inspect = (regex) => new Transform({
-  objectMode: true,
-  transform: (chunk, encoding, callback) =>
-    R.pipe(
-      R.map(JSON.stringify),
-      R.filter(R.test(regex)),
-      R.map(JSON.parse),
-      // Ignore non-interesting fields
-      R.map(R.omit(["id", "lat", "lon", "info", "refs"])),
-      out => out.length > 0 ?
-        fs.appendFileSync("./out/inspect-result.json", JSON.stringify(out, null, 2))
-        : "ignore",
-      () => callback(null, null)
-    )(chunk)
-})
+export const inspectOsmData = (country, regex) => 
+  fs.createReadStream(osmPath(country))
+    .on("open", () => fs.writeFileSync(inspectPath(country), "create new file"))
+    .pipe(new osm_parser())
+    .pipe(new Transform({
+      objectMode: true,
+      transform: (chunk, _encoding, callback) =>
+        R.pipe(
+          R.map(JSON.stringify),
+          R.filter(R.test(new RegExp(regex, "i"))),
+          R.map(JSON.parse),
+          // Ignore non-interesting fields
+          R.map(R.omit(["id", "lat", "lon", "info", "refs", "members"])),
+          out => out.length > 0 ?
+            fs.appendFileSync(inspectPath(country), JSON.stringify(out, null, 2))
+            : "ignore",
+          () => callback(null, null)
+        )(chunk)
+    }))
 
-const parseOsmData = (country) => {
+export const extractOsmData = (country) => {
   const streets = fs.createWriteStream(unsortedFile(country))
   // Add metadata; only the osm last modified date, for now
   streets.write(`[["${modifiedDateOSM(country)}"]`)
-  fs.createReadStream(osm(country))
+  fs.createReadStream(osmPath(country))
     .pipe(new osm_parser())
-    .pipe(extractStreets)
+    .pipe(new Transform({
+      objectMode: true,
+      transform: (chunk, _encoding, callback) =>
+        pipe(
+          // Keep only pbf entries of type `node` and `way`.  If other pbf entries
+          // are found to contain relevant street name data, include them here.      
+          R.filter(R.compose(
+            R.includes(R.__, ["node", "way"]),
+            R.prop("type")
+          )),
+          // Extract the `tags` key. If it exists, this key contains the street
+          // names.  If not, ignore this entry.
+          R.filter(R.prop("tags")),
+          R.map(R.prop("tags")),
+          // There are multiple keys that contain the city+street name duo. Check
+          // all known combinations on each entry and keep the ones that are valid.
+          // If, in the future, other combinations are found to contain relevant
+          // street name data, include them here.      
+          R.chain(R.juxt([
+            R.props(["is_in:city", "name"]),
+            R.props(["addr:city", "addr:street"])
+          ])),
+          R.reject(R.any(R.isNil)),
+          // Pass the transformed chunk to the next stage.      
+          out => callback(null, out)
+        )(chunk)
+    }))
     .on("data", R.pipe(
       uniqBy(join("-")),
       R.map(s => streets.write(",\n" + stringify(s)))
@@ -108,13 +110,13 @@ const parseOsmData = (country) => {
     })
 }
 
-const parseUnsorted = (country) =>
+export const parseOsmData = (country) =>
   R.pipe(
     readUnsorted,
     // Skip the osm modified date
     R.tail,
     // Strip affixes and replace with equivalents;  keep city unchanged
-    R.map(R.adjust(1, R.compose(equivalent(country), stripAffixes(country)))),
+    R.map(R.adjust(1, R.compose(equivalentStreet(country), stripAffixes(country)))),
     // Even without the previous step, but moreso after it, there will be
     // identical [city, name] entries. I've decided to allow only a single
     // eponym per city, even though there might be eponyms for streets, squares
@@ -215,26 +217,19 @@ const statistics = () => R.pipe(
 // Check the `country`.json file for same link assigned to multiple entries.  If
 // found, these should be included under a single person in the equivalents
 // section.
-const linkDups = (country) =>
+export const linkDups = (country) =>
   R.pipe(
     readCountry,    
     R.groupBy(R.prop(2)),
     R.mapObjIndexed(R.length),
     R.toPairs,
     R.reject(R.propEq(1, 1)),    
-    R.reject(R.propEq('', 0)),
+    R.reject(R.propEq('', 0))    
   )(country)
 
-const linkDupsAll = () => R.pipe(  
-  R.compose(R.map(R.replace(".json", "")), fs.readdirSync),
+export const linkDupsAll = () => R.pipe(  
+  R.compose(R.map(R.replace(".json", "")), fs.readdirSync),  
   R.map(R.juxt([R.identity, linkDups])),  
-  R.reject(R.propEq([], 1))
+  R.reject(R.propEq([], 1)),
+  R.map(R.head)
 )(eponymsPath)
-
-
-// console.log(
-//   eponymsFile("romania")
-// )
-
-
-

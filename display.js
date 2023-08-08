@@ -1,39 +1,9 @@
 const { div, a, sup, span, input, b, button } = van.tags
-import regions from "./regions.js"
 import { metadata } from "./out/metadata.js"
 import { statistics } from "./out/all.min.js"
-// const statistics = await fetch("http://192.168.1.8:8085/out/all.json")
-//   .then(s => s.json())
+import { regionsNames, regionCountries, countryDisplayName } from "./regions.js"
 
 const taplog = R.tap(console.log) 
-
-const regionsNames = R.map(R.head, regions)
-
-const countryPrettyName = R.memoizeWith(R.identity, country =>
-  R.pipe(
-    R.chain(R.tail),              // get sub-regions  
-    R.chain(R.tail),              // get countries
-    R.reduce(R.concat, []),
-    taplogv(country),
-    R.find(R.propEq(0, country)),
-    R.last,
-  )(regions)) 
-
-// Return all the countries in the given `region`; each country is an array of
-// raw and pretty name: ([el-salvador, El Salvador]), for example
-const countries = R.memoizeWith(R.identity, region =>
-  R.pipe(
-    R.filter(R.propEq(0, region)),
-    R.chain(R.tail),              // get sub-regions  
-    R.chain(R.tail),              // get countries
-    R.reduce(R.concat, []),
-    // Keep countries that have at least one eponym.
-    countries => R.innerJoin(
-      (a, b) => a[0] === b,
-      countries,
-      R.map(R.head, statistics)),
-    R.sortWith([(R.ascend(R.prop(1)))])    
-  )(regions))
 
 const eponymDisplay = R.compose(R.replace(/_/g, " "), R.last)
 
@@ -72,7 +42,7 @@ const eponymOccurence = (eponym) =>
     R.filter(country =>
       R.find(R.propEq(2, eponym[2]), country[2])),    
     R.map(R.head),
-    R.map(countryPrettyName),
+    R.map(countryDisplayName),
     R.join(", ")
   )(statistics)
 
@@ -134,6 +104,12 @@ const EponymsCountry = country =>
     )(statistics),
     R.find(R.propEq(0, country[0]), metadata)[1])
 
+const regionCountrisWithEponyms = (region) =>
+  R.innerJoin(
+    (a, b) => a[0] === b,
+    regionCountries(region),
+    R.map(R.head, statistics))
+
 const RegionCountries = R.memoizeWith(R.identity, region => span(
   R.map(country =>
     span({ class: "country" },
@@ -150,7 +126,7 @@ const RegionCountries = R.memoizeWith(R.identity, region => span(
           )
         }
       }, country[1] + " ")),
-    countries(region))))
+    regionCountrisWithEponyms(region))))
 
 const Regions = span(
   R.map(region =>
@@ -166,7 +142,7 @@ const Regions = span(
         )
       }
     }, region),
-    regionsNames)  
+    regionsNames())
 )
 
 const Logo = a({

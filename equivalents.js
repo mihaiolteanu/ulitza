@@ -16,15 +16,16 @@ export const equivalentDups = country =>
     R.groupBy(R.identity),
     R.mapObjIndexed(R.length),
     R.toPairs,
-    // One instance is not a dupe
+    // Remove non-duplicates
     R.reject(R.propEq(1, 1)),    
+    R.map(R.head),    
   )(equivalents)
 
-export const allEquivalentDups = () =>
+export const equivalentDupsAll = () =>
   R.pipe(
     R.keys,    
     R.map(R.juxt([R.identity, equivalentDups])),
-    R.reject(R.propEq([], 1))    
+    R.reject(R.propEq([], 1)),    
   )(equivalents)
 
 
