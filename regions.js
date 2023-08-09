@@ -187,8 +187,8 @@ export const regions = [
 
   ["Europe",
     ["europe", [
-      ["albania",                       "Albania"],
-      ["andorra",                       "Andorra"],
+      ["albania",                       "Albania", 2],
+      ["andorra",                       "Andorra", 2],
       ["austria",                       "Austria"],
       ["azores",                        "Azores"],
       ["belarus",                       "Belarus"],
