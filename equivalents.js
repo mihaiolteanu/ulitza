@@ -775,25 +775,25 @@ const equivalents = {
 
   
   "bosnia-herzegovina": [
-    ["Izeta Nanića", "Generala Izeta Nanića"],
-    ["Josipa Bana Jelačića", "Bana Josipa Jelačića"],
-    ["Jovana Raškovića",   "Dr Jovana Raškovića"],
-    ["Karađorđeva",        "Krajla Petra I Karađorđevića",
-                           "Vožda Karađorđa"],
-    ["Kralja Petra I",     "Kralja Petra Prvog"],
-    ["Kralja Tomislava",   "kralja Tomislava"],
-    ["Kulina bana",        "Kulina Bana"],
-    ["Maka Dizdara",       "Mehmedalije Maka Dizdara"],
-    ["Milana Tepića", "Majora Milana Tepića"],
-    ["Miloša Crnjanskog",  "Milosa Crnjanskog"],
-    ["Mladena Stojanovića", "Dr Mladena Stojanovića"],
-    ["Nemanjina",          "Stefana Nemanje"],
-    ["Njegoševa",          "Petra Petrovića Njegoša"],
-    ["Starine Novaka",     "Babanovac"],
-    ["Stevana Sinđelića",  "Vojvode Sinđelića"],
-    ["Vojvode Mišića",     "Vojvode Živojina Mišića"],
-    ["Vojvode Radomira Putnika", "Vojvode Putnika"],
-    ["Zmaj Jovina",        "Jovana Jovanovića Zmaja"]
+    ["Izeta Nanića",              "Generala Izeta Nanića"],
+    ["Josipa Bana Jelačića",      "Bana Josipa Jelačića"],
+    ["Jovana Raškovića",          "Dr Jovana Raškovića"],
+    ["Karađorđeva",               "Krajla Petra I Karađorđevića",
+                                  "Vožda Karađorđa"],
+    ["Kralja Petra I",            "Kralja Petra Prvog"],
+    ["Kralja Tomislava",          "kralja Tomislava"],
+    ["Kulina bana",               "Kulina Bana"],
+    ["Maka Dizdara",              "Mehmedalije Maka Dizdara"],
+    ["Milana Tepića",             "Majora Milana Tepića"],
+    ["Miloša Crnjanskog",         "Milosa Crnjanskog"],
+    ["Mladena Stojanovića",       "Dr Mladena Stojanovića"],
+    ["Nemanjina",                 "Stefana Nemanje"],
+    ["Njegoševa",                 "Petra Petrovića Njegoša"],
+    ["Starine Novaka",            "Babanovac"],
+    ["Stevana Sinđelića",         "Vojvode Sinđelića"],
+    ["Vojvode Mišića",            "Vojvode Živojina Mišića"],
+    ["Vojvode Radomira Putnika",  "Vojvode Putnika"],
+    ["Zmaj Jovina",               "Jovana Jovanovića Zmaja"]
   ],
 
   
@@ -1021,6 +1021,7 @@ const equivalents = {
     ["Княз Александър Батенберг",  "Княз Ал. Батенберг"],
     ["Княз Борис I",               "Цар Борис I",
                                    "Княз Борис"],
+    ["Кирил и Методий",            "Св.Кирил и Методий"],
     ["Никола Вапцаров",            "Никола Й. Вапцаров",
                                    "Никола Йонков Вапцаров"],
     ["Отец Паисий",                "Паисий",
@@ -1032,7 +1033,8 @@ const equivalents = {
     ["Цар Иван Шишман",            "Цар Шишман"],
     ["Цар Симеон",                 "Цар Симеон Велики",
                                    "Цар Симеон I",
-                                   "Симеон Велики"]
+                                   "Симеон Велики"],
+    ["Уилям Гладстон",             "Петко Д. Петков"]
   ],
 
   
