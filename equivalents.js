@@ -668,6 +668,14 @@ const equivalents = {
     ["Xətai",         "Sah İsmayil Xetai"]
   ],
 
+
+  "azores": [
+    ["Almeida Garrett", "Almeida Garret"],
+    ["São João",        "S. João"],
+    ["São Pedro",       "S. Pedro"],
+    ["Serpa Pinto",     "Doutor Serpa Pinto"]
+  ],
+
   
   "belarus": [
     ["Леніна",               "Ленінская"],
