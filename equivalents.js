@@ -1403,15 +1403,20 @@ const equivalents = {
     ["Alojzija Stepinca",          "Kardinala Alojzija Stepinca"],
     ["Andrije Kačića Miošića",     "Fra Andrije Kačića Miošića"],
     ["Brune Bušića",               "Bruna Bušića"],
-    ["Franje Tudmana",             "doktora Franje Tuđmana"],
+    ["Franje Tuđmana",             "Franje Tudmana",
+                                   "doktora Franje Tuđmana"],
     ["Ivana Zajca",                "Ivana pl. Zajca"],
     ["Josipa Jelačića",            "Josipa bana Jelačića"],
     ["Josipa Jurja Strossmayera",  "Josipa Juraja Strossmayera"],
     ["Kraljice Jelene",            "kraljice Jelene"],
+    ["Matije Antuna Reljkovića",   "Antuna Matije Reljkovića"],
     ["Maršala Tita",               "maršala Tita",
                                    "Josipa Broza Tita"],
+    ["Mihovila Pavleka Miškine",   "Pavleka Miškine"],
     ["Petra Krešimira IV",         "Petra Krešimira IV."],
     ["Stjepana Radića",            "braće Radića",
+                                   "Šetalište Stjepana Radića",
+                                   "Stjepana Radica",
                                    "Braće Radića",
                                    "braće Radić"],
     ["Svetog Florijana",           "svetog Florijana"],
@@ -1426,8 +1431,7 @@ const equivalents = {
     ["sv. Mihovila",               "Svetog Mihovila"],
     ["svete Ane",                  "Svete Ane"],
     ["svetog Ivana",               "sv. Ivana",
-                                   "Sv. Ivana"],
-    ["Šetalište Stjepana Radića",  "Stjepana Radica"]
+                                   "Sv. Ivana"]    
   ],
 
   
