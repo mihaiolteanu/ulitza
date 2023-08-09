@@ -1356,6 +1356,7 @@ const equivalents = {
     ["Latorre",                     "Juan José Latorre",
                                     "Almirante Latorre"],
     ["Laura Vicuña",                "Vicuña"],
+    ["Luis Cruz Martínez",          "Teniente Cruz"],
     ["Manuel Bulnes",               "Bulnes",
                                     "General Bulnes"],
     ["Manuel Bustos",               "Bustos"],
