@@ -56,6 +56,7 @@ const affixes = {
   "great-britain"        : /^(the|west|western|north|east|eastern|south)|('s |)(street|road|lane|avenue|hill|way|place|park|square|drive|crescent|court|gardens|terrace|grove|close|walk|end|fields|view|bridge|cottages|parade|mews|hall|side|north|east|west|south|high|gate)$/ig,
   greece                 : /^(Λεωφόρος) /i,
   guatemala              : /^([0-9]*(a | |)(calle|carretera|avenida|calzada)( a |)( zona[1-9]*|))| avenida| calle|[0-9]*$/i,
+  "guernsey-jersey"      : /^(rue|clos|havre) (du |de la |de l'|des |de |)| (road|street|place)$/i,
   guyana                 : / (road|highway|street|drive)$/i,
   "haiti-and-domrep"     : /^(avenida|calle|carretera|autopista|boulevard|rue) /i,
   honduras               : /^(calle|carretera (del |))/i,
