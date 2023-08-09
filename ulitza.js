@@ -1,5 +1,5 @@
 import { program } from "commander"
-import fs from "fs/promises"
+import fs from "fs"
 import * as R from "./ramda.js"
 import * as F from "fluture"
 import S from "sanctuary"
@@ -22,15 +22,17 @@ program
   .action(country =>
     R.pipe(
       osmDownloadLink,
-      // promises are not a vaild datatype for Maybe
+      link => link === "" ? S.Nothing : S.Just(link),
+      // promises are not a vaild datatype for Maybe, use Fluture
       R.map(F.encaseP(fetch)),
       R.map(F.fork
         (console.log)
-        (v => v.text()
-          .then(data => fs.writeFile(osmPath(country), data)
-          .catch(console.log)))),
+        (v => v.arrayBuffer()
+          .then(Buffer.from)
+          .then(buffer => fs.createWriteStream(osmPath(country)).write(buffer))
+          .catch(console.log))),
       S.maybe
-        ("country not found; see the list of available countries with the <country> command")
+        ("country not found; see the list of available countries with the <countries> command")
         (R.always(`downloading ${country} latest osm data...`)),
       console.log
     )(country))
