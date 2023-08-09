@@ -30,6 +30,13 @@ export const equivalentDupsAll = () =>
 
 
 const equivalents = {
+  // SQ
+  "albania": [
+    ["Andon Zako Çajupi", "Andon Zako Cajupi"],
+    ["Sami Frashëri",     "Sami Frasheri"]    
+  ],
+
+  
   "algeria": [
     ["Emir Abdelkader",    "الأمير عبد القادر"],
     ["Houari Boumediene",  "هواري بومدين"],

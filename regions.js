@@ -1,16 +1,6 @@
 import * as R from "./ramda.js"
-import S from "sanctuary"
 
 export const regionsNames = () => R.map(R.head, regions)
-
-export const countryDisplayName = R.memoizeWith(R.identity, country =>
-  R.pipe(
-    R.chain(R.tail),              // get sub-regions  
-    R.chain(R.tail),              // get countries
-    R.reduce(R.concat, []),
-    R.find(R.propEq(0, country)),
-    R.last,
-  )(regions)) 
 
 // Return all the countries in the given `region`
 export const regionCountries = R.memoizeWith(R.identity, region =>
@@ -29,18 +19,24 @@ export const osmDownloadLink = (country) =>
     // Keep only the region containing the given country
     R.find(R.find(R.find(R.propEq(0, country)))),
     // ...if it exists
-    R.propOr("", 0),
-    // Return Just the url or Nothing, if country was spelled wrong, for example
-    v => v === "" ? S.Nothing : S.Just(v),    
-    R.map(r => `http://download.geofabrik.de/${r}/${country}-latest.osm.pbf`),    
+    R.propOr("", 0),    
+    region => region === ""
+      ? ""
+      : `http://download.geofabrik.de/${region}/${country}-latest.osm.pbf`,    
   )(regions)
 
-export const allCountries = () => R.pipe(
+export const allCountryEntries = () => R.pipe(
   R.chain(R.tail),
-  R.chain(R.tail),
-  R.chain(R.tail),
-  R.map(R.head),  
+  R.chain(R.tail),  
+  R.reduce(R.concat, [])
 )(regions)
+
+const countryEntry = country => R.find(R.propEq(0, country), allCountryEntries())
+
+export const allCountries = R.compose(R.map(R.head), allCountryEntries)
+export const countryDisplayName = R.compose(R.prop(1), countryEntry)
+export const countryEponymFrequency = R.compose(R.prop(2), countryEntry)
+export const countryStreetLength = R.compose(R.prop(3), countryEntry)
 
 
 export const regions = [

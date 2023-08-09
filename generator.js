@@ -6,6 +6,7 @@ import stringify from "json-stringify-pretty-compact"
 import * as R from "ramda"
 import { equivalentStreet } from "./equivalents.js"
 import {stripAffixes} from "./affixes.js"
+import { countryEponymFrequency } from "./regions.js"
 
 const { pipe, map, join, uniqBy, groupBy, mapObjIndexed, length, toPairs} = R
 
@@ -142,15 +143,9 @@ export const parseOsmData = (country) =>
       R.length,
       R.prop(0))
     ),
-    // Remove streets that appear only once or twice; these are usually
-    // (though not always) garbage; it also helps in keeping the output file
-    // to a reasonable size.  Negative side effect: for small countries,
-    // there might be no streets left.  Tried alternative: cut the number of
-    // street to a hard-value, like 3000; negative side-effect: for
-    // well-tagged countries, there are still meaningful person names in the
-    // list.        
+    // Protect against garbage entries and very long files (lots of streets)
     R.reject(R.compose(
-      R.gte(1),
+      R.gt(countryEponymFrequency(country)),
       R.prop(1))
     ),
     // Sort by most frequent street names first.
