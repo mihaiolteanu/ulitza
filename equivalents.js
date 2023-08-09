@@ -604,6 +604,7 @@ const equivalents = {
                             "Stolz"],
     ["Rosegger",            "Peter-Rosegger",
                             "Peter Rosegger"],
+    ["Semmelweis",          "Dr. Ignaz Semmelweis"],
     ["Sankt Michael",       "St. Michaeler"],
     ["Schiller",            "Friedrich Schiller"],
     ["Schmidt",             "Franz-Schmidt"],
