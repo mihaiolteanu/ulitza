@@ -1434,9 +1434,17 @@ const equivalents = {
 
   
   "cyprus": [
-    ["Apostolou Andrea",  "Agiou Andreou"],
-    ["Makariou III",      "Archiepiskopou Makariou III",
-                          "Arch. Makariou III"]
+    ["Agiou Georgiou",       "Ayiou Georgiou",
+                             "Agios Georgios"],
+    ["Apostolou Andrea",     "Agiou Andreou"],
+    ["Fragklinou Rousvelt",  "Franklin Roosevelt"],
+    ["Makariou III",         "Archiepiskopou Makariou III",
+                             "Archiepiskopou Makariou",
+                             "Arch. Makariou III",
+                             "Makarios III",
+                             "Leoforos Archiepiskopou Makariou III",
+                             "Leoforos Arch. Makariou III",
+                             "Archbishop Makarios III"]
   ],
 
   

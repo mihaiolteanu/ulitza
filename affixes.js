@@ -38,7 +38,7 @@ const affixes = {
   "costa-rica"           : /^(calle|avenida|carretera|autopista|boulevard|radial|corredor) (interamericana|pacífica|)|.* [0-9]+$|^(avenida|calle|este|paseo|rincon|ruta|boulevard (de las |de la |la |las |del ))/i,
   croatia                : /^(ulica|trg|dr.|obala|cesta|put|bana) (kralja |dr. |bana |kneza |)|^(kralja|bana|kneza) | (ulica|cesta|trg)$/i,
   "czech-republic"       : /^(náměstí|nám.|za|U|V|K|nad|ke|pod|třída|na|ve) |( náměstí|nám.|ská| třída| alej| sady)$|((-|)(straße))$/i,
-  cyprus                 : / (avenue|street|ave.)$/i,
+  cyprus                 : / (avenue|street|ave.|caddesi|bulvarı)$/i,
   cuba                   : /^(calle|avenida|carretera|calzada) (de las |de los |de la |del |de |)| (avenida)$/i,
   denmark                : /^(gammel|vester|vestre|Østre|Øster|nordre|Nørre)|(vejen|gårdsvej|vej|gade|vænget|vang| alle| lande| strand|have|høj|parken|mose|holm|gårds|gård|minde| allé| boulevard|borg)$/i,
   ecuador                : /^(avenida|calle|vía|via|troncal) (de la |de las |del |a |)/i,
