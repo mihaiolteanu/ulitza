@@ -775,10 +775,25 @@ const equivalents = {
 
   
   "bosnia-herzegovina": [
-    ["Karađorđeva",        "Krajla Petra I Karađorđevića"],    
+    ["Izeta Nanića", "Generala Izeta Nanića"],
+    ["Josipa Bana Jelačića", "Bana Josipa Jelačića"],
+    ["Jovana Raškovića",   "Dr Jovana Raškovića"],
+    ["Karađorđeva",        "Krajla Petra I Karađorđevića",
+                           "Vožda Karađorđa"],
+    ["Kralja Petra I",     "Kralja Petra Prvog"],
     ["Kralja Tomislava",   "kralja Tomislava"],
+    ["Kulina bana",        "Kulina Bana"],
+    ["Maka Dizdara",       "Mehmedalije Maka Dizdara"],
+    ["Milana Tepića", "Majora Milana Tepića"],
+    ["Miloša Crnjanskog",  "Milosa Crnjanskog"],
+    ["Mladena Stojanovića", "Dr Mladena Stojanovića"],
+    ["Nemanjina",          "Stefana Nemanje"],
     ["Njegoševa",          "Petra Petrovića Njegoša"],
-    ["Vojvode Mišića",     "Vojvode Živojina Mišića"]
+    ["Starine Novaka",     "Babanovac"],
+    ["Stevana Sinđelića",  "Vojvode Sinđelića"],
+    ["Vojvode Mišića",     "Vojvode Živojina Mišića"],
+    ["Vojvode Radomira Putnika", "Vojvode Putnika"],
+    ["Zmaj Jovina",        "Jovana Jovanovića Zmaja"]
   ],
 
   
