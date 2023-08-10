@@ -3255,10 +3255,19 @@ const equivalents = {
   
   "ireland-and-northern-ireland": [
     ["Francis",        "Saint Francis"],
+    ["Kildare",        "Saint Brigid"],
     ["Lord Edward",    "Edward"],
+    ["Saint Anne",     "St Anne",
+                       "St. Anne"],
     ["Saint John",     "Saint Johns"],
+    ["Saint Joseph",   "St Joseph"],
+    ["Saint Lawrence", "Saint Laurence"],
+    ["Saint Mary",     "Saint Marys",
+                       "St Mary",
+                       "St. Mary"],
     ["Saint Patrick",  "Saint Patricks",
-                       "St Patrick"]
+                       "St Patrick",
+                       "St. Patrick"]
   ],
   
 

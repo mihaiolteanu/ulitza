@@ -66,7 +66,7 @@ const affixes = {
   indonesia              : /^(jalan|jl.)( raya| bypass| by pass|boulevard |bulevar |) /i,
   iran                   : /^(بلوار|خیابان|میدان|آیت|شهید)/i,
   iraq                   : /^(شارع|شەقامی|جادەیا|ڕێگای) | (boulevard|road|street)$/i,
-  "ireland-and-northern-ireland": /^(the) |('s|) (street|road|drive|avenue|square|hill|terrace|place|lane|view)$|(view)$/i,
+  "ireland-and-northern-ireland": /^(the) |('s|) (street|road|drive|avenue|square|hill|terrace|place|lane|view|close|park|grove|walk|court|cove|crescent)$|(view)$/i,
   italy                  : /^(viale|via|corso|piazzale|piazzetta|piazza|lungomare|autostrada|strada|traversa|largo|contrada|salita|vicolo|vico|monte|campo|borgo) (provinciale |statale |)([0-9]* |)(dell'|della |delle |dello |degli |del |dei |di |al |)| (sud|nord|vecchia|antica)$/ig,
   "isle-of-man"          : / (road|promenade|street|main)$/i,
   "israel-and-palestine" : /^(نهج|شارع|طريق|שדרות)/i,  
