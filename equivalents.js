@@ -4135,6 +4135,11 @@ const equivalents = {
     ["Манлайбаатар Дамдинсүрэнгийн",  "Манлайбаатар Дамидансүрэнгийн"]
   ],
 
+
+  "montenegro": [
+    ["Vuka Karadžića", "Vuka Karadzića"]
+  ],
+
   
   "morocco": [
     ["Abdelkrim El Khattabi",           "Abdelkrim Al Khattabi شارع عبد الكريم الخطابي"],
