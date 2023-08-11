@@ -3891,6 +3891,7 @@ const equivalents = {
     ["Ismail Qemajli",  "Ismail Qemali"],
     ["Jusuf Gërvalla",  "Vëllezërit Gërvalla"],
     ["Nëna Terezë",     "Nënë Tereza",
+                        "Nëna Tereze",
                         "Nëna Tereza"],
     ["Skënderbeu",      "Skenderbeu"]
   ],
