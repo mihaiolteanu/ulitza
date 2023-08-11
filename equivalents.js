@@ -3959,7 +3959,9 @@ const equivalents = {
   
 
   "luxembourg": [
-    ["Grande-Duchesse Joséphine-Charlotte", "Charlotte"]
+    ["Grande-Duchesse Joséphine-Charlotte", "Charlotte"],
+    ["Jean-Antoine Zinnen",                 "Antoine Zinnen"],
+    ["Michel Welter",                       "Docteur Michel Welter"]
   ],
   
 
