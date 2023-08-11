@@ -3964,9 +3964,12 @@ const equivalents = {
     ["Michel Welter",                       "Docteur Michel Welter"]
   ],
   
-
+  // MK
   "macedonia": [
     ["Sveti Joakim Osogovski",  "Свети Јоаким Осоговски"],
+    ["Браќа Миладинови",        "Браќа Миладиновци"],
+    ["Борис Трајковски",        "Boris Trajkovski"],
+    ["Франц Прешерн",           "Францe Прешерн"],
     ["Маршал Тито",             "Marshal Tito"]
   ],
   
