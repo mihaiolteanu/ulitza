@@ -3912,6 +3912,11 @@ const equivalents = {
     ["Krišjāņa Barona",     "Kr. Barona"],
     ["Krišjāņa Valdemāra",  "Valdemāra"]
   ],
+
+
+  "liechtenstein": [
+    ["Sankt Luzi", "St. Luzi"]
+  ],
   
 
   "lithuania": [
