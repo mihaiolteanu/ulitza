@@ -113,7 +113,7 @@ const affixes = {
   scotland               : / (street|road)$/i,
   "senegal-and-gambia"   : /^(rue|route|avenue|boulevard) (des |de |)| (road|highway|avenue)$|[a-z][a-z]-[0-9]+$/ig,
   serbia                 : /^(Трг|Булевар|Алеја|Пут|Парк) | (пут|друм|ulica|трг|булевар)$/i,
-  slovakia               : /^(námestie|pri|pod|nad|na|za) |(ova| námestie| rad| utca| cesta)$/i,
+  slovakia               : /^(námestie|pri|pod|nad|na|za|nábrežie) |(ova| námestie| rad| utca| cesta)$/i,
   slovenia               : /^(ulica|trg|pod|cesta|na) | (ulica|cesta|odreda|pot|trg|vrh)$/ig,
   "south-africa"         : /1st|2nd|3rd|4th|5th|6th|7th|8th|11th|12th|east|north|west|south|(road|street|drive|avenue|straat)$/ig,
   "south-korea"          : /(대로)$/i,
