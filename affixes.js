@@ -85,7 +85,7 @@ const affixes = {
   luxembourg             : /^(rue|place|avenue|impasse|route|chemin|allée|boulevard|cours|montée) (du|des|de la|de l'|d'|de|)|^(an der|an de|am|um|op den|op der) |( rue|strooss|gaass| wee|wee)$|^le /i,
   macedonia              : /^(Булевар|Улица) /i,
   "malaysia-singapore-brunei" : /^(jalan) | (street( [0-9]*|)$)/i,
-  malta                  : /^(triq) (il-|)/i,
+  malta                  : /^(triq|rue) (d'|il-|)| (street)$/i,
   mexico                 : /^(calle|avenida|boulevard|carretera|periférico|carr.|vía|calzada| sur|av.|av|blvd.|blvd|paseo|prolongación|plaza|plan) (Vía |via |)(de los|de las|de la|del|de|a |)|^(de los|de las|de la|del|de) | (sur|oriente|poniente)$/ig,
   moldova                : /^(strada|stradela|aleea|bulevardul|calea|drumul|piața|intrarea|șoseaua|улица|переулок|ул.|str.) [0-9]*|(переулок|улица)$/i,
   monaco                 : /^(boulevard|avenue|rue|chemin|quai|place) (de la|des|de l'|de|)/i,

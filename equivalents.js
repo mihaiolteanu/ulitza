@@ -3978,6 +3978,11 @@ const equivalents = {
     ["Perak",          "Tun Perak"],
     ["Tun Dr Ismail",  "Ismail"]
   ],
+
+
+  "malta": [
+    ["San Ġorġ", "San Gorg"]
+  ],
   
 
   "mexico": [
