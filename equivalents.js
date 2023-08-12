@@ -1324,7 +1324,10 @@ const equivalents = {
 
 
   "canary-islands": [
-    ["Colón", "Cristóbal Colón"]
+    ["Colón",            "Cristóbal Colón"],
+    ["Virgen del Pilar", "Nuestra Senora del Carmen",
+                         "Nuestra Señora del Rosario",
+                         "Virgen del Carmen"]
   ],
 
   
