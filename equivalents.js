@@ -665,10 +665,23 @@ const equivalents = {
     ["Zweig",               "Stefan-Zweig"]
   ],
 
-  
+  // AZ
   "azerbaijan": [
-    ["Səməd Vurğun",  "Semed Vurgun"],
-    ["Xətai",         "Sah İsmayil Xetai"]
+    ["Aşıq Molla Cümə",      "Aşıq Molla Cumə"],
+    ["Bakıxanov",            "Abbasqulu ağa Bakıxanov"],
+    ["Cəfər Cabbarlı",       "Cefer Cabbarli"],
+    ["Heydər Əliyev",        "Heyder Eliyev",
+                             "Haydar Aliyev"],
+    ["Həzi Aslanov",         "Hezi Aslanov"],
+    ["Mirzə Ələkbər Sabir",  "Mirza Alakbar Sabir"],
+    ["Nəriman Nərimanov",    "Nəcəf Nərimanov"],
+    ["Nizami",               "Nizami Gencevi"],
+    ["Rəşid Behbudov",       "Rashid Behbudov"],
+    ["Səməd Vurğun",         "Semed Vurgun"],
+    ["Vaqif",                "Molla Pənah Vaqif",
+                             "Molla Penah Vaqif"],
+    ["Xətai",                "Sah İsmayil Xetai",
+                             "Şah İsmayıl Xətai"]
   ],
 
 
