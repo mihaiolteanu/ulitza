@@ -47,6 +47,14 @@ const equivalents = {
                            "Larbi Ben Mhidi"]
   ],
 
+
+  "angola": [
+    ["Amílcar Cabral",      "Amilcar Cabral"],
+    ["António Garcia Neto", "Doutor António Agostinho Neto",
+                            "Dr. Antonio Agostinho Neto"],
+    ["Fidel Castro Ruz",    "Comandante Fidel Castro"]
+  ],  
+
   
   "argentina": [
     ["Alberdi",                 "Juan Bautista Alberdi",
