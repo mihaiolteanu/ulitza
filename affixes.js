@@ -7,6 +7,7 @@ export const stripAffixes = country =>
 const affixes = {
   albania                : /^(rruga|bulevardi|autostrada) (at |e |)/i,
   algeria                : /^(شارع|avenue|rue|boulevard|route|نهج) (رقم |du |de la |de l'|des |de |d' |)/i,
+  "american-oceania"     : /^(pale) | (street|road|drive|way|loop|court|place|avenue|st)$/ig,
   andorra                : /^(carretera|avinguda) (del |d'|)/i,
   angola                 : /^(avenida|rua|estrada)/i,
   argentina              : /^(([0-9]+ - |)avenida|boulevard|bulevar|boulevar|general|nacional|peatonal|avda.|autopista|pasaje|vuelta|camino|autovía|diagonal|paseo|av.) (general|del |de |[0-9]+ - |)|^ruta (provincial|nacional) [0-9]*|^calle [0-9]+.*| (sur|norte)$| \/ .*$/ig,
