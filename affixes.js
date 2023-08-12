@@ -48,6 +48,7 @@ const affixes = {
   estonia                : / (tee|mnt|põik|pst|allee)$/i,
   ethiopia               : / (road)$/i,
   "faroe-islands"        : /^(Í|Undir|Við) |(vegur|gøta)$/i,
+  fiji                   : / (road|street|highway|bay|avenue|place)$/i,
   finland                : /(sentie|senkatu|tie|katu|sen|kuja|mäen|lan|vanha)$/i,
   france                 : /^(rue|place|avenue|impasse|route|chemin|allée|boulevard|cours|chaussée|faubourg|quai|esplanade|square|traverse|clos|parvis) (du |des |de la |de l'|d'|de |)| rue$|^le /i,
   "gcc-states"           : /^(نهج|شارع|طريق|street) |(جادة|road|street)$|[1-9]/ig,
