@@ -78,7 +78,7 @@ const affixes = {
   kazakhstan             : /^(улица|проспект|бульвар) | (улица|проспект)$/i,
   kenya                  : / (road|highway|avenue|bypass)$/i,
   kosovo                 : /^(bulevardi|sheshi|rruga) (e |)/i,
-  kyrgyzstan             : /^(улица) | (улица|проспект|көчөсү)$/i,
+  kyrgyzstan             : /^(улица) | (улица|проспект|көчөсү|переулок)$/i,
   laos                   : /^(rue) | (road)$/i,
   latvia                 : /^(mazā) | (iela|laukums|prospekts|līnija|g.|aleja|bulvāris)$/ig,
   lebanon                : /^(شارع)/i,
