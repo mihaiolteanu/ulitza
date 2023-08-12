@@ -5,6 +5,7 @@ export const stripAffixes = country =>
   R.compose(R.trim, R.replace(affixes[country], ""))
 
 const affixes = {
+  afghanistan            : / (street|road)$/i,
   albania                : /^(rruga|bulevardi|autostrada) (at |e |)/i,
   algeria                : /^(شارع|avenue|rue|boulevard|route|نهج) (رقم |du |de la |de l'|des |de |d' |)/i,
   "american-oceania"     : /^(pale) | (street|road|drive|way|loop|court|place|avenue|st)$/ig,
