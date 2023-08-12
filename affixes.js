@@ -105,7 +105,7 @@ const affixes = {
   norway                 : /^(gamle|nedre|Øvre)|(veien|vegen|gata|gaten| gate| vei| veg)$/i,
   pakistan               : /^(street) | (road|highway|روڈ)$/i,
   panama                 : /^(carretera|avenida|calle|vía|boulevar|carr.|via) ([0-9]+.* |)|( sur)$/ig,
-  "papua-new-guinea"     : / (drive|avenue|road|street|highway)$/i,
+  "papua-new-guinea"     : /^(old) | (drive|avenue|road|street|highway|place|crescent|circuit|flyover)$/ig,
   paraguay               : /^(avenida|ruta nacional|ruta|general) (general |)/i,
   peru                   : /^(avenida|jirón|calle|prolongación|malecón|pasaje|paseo) (almirante |mariscal |las |los |de la |de |)/i,
   philippines            : / (national |)(extension|highway|avenue|street|road|boulevard|drive|st.)$|^(purok) |^(barangay|road [0-9]+) .*/ig,
