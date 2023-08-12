@@ -98,6 +98,7 @@ const affixes = {
   myanmar                : /^(ဗိုလ်ချုပ်လမ်း|jalan|jl.) (by pass |bypass |)|( road| street|လမ်း| rd| boulevard)$/ig,
   nepal                  : / (highway|road|राज्मार्ग्|rajmarg)$/i,
   netherlands            : /^(oude|korte|het) |(-| |)(straat|weg|laan|plein|kade|pad|dijk|park|plantsoen|singel|hof|zuid)$/i,
+  "new-caledonia"        : /^(rue|route|avenue|voie|promenade|impasse|allée) (du |des |de la |de l'|de |d'|territoriale |)/i,
   "new-zealand"          : / (road|street|avenue|lane|place|drive)$/i,
   nicaragua              : /^[1-9]*(a | |)(carretera|avenida|calle) /i,
   nigeria                : / (way|road|crescent|avenue|street|ave|st)$/i,
