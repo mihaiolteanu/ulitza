@@ -38,7 +38,7 @@ const affixes = {
   china                  : /(路|道|北|南|东|街)$/i,
   "congo-brazzaville"    : /^(avenue|boulevard|rue|impasse|route|av.) (de la |de l'|des |de |du |le |)/i,
   colombia               : /^avenida carrera |^(carrera|calle|avenida|transversal|calle|vía) ([0-9]*)| (sur|bis|norte)$/ig,
-  "congo-democratic-republic": /^(avenue|boulevard|avenue|rue|route) (du |de la |de l'|des |)/i,
+  "congo-democratic-republic": /^(avenue|boulevard|avenue|rue|route) (du |de la |de l'|des |de |l' |)/i,
   "costa-rica"           : /^(calle|avenida|carretera|autopista|boulevard|radial|corredor) (interamericana|pacífica|)|.* [0-9]+$|^(avenida|calle|este|paseo|rincon|ruta|boulevard (de las |de la |la |las |del ))/i,
   croatia                : /^(ulica|trg|dr.|obala|cesta|put|bana) (kralja |dr. |bana |kneza |)|^(kralja|bana|kneza) | (ulica|cesta|trg)$/i,
   "czech-republic"       : /^(náměstí|nám.|za|U|V|K|nad|ke|pod|třída|na|ve) |( náměstí|nám.|ská| třída| alej| sady)$|((-|)(straße))$/i,
