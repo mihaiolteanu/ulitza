@@ -85,6 +85,7 @@ const affixes = {
   laos:                            /^(rue|avenue) | (street|road|avenue)$/i,
   latvia:                          /^(mazā) | (iela|laukums|prospekts|līnija|g.|aleja|bulvāris)$/ig,
   lebanon:                         /^(شارع)/i,
+  liberia:                         / (street|road|highway|boulevard|drive)$/i,
   libya:                           /^(الطريق|شارع)| (road)$/i,
   liechtenstein:                   /(-strasse|strasse|weg)$/i,
   lithuania:                       /^(Šv.) | ([1-9]+-(i|)oji g.)$| (skg.|tak.|pl.|pr.|al.|g.|a.|plento g.|plento|kelio g.|kelio|kel.|aklg.)$/ig,
