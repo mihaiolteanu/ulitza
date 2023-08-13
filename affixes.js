@@ -91,6 +91,7 @@ const affixes = {
   lithuania:                       /^(Šv.) | ([1-9]+-(i|)oji g.)$| (skg.|tak.|pl.|pr.|al.|g.|a.|plento g.|plento|kelio g.|kelio|kel.|aklg.)$/ig,
   luxembourg:                      /^(rue|place|avenue|impasse|route|chemin|allée|boulevard|cours|montée) (du|des|de la|de l'|d'|de|)|^(an der|an de|am|um|op den|op der) |( rue|strooss|gaass| wee|wee)$|^le /i,
   macedonia:                       /^(Булевар|Улица) /i,
+  madagascar:                      /^(rue|avenue|route|làlana) (de la |de l'|des |de |du |d'|)/i,
   "malaysia-singapore-brunei" :    /^(jalan) | (street( [0-9]*|)$)/i,
   malta:                           /^(triq|rue) (d'|il-|)| (street)$/i,
   mexico:                          /^(calle|avenida|boulevard|carretera|periférico|carr.|vía|calzada| sur|av.|av|blvd.|blvd|paseo|prolongación|plaza|plan) (Vía |via |)(de los|de las|de la|del|de|a |)|^(de los|de las|de la|del|de) | (sur|oriente|poniente)$/ig,
