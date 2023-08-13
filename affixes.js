@@ -36,6 +36,7 @@ const affixes = {
   chad                   : /^(avenue|rue|av) |(نهج|شارع|طريق)/i,
   chile                  : /^(gran |)(avenida|pasaje|almirante|diagonal|camino|puerto|lago|isla|volcán|alcalde|calle|ruta|las|los) (central |alcalde |[0-9]+ |)|^(cruce|corral) .*| (sur|norte)$/ig,
   china                  : /(路|道|北|南|东|街)$/i,
+  "congo-brazzaville"    : /^(avenue|boulevard|rue|impasse|route|av.) (de la |de l'|des |de |du |le |)/i,
   colombia               : /^avenida carrera |^(carrera|calle|avenida|transversal|calle|vía) ([0-9]*)| (sur|bis|norte)$/ig,
   "congo-democratic-republic": /^(avenue|boulevard|avenue|rue|route) (du |de la |de l'|des |)/i,
   "costa-rica"           : /^(calle|avenida|carretera|autopista|boulevard|radial|corredor) (interamericana|pacífica|)|.* [0-9]+$|^(avenida|calle|este|paseo|rincon|ruta|boulevard (de las |de la |la |las |del ))/i,
