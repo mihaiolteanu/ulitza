@@ -79,7 +79,7 @@ const affixes = {
   "ivory-coast":                   /^(boulevard|avenue|rue|route) (de la |de l'|des |de |du |d'|)/i,
   jordan:                          /^(شارع الشهيد|شارع|الشارع)| (street|highway)$/i,
   kazakhstan:                      /^(улица|проспект|бульвар) | (улица|проспект)$/i,
-  kenya:                           / (road|highway|avenue|bypass)$/i,
+  kenya:                           / (road|highway|avenue|bypass|street|drive|highway|lane|way)$/i,
   kosovo:                          /^(bulevardi|sheshi|rruga) (e |)/i,
   kyrgyzstan:                      /^(улица) | (улица|проспект|көчөсү|переулок)$/i,
   laos:                            /^(rue|avenue) | (street|road|avenue)$/i,

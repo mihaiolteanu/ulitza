@@ -3909,6 +3909,11 @@ const equivalents = {
     ["Толе би",                "Толе Би"],
     ["Уалиханова",             "Валиханова"]
   ],
+
+
+  "kenya": [
+    ["Kenyatta", "Jomo Kenyatta"]
+  ],
   
 
   "kosovo": [
