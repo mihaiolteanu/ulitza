@@ -33,6 +33,7 @@ const affixes = {
   cameroon               : /^(rue|route|boulevard) (du |de la |de |)| (avenue|street)$/i,
   canada                 : /^([0-9]+(e|er|ere|th|) |)(rue|highway|boulevard|avenue|autoroute|county road|chemin|rang|old|route|north|south|east|west|montée|lac-|lac|bay) (de la |des |de l'|du |de |)| (street|avenue|highway|way|road|boulevard|line|rang|ouest|est|north|nord|south|sud|rd.|rd|drive|SE|NW|NE|SW|station|lane|place|run|crescent|court|perimeter|lake|river|creek)( north| south| east| west| SE| SW| NW| NE|)$|^[a-z][a-z]-[0-9]+.*|^[0-9]+.*|^township .*|^range road .*| (.*[0-9]+)$/ig,
   "canary-islands"       : /^(carretera|ctra.|avenida|paseo|calle|camino|plaza)( general|) (las |la |del |de los |los |de |el |)| (norte|sur)/ig,
+  chad                   : /^(avenue|rue|av) |(نهج|شارع|طريق)/i,
   chile                  : /^(gran |)(avenida|pasaje|almirante|diagonal|camino|puerto|lago|isla|volcán|alcalde|calle|ruta|las|los) (central |alcalde |[0-9]+ |)|^(cruce|corral) .*| (sur|norte)$/ig,
   china                  : /(路|道|北|南|东|街)$/i,
   colombia               : /^avenida carrera |^(carrera|calle|avenida|transversal|calle|vía) ([0-9]*)| (sur|bis|norte)$/ig,
