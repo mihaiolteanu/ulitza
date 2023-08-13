@@ -57,7 +57,7 @@ const affixes = {
   "gcc-states"           : /^(نهج|شارع|طريق|street) |(جادة|road|street)$|[1-9]/ig,
   georgia                : /^(улица) | (ქუჩა|გამზირი|улица|st)$/i,
   germany                : /((-|)(straße|weg|platz|allee|gasse|chaussee|promenade|park|hain|höhe|garten))$|( ring|-ring| siedlung|-siedlung|-hof)$|^(am|im) |^((an|auf|unterer|untere|unter|oberer|oberes|obere|in|alter|alte|zum|zur|zu|in|im) (der |den |dem |))|^(straße (der |des |zum |am |))/ig,
-  ghana                  : / (road|ridge|region)$/i,
+  ghana                  : / (road|ridge|region|avenue|lane|street|close|drive|crescent)$/i,
   "great-britain"        : /^(the|west|western|north|east|eastern|south)|('s |)(street|road|lane|avenue|hill|way|place|park|square|drive|crescent|court|gardens|terrace|grove|close|walk|end|fields|view|bridge|cottages|parade|mews|hall|side|north|east|west|south|high|gate)$/ig,
   greece                 : /^(Λεωφόρος) /i,
   guatemala              : /^([0-9]*(a | |)(calle|carretera|avenida|calzada)( a |)( zona[1-9]*|))| avenida| calle|[0-9]*$/i,
