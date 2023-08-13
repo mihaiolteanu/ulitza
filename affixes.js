@@ -62,6 +62,7 @@ const affixes = {
   greece                 : /^(Λεωφόρος) /i,
   guatemala              : /^([0-9]*(a | |)(calle|carretera|avenida|calzada)( a |)( zona[1-9]*|))| avenida| calle|[0-9]*$/i,
   "guernsey-jersey"      : /^(rue|clos|havre) (du |de la |de l'|des |de |)| (road|street|place)$/i,
+  guinea                 : /^(autoroute|route|rue) (de la |de |)| (street|road)$/i,
   guyana                 : / (road|highway|street|drive)$/i,
   "haiti-and-domrep"     : /^(avenida|calle|carretera|autopista|boulevard|rue) /i,
   honduras               : /^(calle|carretera (del |))/i,
