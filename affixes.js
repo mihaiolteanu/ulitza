@@ -104,6 +104,7 @@ const affixes = {
   morocco:                         /^(avenue|route|rue|boulevard|avenida|bd|place|chemin|شارع) (des |de la |de l'|du |de |d'|)|(شارع)$/i,
   mozambique:                      /^(avenida|av.|estrada|rua|praça) (das |des |de |dos |do |da |)/i,
   myanmar:                         /^(ဗိုလ်ချုပ်လမ်း|jalan|jl.) (by pass |bypass |)|( road| street|လမ်း| rd| boulevard)$/ig,
+  namibia:                         / (street|avenue|road|square|highway|drive|st)$/i,
   nepal:                           / (highway|road|राज्मार्ग्|rajmarg)$/i,
   netherlands:                     /^(oude|korte|het) |(-| |)(straat|weg|laan|plein|kade|pad|dijk|park|plantsoen|singel|hof|zuid)$/i,
   "new-caledonia":                 /^(rue|route|avenue|voie|promenade|impasse|allée) (du |des |de la |de l'|de |d'|territoriale |)/i,

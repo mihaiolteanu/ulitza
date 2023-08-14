@@ -4231,6 +4231,13 @@ const equivalents = {
     ["MT Haryono",         "Letnan Jenderal MT Haryono"]
   ],
 
+
+  "namibia": [
+    ["Dr Agostinho Neto",  "Dr. António Agostinho Neto"],
+    ["Libertina Amathila", "Dr. Libertina Amathila"],
+    ["Moses ǁGaroëb",      "Moses Garoeb"]    
+  ],
+
   
   "nepal": [
     ["Araniko",   "Arniko Raj Marga"],
