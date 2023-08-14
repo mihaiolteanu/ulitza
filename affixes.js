@@ -101,7 +101,7 @@ const affixes = {
   monaco:                          /^(boulevard|avenue|rue|chemin|quai|place|allée|promenade) (de la |des |de l'|de |du |d'|)/i,
   mongolia:                        /( зам| өргөн чөлөө| гудамж|'s street)$/i,
   montenegro:                      /^(bulevar|ulica) /i,
-  morocco:                         /^(avenue|route|rue|boulevard|place|chemin|شارع) (des |de la |de l'|du |de |d' |)|(شارع)$/i,
+  morocco:                         /^(avenue|route|rue|boulevard|avenida|bd|place|chemin|شارع) (des |de la |de l'|du |de |d'|)|(شارع)$/i,
   mozambique:                      /^(avenida|av.|estrada|rua) (da |des |de |dos |das |)/i,
   myanmar:                         /^(ဗိုလ်ချုပ်လမ်း|jalan|jl.) (by pass |bypass |)|( road| street|လမ်း| rd| boulevard)$/ig,
   nepal:                           / (highway|road|राज्मार्ग्|rajmarg)$/i,
