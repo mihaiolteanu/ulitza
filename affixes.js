@@ -110,7 +110,7 @@ const affixes = {
   "new-caledonia":                 /^(rue|route|avenue|voie|promenade|impasse|allée) (du |des |de la |de l'|de |d'|territoriale |)/i,
   "new-zealand":                   / (road|street|avenue|lane|place|drive)$/i,
   nicaragua:                       /^[1-9]*(a | |)(carretera|avenida|calle) /i,
-  nigeria:                         / (way|road|crescent|avenue|street|ave|st)$/i,
+  nigeria:                         / (way|road|crescent|avenue|street|close|drive|ave|str|st)$/i,
   norway:                          /^(gamle|nedre|Øvre)|(veien|vegen|gata|gaten| gate| vei| veg)$/i,
   pakistan:                        /^(street) | (road|highway|روڈ)$/i,
   panama:                          /^(carretera|avenida|calle|vía|boulevar|carr.|via) ([0-9]+.* |)|( sur)$/ig,
