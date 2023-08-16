@@ -6786,6 +6786,12 @@ const equivalents = {
     ["S.A. Nyýazow", "S. Türkmenbaşy"]
   ],
 
+
+  "uganda": [
+    ["Sir Apollo Kaggwa", "Sir Apollo kaggwa"]
+  ],
+  
+
   // UK
   "ukraine": [
     ["Івана Франка",    "Франка"],

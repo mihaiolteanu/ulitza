@@ -145,7 +145,7 @@ const affixes = {
   tunisia:                         /نهج|شارع|^(avenue|route|rue|boulevard) (de la |des |de |du |)/i,
   turkey:                          /^([0-9]+.*)|(yolu |)(caddesi|bulvarı|bulv.|blv.|blv|sokağı|sokak|cd.|cd|cad.|yolu|փողոց|խճուղի)$/i,
   turkmenistan:                    / (köçesi|şaýoly|ýoly)$/i,
-  uganda:                          /^(jinja|mbale) | (road|street|highway|jinja|mbale|avenue)$/i,
+  uganda:                          /^(jinja|mbale) | (road|street|highway|jinja|mbale|avenue|crescent|close|lane|boulevard)$/i,
   ukraine:                         /^(вулиця|улица|проспект) | (вулиця|улица|бульвар|провулок|проспект|шоссе)$/i,
   uruguay:                         /^(calle|avenida|camino|general|bulevar|rambla) (de los |los |del |general|)|^(las|los|general)|^INE .*|^ruta [0-9]*( |)(perimetral|interbalnearia|)|^ute .+|^oficial [0-9]+/i,
   us:                              /^(east|west|north|south|via)|([0-9]+.*)|^((avenida|paseo|calle|rue) (de la|de las|de l'|del|de|du|la|))|(street|road|avenue|drive|lane|ridge|court| hill| highway| way| boulevard| view| place|side| circle| trails| trail| rd| parkway)( east| west| north| south|)$/ig,
