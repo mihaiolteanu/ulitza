@@ -6357,6 +6357,7 @@ const equivalents = {
   
   // ES
   "spain": [
+    ["Albert Einstein",                "Einstein"],
     ["Alejandro Casona",               "Casona"],
     ["Alfonso X el Sabio",             "Alfonso X El Sabio",
                                        "Alfonso X"],
