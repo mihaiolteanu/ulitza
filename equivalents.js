@@ -1423,8 +1423,12 @@ const equivalents = {
 
 
   "costa-rica": [
-    ["Fernández Oreamuno",  "Próspero Fernández"],
-    ["General Cañas",       "José María Cañas"]    
+    ["Fernández Oreamuno",        "Próspero Fernández"],
+    ["General Cañas",             "José María Cañas"],
+    ["José María Castro Madriz",  "Castro Madriz"],
+    ["Tomás Guardia",             "General Tomás Guardia Gutiérrez",
+                                  "General Tomás Guardia",
+                                  "Gral Tomás Guardia Gutiérrez"]
   ],
 
   
