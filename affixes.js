@@ -128,7 +128,7 @@ const affixes = {
   serbia:                          /^(Трг|Булевар|Алеја|Пут|Парк) | (пут|друм|ulica|трг|булевар)$/i,
   slovakia:                        /^(námestie|pri|pod|nad|na|za|nábrežie) |(ova| námestie| rad| utca| cesta)$/i,
   slovenia:                        /^(ulica|trg|pod|cesta|na) | (ulica|cesta|odreda|pot|trg|vrh)$/ig,
-  "south-africa":                  /1st|2nd|3rd|4th|5th|6th|7th|8th|11th|12th|east|north|west|south|(road|street|drive|avenue|straat)$/ig,
+  "south-africa":                  /1st|2nd|3rd|4th|5th|6th|7th|8th|11th|12th| (road|street|drive|close|square|avenue|boulevard|crescent|straat|lane|st)( east| north| west| south|)$/ig,
   "south-korea":                   /(대로)$/i,
   "south-sudan":                   / (road|highway|street|avenue)$/i,
   spain:                           /^((kale|plaza|plaça|avenida|camino|camiño|camí|calle|carrer|carretera|rúa|autovía|barrio|avinguda|ronda|travesía|paseo|estrada|cuesta|praza|passeig) (de la |de las |de los |de les |de ses |dels |de l'|del |el |da |dos |do |des |de |la |las |d'|))|(kalea| plaza|(kalea|)\/.*)$/ig,

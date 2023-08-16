@@ -6323,15 +6323,20 @@ const equivalents = {
   
 
   "south-africa": [
+    ["Ben Viljoen",     "Viljoen"],
+    ["Edward",          "King Edward"],
     ["Gray",            "Sir George Grey"],
     ["Louis Botha",     "Botha"],
     ["Naude",           "Beyers Naude"],
     ["Nelson Mandela",  "Mandela",
+                        "Madiba",
                         "Nelson Mandela Dr"],
     ["Paul Kruger",     "Kruger"],
     ["Pretorius",       "Andries Pretorius"],
     ["Sarel Cilliers",  "Cilliers"],
+    ["Steyn",           "President Steyn"],
     ["Theron",          "Danie Theron"],
+    ["Van Riebeeck",    "Jan Van Riebeeck"],
     ["Victoria",        "Queen Victoria",
                         "Victoria Walk"],
     ["Voortrekker",     "Voortrek"]
