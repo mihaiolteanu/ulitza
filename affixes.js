@@ -140,7 +140,7 @@ const affixes = {
   switzerland:                     /^(am|im|untere) |^(via (alla|ai|del|da|alle|))|(^(rue|ruelle|chemin|place|route|impasse|avenue) (du |de la |de l'|de |des |))|(strasse|weg)$/i,
   taiwan:                          /(路|街)$/i,
   tajikistan:                      /^(кӯчаи|кучаи|хиёбони) /i,
-  tanzania:                        / (road|street|avenue)$/i,
+  tanzania:                        / (road|street|avenue|st)$/i,
   thailand:                        /^(ถนน|moo)| (road)$/i,
   tunisia:                         /نهج|شارع|^(avenue|route|rue) (de la |des |de |)/i,
   turkey:                          /^([0-9]+.*)|(yolu |)(caddesi|bulvarı|bulv.|blv.|blv|sokağı|sokak|cd.|cd|cad.|yolu|փողոց|խճուղի)$/i,
