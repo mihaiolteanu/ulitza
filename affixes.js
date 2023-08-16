@@ -154,5 +154,5 @@ const affixes = {
   vietnam:                         /^(Đường|Phố|Cầu) | [0-9]+$/ig,
   yemen:                           /^(شارع|الشارع)/i,
   zambia:                          / (road|street|avenue|boulevard)$/i,
-  zimbabwe:                        / (street|road|avenue|drive|boulevard|rd)$/i
+  zimbabwe:                        / (street|road|avenue|drive|boulevard|close|way|rd)$/i
 }
