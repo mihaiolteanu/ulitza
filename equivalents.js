@@ -706,6 +706,11 @@ const equivalents = {
     ["Гагарына",             "Юрыя Гагарына"],
     ["Максіма Багдановіча",  "Багдановіча"]
   ],
+
+
+  "belize": [
+    ["Saint Joseph", "St. Joseph"]
+  ],
   
 
   "belgium": [

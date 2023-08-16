@@ -20,7 +20,7 @@ const affixes = {
   bangladesh:                      /^(road) | (road|highway)$/i,
   belarus:                         /^(вуліца|плошча|завулак) |^[1-9]-(я|й|го|е|ы|і) | (вуліца|завулак|вуліца)$/i,
   belgium:                         /^((rue|place|avenue|chaussée|route|chemin|oude|allée) (de la |de l'|du |des |de |))|((-|)(straat|straße|plein|dreef|laan|weg|steenweg|steen|weg|baan))$/i,
-  belize:                          / (highway|road|street|drive)$/i,
+  belize:                          / (highway|road|street|drive|highway|lane|boulevard|hill|avenue)( south| north| east| west|)$/i,
   benin:                           /^(boulevard|rue) (de la |des |de l'|)/i,
   bolivia:                         /^(calle|avenida|camino|carretera) (de las |de la |del |a |)|^RN[0-9]+.*|^Doble Vía .*/i,
   "bosnia-herzegovina":            /^(ulica|trg|bulevar) /i,
