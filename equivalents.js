@@ -1718,6 +1718,12 @@ const equivalents = {
     ["Velasco Ibarra",           "Ibarra"],
     ["Vicente Rocafuerte",       "Rocafuerte"]
   ],
+
+
+  "el-salvador": [
+    ["José Matías Delgado",  "Jose Matias Delgado",
+                             "Delgado"]
+  ],
   
 
   "estonia": [

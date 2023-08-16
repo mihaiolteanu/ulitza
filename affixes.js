@@ -47,7 +47,7 @@ const affixes = {
   denmark:                         /^(gammel|vester|vestre|Østre|Øster|nordre|Nørre)|(vejen|gårdsvej|vej|gade|vænget|vang| alle| lande| strand|have|høj|parken|mose|holm|gårds|gård|minde| allé| boulevard|borg)$/i,
   ecuador:                         /^(avenida|calle|vía|via|troncal) (de la |de las |del |a |)/i,
   egypt:                           /^(نهج|شارع|طريق)/i,
-  "el-salvador":                   /^([0-9]*(a |ª | |)(calle|carretera|avenida|boulevard|pasaje|pje.|pje) (el |del |a |))| avenida| calle|(norte|poniente|pte|oriente)$/ig,  
+  "el-salvador":                   /^([0-9]*(a |ª | |)(calle|carretera|avenida|boulevard|pasaje|pje.|pje|av.) (el |del |a |))| avenida| calle|(norte|poniente|pte|oriente)$/ig,  
   estonia:                         / (tee|mnt|põik|pst|allee)$/i,
   ethiopia:                        / (road|street|avenue|ave|av|st.)$/i,
   "faroe-islands":                 /^(Í|Undir|Við) |(vegur|gøta)$/i,
