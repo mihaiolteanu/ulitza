@@ -3041,11 +3041,21 @@ const equivalents = {
 
   
   "haiti-and-domrep": [
-    ["Antonio Guzman Fernandez",  "Antonio Guzmán"],
+    ["Antonio Guzman Fernandez",  "Antonio Guzmán",
+                                  "Presidente Antonio Guzmán Fernández"],
+    ["Charlemagne Peralte",       "charlemagne Peralte"],
     ["Colón",                     "Colon"],
     ["Duarte",                    "Juan Pablo Duarte"],
-    ["Gregorio Luperón", ]
-    ["Sanchez",                   "Maria Trinidad Sanchez", "Sánchez"],
+    ["Manolo Tavárez Justo",      "Manolo Tavares Justo",
+                                  "Manolo Tavarez"],
+    ["Mella",                     "Ramón Matías Mella"],
+    ["Nuñez De Cácerez",          "José Núñez de Cáceres"],
+    ["Sanchez",                   "Maria Trinidad Sanchez",
+                                  "Sánchez",
+                                  "María Trinidad Sánchez"],
+    ["Simón Bolivar",             "Bolivar"],
+    ["Sténio Vincent",            "stenio vincent",
+                                  "Stenio Vincent"],
     ["Toussaint Louverture",      "Louverture"]    
   ],
   
