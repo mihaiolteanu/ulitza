@@ -1471,9 +1471,12 @@ const equivalents = {
   
   "cuba": [
     ["Calixto García",  "Calixto Garcia"],
+    ["Céspedes",        "Carlos Manuel de Céspedes"],
     ["Frank Pais",      "Frank País"],
     ["Maceo",           "Antonio Maceo"],
-    ["Martí",           "José Martí"]
+    ["Martí",           "José Martí"],
+    ["Máximo Gómez",    "General Gómez",
+                        "Máximo Gómez (Monte)"]
   ],
 
   
