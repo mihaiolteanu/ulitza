@@ -179,6 +179,7 @@ const equivalents = {
     ["Garibaldi",               "José Garibaldi"],
     ["Gobernador Moyano",       "Capitán de Fragata Moyano"],
     ["Godoy Cruz",              "Tomás Godoy Cruz"],
+    ["Gómez",                   "Sargento Gómez"],
     ["Gorriti",                 "Juana Manuela Gorriti"],
     ["Guevara",                 "Ernesto Che Guevara"],
     ["Guido Spano",             "Guido y Spano"],
