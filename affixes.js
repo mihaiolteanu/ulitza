@@ -142,7 +142,7 @@ const affixes = {
   tajikistan:                      /^(кӯчаи|кучаи|хиёбони) /i,
   tanzania:                        / (road|street|avenue|st)$/i,
   thailand:                        /^(ถนน|moo)| (road)$/i,
-  tunisia:                         /نهج|شارع|^(avenue|route|rue) (de la |des |de |)/i,
+  tunisia:                         /نهج|شارع|^(avenue|route|rue|boulevard) (de la |des |de |du |)/i,
   turkey:                          /^([0-9]+.*)|(yolu |)(caddesi|bulvarı|bulv.|blv.|blv|sokağı|sokak|cd.|cd|cad.|yolu|փողոց|խճուղի)$/i,
   turkmenistan:                    / (köçesi|şaýoly|ýoly)$/i,
   uganda:                          /^(jinja|mbale) | (road|street|highway|jinja|mbale|avenue)$/i,
