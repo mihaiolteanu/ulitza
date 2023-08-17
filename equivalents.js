@@ -5039,6 +5039,7 @@ const equivalents = {
 
   
   "panama": [
+    ["Bolívar",              "Simón Bolívar"],
     ["Dr. Belisario Porras", "Belisario Porras"]
   ],
 
