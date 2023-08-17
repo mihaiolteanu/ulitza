@@ -60,6 +60,7 @@ const affixes = {
   ghana:                           / (road|ridge|region|avenue|lane|street|close|drive|crescent)$/i,
   "great-britain":                 /^(the|west|western|north|east|eastern|south)|('s |)(street|road|lane|avenue|hill|way|place|park|square|drive|crescent|court|gardens|terrace|grove|close|walk|end|fields|view|bridge|cottages|parade|mews|hall|side|north|east|west|south|high|gate)$/ig,
   greece:                          /^(Λεωφόρος) /i,
+  greenland:                       / (aqqutaa|aqquserna|aqq)$/i,
   guatemala:                       /^([0-9]*(a | |)(calle|carretera|avenida|calzada|bulevar|boulevard)( de los | de la | del | a |)( zona[1-9]*|))| avenida| calle|[0-9]*$/i,
   "guernsey-jersey":               /^(rue|clos|havre) (du |de la |de l'|des |de |)| (road|street|place)$/i,
   guinea:                          /^(autoroute|route|rue) (de la |de |)| (street|road)$/i,
