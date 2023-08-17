@@ -1423,6 +1423,11 @@ const equivalents = {
   ],
 
 
+  "colombia": [
+    ["Bolívar", "Bolivar"]
+  ],
+
+
   "costa-rica": [
     ["Fernández Oreamuno",        "Próspero Fernández"],
     ["General Cañas",             "José María Cañas"],

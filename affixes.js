@@ -37,7 +37,7 @@ const affixes = {
   chile:                           /^(gran |)(avenida|pasaje|almirante|diagonal|camino|puerto|lago|isla|volcán|alcalde|calle|ruta|las|los) (central |alcalde |[0-9]+ |)|^(cruce|corral) .*| (sur|norte)$/ig,
   china:                           /(路|道|北|南|东|街)$/i,
   "congo-brazzaville":             /^(avenue|boulevard|rue|impasse|route|av.) (de la |de l'|des |de |du |le |)/i,
-  colombia:                        /^avenida carrera |^(carrera|calle|avenida|transversal|calle|vía) ([0-9]*)| (sur|bis|norte)$/ig,
+  colombia:                        /^avenida carrera |^(carrera|carretera|calle|avenida|transversal|manzana|calle|diagonal|vía) (de los |de la |del |[0-9]*)| (sur|bis|norte)$/ig,
   "congo-democratic-republic":     /^(avenue|boulevard|avenue|rue|route) (du |de la |de l'|des |de |l' |)/i,
   "costa-rica": /^(avenida|calle|este|paseo|rincon|ruta|boulevard|carretera|autopista|radial|corredor|vía|diagonal|nacional|transversal) (de las |de los |de la |la |las |del |(interamericana|pacífica|nacional|[0-9]*) |)| .* [0-9]+$/i,
   croatia:                         /^(ulica|trg|dr.|obala|cesta|put|bana) (kralja |dr. |bana |kneza |)|^(kralja|bana|kneza) | (ulica|cesta|trg)$/i,
