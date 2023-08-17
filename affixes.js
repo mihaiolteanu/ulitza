@@ -77,6 +77,7 @@ const affixes = {
   "isle-of-man":                   / (main |)(road|promenade|street|main|square|avenue|park)$/i,
   "israel-and-palestine":          /^(نهج|شارع|طريق|שדרות)/i,  
   "ivory-coast":                   /^(boulevard|avenue|rue|route) (de la |de l'|des |de |du |d'|)/i,
+  jamaica:                         / (drive|road|avenue|street|boulevard|park|crescent|way|place|highway|close|blvd)$/i,
   jordan:                          /^(شارع الشهيد|شارع|الشارع)| (street|highway)$/i,
   kazakhstan:                      /^(улица|проспект|бульвар) | (улица|проспект)$/i,
   kenya:                           / (road|highway|avenue|bypass|street|drive|highway|lane|way)$/i,
