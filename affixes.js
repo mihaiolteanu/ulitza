@@ -65,7 +65,7 @@ const affixes = {
   guinea:                          /^(autoroute|route|rue) (de la |de |)| (street|road)$/i,
   guyana:                          / (road|highway|street|drive)$/i,
   "haiti-and-domrep":              /^(avenida|calle|carretera|autopista|boulevard|route|paseo|rue|ave.|ave|av.|av) (de las |de la |de los |de l'|del |des |de |las |los |)/i,
-  honduras:                        /^(calle|carretera (del |))/i,
+  honduras:                        /^([0-9]*(a |ra |ma |na | |)(calle|carretera|boulevard|bulevar|boulevar|avenida|paseo|blv|ave.|av.|blvd.|blv.|blvd)( principal|)( de la | del |))/i,
   hungary:                         /(utca|körút|sétány|köz|út|útja|tere|tér|lakótelep|sor|liget)$/i,
   iceland:                         /(gata|vegur|braut)$/i,
   india:                           /^(main) | (road|highway|main|street|marg|nagar( road|))$/i,

@@ -3058,6 +3058,12 @@ const equivalents = {
                                   "Stenio Vincent"],
     ["Toussaint Louverture",      "Louverture"]    
   ],
+
+
+  "honduras": [
+    ["Francisco Morazán", "Morazan",
+                          "Morazán"]
+  ],
   
 
   "hungary": [
