@@ -118,7 +118,7 @@ const affixes = {
   panama:                          /^(carretera|avenida|calle|vía|boulevard|boulevar|bulevar|carr.|via) ([0-9]+.* |)(de la |)|( sur)$/ig,
   "papua-new-guinea":              /^(old) | (drive|avenue|road|street|highway|place|crescent|circuit|flyover)$/ig,
   paraguay:                        /^(avenida|ruta nacional|ruta|general|rua|calle|supercarretera) (general |)|^(Colector .*)/i,
-  peru:                            /^(avenida|jirón|calle|prolongación|malecón|pasaje|paseo) (almirante |mariscal |las |los |de la |de |)/i,
+  peru:                            /^(avenida|jirón|jiron|calle|prolongación|malecón|pasaje|paseo|plaza|vía) (almirante |mariscal |las |los |de las |de la |del |de |du |)| (norte|sur|oeste|este)$/ig,
   philippines:                     / (national |)(extension|highway|avenue|street|road|boulevard|drive|st.)$|^(purok) |^(barangay|road [0-9]+) .*/ig,
   poland:                          /^(plac|aleja|aleje|trakt|przy|osiedle|rynek|stary|pod|na) |(ego|ski|-Straße| Straße)$/i,
   "polynesie-francaise":           /^(rue|boulevard|avenue|route|chemin) (du |de |)| (road)$/i,
