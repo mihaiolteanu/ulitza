@@ -7044,10 +7044,14 @@ const equivalents = {
 
   
   "vietnam": [
+    ["Hùng Vương",            "Hung Vuong"],
+    ["Lê Thánh Tôn",          "Lê Thánh Tông"],
     ["Nguyễn Thị Minh Khai",  "Minh Khai"],
-    ["Nguyễn Đình Chiểu",     "Nguyễn Ðình Chiểu"],
+    ["Nguyễn Đình Chiểu",     "Nguyễn Ðình Chiểu",
+                              "Nguyen Dinh Chieu"],
     ["Nguyễn Tất Thành",      "Hồ Chí Minh"],
     ["Quang Trung",           "Nguyễn Huệ"],
-    ["Trần Hưng Đạo",         "Tran Hung Dao"]    
+    ["Trần Hưng Đạo",         "Tran Hung Dao",
+                              "Trần Hưng Ðạo"]
   ]
 }
