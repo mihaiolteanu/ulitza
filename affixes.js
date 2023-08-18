@@ -152,7 +152,7 @@ const affixes = {
   uruguay:                         /^(calle|avenida|camino|general|bulevar|rambla) (de los |los |del |general|)|^(las|los|general)|^INE .*|^ruta [0-9]*( |)(perimetral|interbalnearia|)|^ute .+|^oficial [0-9]+/i,
   us:                              /^(east|west|north|south|via)|([0-9]+.*)|^((avenida|paseo|calle|rue) (de la|de las|de l'|del|de|du|la|))|(street|road|avenue|drive|lane|ridge|court| hill| highway| way| boulevard| view| place|side| circle| trails| trail| rd| parkway)( east| west| north| south|)$/ig,
   uzbekistan:                      /( (shoh |)(ko'chasi|ko'shesi|ko‘chasi|shoh|maydoni))$/ig,
-  venezuela:                       /^(calle|avenida|carretera|carrera|av.|intercomunal|autopista) ([0-9]* |intercomunal |principal |)(de los |los |de |)|^([0-9]*(a |ª | |)(transversal|av.) (de los| los| de |))/i,
+  venezuela:                       /^(calle|avenida|carretera|carrera|av.|intercomunal|autopista|vía|boulevard|bulevar|paseo) ([0-9]* |intercomunal |principal |)(de los |los |de la |la |del |de |el |)|^([0-9]*(a |ª | |)(transversal|av.) (de los| los| de |))/i,
   vietnam:                         /^(Đường|Phố|Cầu) | [0-9]+$/ig,
   yemen:                           /^(شارع|الشارع)/i,
   zambia:                          / (road|street|avenue|boulevard)$/i,

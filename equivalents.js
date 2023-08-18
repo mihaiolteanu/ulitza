@@ -7030,11 +7030,16 @@ const equivalents = {
 
   
   "venezuela": [
-    ["Andrés Bello",  "Andres Bello"],    
-    ["Bolívar",       "Bolivar",
-                      "Simón Bolívar"],
-    ["Sucre",         "Ayacucho",
-                      "Gran Mariscal de Ayacucho"]    
+    ["Américo Vespucio",  "Américo Vespúcio"],
+    ["Andrés Bello",      "Andres Bello"],    
+    ["Bolívar",           "Bolivar",
+                          "Simón Bolívar"],
+    ["Cecilio Acosta",    "cecilio acosta"],
+    ["Pinto Salinas",     "pinto salinas"],
+    ["Ruiz Pineda",       "ruiz pineda",
+                          "Ruíz Pineda"],
+    ["Sucre",             "Ayacucho",
+                          "Gran Mariscal de Ayacucho"]    
   ],
 
   
