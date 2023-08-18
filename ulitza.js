@@ -3,7 +3,7 @@ import fs from "fs"
 import * as R from "./ramda.js"
 import * as F from "fluture"
 import S from "sanctuary"
-import { allCountries, osmDownloadLink } from "./regions.js"
+import { countries, osmDownloadLink } from "./regions.js"
 import { equivalentDups, equivalentDupsAll } from "./equivalents.js"
 import { extractOsmData, parseOsmData, osmPath, inspectOsmData, linkDups, linkDupsAll } from "./generator.js"
 
@@ -13,7 +13,7 @@ program
 program
   .command("countries")
   .description("Display all available osm countries.")
-  .action(R.compose(console.log, R.join("\n"), allCountries))
+  .action(R.compose(console.log, R.join("\n"), countries))
 
 
 program

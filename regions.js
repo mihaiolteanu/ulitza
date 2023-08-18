@@ -34,7 +34,7 @@ const allCountryEntries = () => R.pipe(
 
 const countryEntry = country => R.find(R.propEq(0, country), allCountryEntries())
 
-export const allCountries = R.compose(R.map(R.head), allCountryEntries)
+export const countries = R.compose(R.map(R.head), allCountryEntries)
 export const countryDisplayName     = R.compose(R.prop(1), countryEntry)
 export const countryEponymFrequency = R.compose(R.prop(2), countryEntry)
 export const countryStreetLength    = R.compose(R.prop(3), countryEntry)
