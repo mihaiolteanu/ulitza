@@ -6940,12 +6940,7 @@ const equivalents = {
   ],
 
   // ES
-  "uruguay": [
-    ["33 Orientales",                 "Dionisio Oribe",
-                                      "Treinta y Tres Orientales",
-                                      "Gregorio Sanabria",
-                                      "Andrés Cheveste",
-                                      "Simón del Pino"],
+  "uruguay": [    
     ["Acevedo Díaz",                  "Eduardo Acevedo"],
     ["Alberto Gallinal",              "Doctor Alberto Gallinal"],
     ["Alejandro Gallinal",            "Doctor Alejandro Gallinal"],
