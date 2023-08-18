@@ -1,5 +1,6 @@
 import * as R from "./ramda.js"
 
+// Retrun the display name of all the regions
 export const regionsNames = () => R.map(R.head, regions)
 
 // Return all the countries in the given `region`
@@ -25,7 +26,7 @@ export const osmDownloadLink = (country) =>
       : `http://download.geofabrik.de/${region}/${country}-latest.osm.pbf`,    
   )(regions)
 
-export const allCountryEntries = () => R.pipe(
+const allCountryEntries = () => R.pipe(
   R.chain(R.tail),
   R.chain(R.tail),  
   R.reduce(R.concat, [])
@@ -34,53 +35,52 @@ export const allCountryEntries = () => R.pipe(
 const countryEntry = country => R.find(R.propEq(0, country), allCountryEntries())
 
 export const allCountries = R.compose(R.map(R.head), allCountryEntries)
-export const countryDisplayName = R.compose(R.prop(1), countryEntry)
+export const countryDisplayName     = R.compose(R.prop(1), countryEntry)
 export const countryEponymFrequency = R.compose(R.prop(2), countryEntry)
-export const countryStreetLength = R.compose(R.prop(3), countryEntry)
+export const countryStreetLength    = R.compose(R.prop(3), countryEntry)
 
-
-export const regions = [
+const regions = [
   // Region (display name)
   ["Africa",
-    // Sub-Region (osm download site name),
+    // Sub-Region (http://download.geofabrik.de/africa.html),
     ["africa", [
-      // osm name                    Display Name (EN)
-      ["algeria",                    "Algeria",                  3],
-      ["angola",                     "Angola",                   2],
-      ["benin",                      "Benin",                    2],
-      ["botswana",                   "Botswana",                 2],
-      ["burkina-faso",               "Burkina Faso",             2],
-      ["burundi",                    "Burundi",                  2],
-      ["cameroon",                   "Cameroon",                 2],
-      ["canary-islands",             "Canary Islands",           2],      
-      ["central-african-republic",   "Central African Republic", 2],
-      ["chad",                       "Chad",                     2],
-      ["congo-brazzaville",          "Republic of the Congo",    2],
-      ["congo-democratic-republic",  "Democratic Republic of the Congo", 2],      
-      ["egypt",                      "Egypt",                    3],      
-      ["ethiopia",                   "Ethiopia",                 2],
-      ["ghana",                      "Ghana",                    2],
-      ["guinea",                     "Guinea",                   2],
-      ["ivory-coast",                "Ivory Coast",              2],
-      ["kenya",                      "Kenya",                    2],
-      ["liberia",                    "Liberia",                  2],
-      ["libya",                      "Libya",                    2],
-      ["madagascar",                 "Madagascar",               2],
-      ["malawi",                     "Malawi",                   2],
-      ["mali",                       "Mali",                     2],
-      ["morocco",                    "Morocco",                  2],
-      ["mozambique",                 "Mozambique",               2],
-      ["namibia",                    "Namibia",                  2],
-      ["nigeria",                    "Nigeria",                  2],
-      ["senegal-and-gambia",         "Senegal and Gambia",       2],
-      ["south-africa",               "South Africa",             2],
-      ["sudan",                      "Sudan",                    2],
-      ["tanzania",                   "Tanzania",                 3],
-      ["togo",                       "Togo",                     2],
-      ["tunisia",                    "Tunisia",                  2],
-      ["uganda",                     "Uganda",                   2],
-      ["zambia",                     "Zambia",                   2],
-      ["zimbabwe",                   "Zimbabwe",                 2]
+      // osm name                    Display Name (EN)               Eponym Minimum Frequency
+      ["algeria",                    "Algeria",                           3],
+      ["angola",                     "Angola",                            2],
+      ["benin",                      "Benin",                             2],
+      ["botswana",                   "Botswana",                          2],
+      ["burkina-faso",               "Burkina Faso",                      2],
+      ["burundi",                    "Burundi",                           2],
+      ["cameroon",                   "Cameroon",                          2],
+      ["canary-islands",             "Canary Islands",                    2],      
+      ["central-african-republic",   "Central African Republic",          2],
+      ["chad",                       "Chad",                              2],
+      ["congo-brazzaville",          "Republic of the Congo",             2],
+      ["congo-democratic-republic",  "Democratic Republic of the Congo",  2],      
+      ["egypt",                      "Egypt",                             3],      
+      ["ethiopia",                   "Ethiopia",                          2],
+      ["ghana",                      "Ghana",                             2],
+      ["guinea",                     "Guinea",                            2],
+      ["ivory-coast",                "Ivory Coast",                       2],
+      ["kenya",                      "Kenya",                             2],
+      ["liberia",                    "Liberia",                           2],
+      ["libya",                      "Libya",                             2],
+      ["madagascar",                 "Madagascar",                        2],
+      ["malawi",                     "Malawi",                            2],
+      ["mali",                       "Mali",                              2],
+      ["morocco",                    "Morocco",                           2],
+      ["mozambique",                 "Mozambique",                        2],
+      ["namibia",                    "Namibia",                           2],
+      ["nigeria",                    "Nigeria",                           2],
+      ["senegal-and-gambia",         "Senegal and Gambia",                2],
+      ["south-africa",               "South Africa",                      2],
+      ["sudan",                      "Sudan",                             2],
+      ["tanzania",                   "Tanzania",                          3],
+      ["togo",                       "Togo",                              2],
+      ["tunisia",                    "Tunisia",                           2],
+      ["uganda",                     "Uganda",                            2],
+      ["zambia",                     "Zambia",                            2],
+      ["zimbabwe",                   "Zimbabwe",                          2]
     ]]
   ],
 
