@@ -4637,6 +4637,7 @@ const equivalents = {
                                    "Doctor J M den Uyl",
                                    "Doctor J.M. den Uyl"],
     ["Jozef Israëls",              "Joseph Israëls",
+                                   "Jozef Israels",
                                    "Israëls",
                                    "Josef Israëls"],
     ["Judith Leyster",             "Judith Leijster"],
