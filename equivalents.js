@@ -5053,6 +5053,7 @@ const equivalents = {
     ["Hovden",            "Anders Hovdens"],
     ["Karl Johans",       "Karl Johan"],
     ["Kloster",           "Asbjørn Klosters"],
+    ["Elias Blix",        "Elias Blix'"],
     ["Nikolai Astrups",   "Astrups"],
     ["Oscars",            "Kong Oscars"],
     ["Regine Normanns",   "Normanns"],
