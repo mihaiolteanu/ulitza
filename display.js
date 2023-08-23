@@ -2,44 +2,52 @@ const { div, a, sup, span, input, b, table, tbody, thead, tr, th, td} = van.tags
 import { statistics } from "./out/all.min.js"
 import { regionsNames, regionCountries, countryDisplayName } from "./regions.js"
 
-const taplog = R.tap(console.log) 
-
-const eponymDisplay = R.compose(R.replace(/_/g, " "), R.last)
-
-const eponymDisplayFormat = (eponym) =>  
-  vLanguage.val === "EN" ? eponymDisplay(eponym[2]) : eponym[0]
-
-// Return a list of all unique eponyms from all countries.
-const allEponyms = R.memoizeWith(R.identity, () =>
-  R.pipe(
-    R.chain(R.prop(2)),    
-    R.map(R.prop(2)),
-    R.groupBy(R.identity),
-    R.mapObjIndexed(R.length),
-    R.toPairs,    
-    // There is no translation for worlwide eponyms, so keep a 
-    // [epony, count, [lang, eponym]] structure
-    R.map(v => [
-      eponymDisplay(R.split("|", R.replace(",", "|", v[0]))),
-      v[1],
-      R.split("|", R.replace(",", "|", v[0]))
-    ]),    
-  )(statistics))
+const taplog = R.tap(console.log)
+const tapfn  = (_fn) => R.tap
 
 const vRegion    = van.state("")
 const vCountry   = van.state("")
-const vLanguage  = van.state("EN")
-const vSort      = van.state("down")
 const vSearchStr = van.state(".*")
 
-const sortDirection = () =>
-  vSort.val === "up" ? R.ascend : R.descend
+// The standard eponym format:
+// [count, [wiki_lang, wiki_name]]
+const eponymCount   = R.head
+const eponymArray   = R.tail 
+const eponymDisplay = R.pipe(
+  R.last,
+  R.last,
+  R.replace(/_/g, " "),
+)
+const eponymURL = R.pipe(
+  R.last,
+  l => `https://${l[0]}.wikipedia.org/wiki/${l[1]}`,
+)
+
+// The standard country format:
+// [name, metadata, eponym, eponym, ....]
+const skipNameAndMetadata = (country) =>
+  R.chain(R.compose(R.tail, R.tail), country)
+
+// Count the number of occurences for each eponym, for all countries worldwide
+const allEponyms = R.memoizeWith(R.identity, () =>
+  R.pipe(    
+    skipNameAndMetadata,
+    R.map(R.prop(1)),
+    R.groupBy(R.identity),
+    R.mapObjIndexed(R.length),
+    R.toPairs,
+    R.sortWith([R.descend(R.prop(1))]),
+    // Transform back to standard eponym format (transformed into a string at
+    // the groupBy stage above)
+    R.map(R.adjust(0,
+      R.juxt([R.take(2), R.drop(3)]),)),
+    R.map(v => [v[1], v[0]]),    
+  )(statistics))
 
 // Return a list of countries where the given eponym appears in.
 const eponymOccurence = (eponym) =>
   R.pipe(
-    R.filter(country =>
-      R.find(R.propEq(2, eponym[2]), country[2])),    
+    R.filter(R.find(R.compose(R.equals(eponymArray(eponym)), eponymArray))),    
     R.map(R.head),
     R.map(countryDisplayName),
     R.join(", ")
@@ -50,9 +58,7 @@ const dialog = document.getElementById("showCountries")
 dialog.addEventListener("click", ({ target: dialog }) => {  
   if (dialog.nodeName === 'DIALOG')
     dialog.close('dismiss')
-})    
-
-const buildLink = l => `https://${l[2][0]}.wikipedia.org/wiki/${l[2][1]}`
+})
 
 const Table = (data) => table(  
   tbody(data.map(row => tr(
@@ -71,71 +77,43 @@ const Eponyms = (title, eponyms, date) =>
             dialog.innerText = eponymOccurence(eponym)
             dialog.showModal()
           }
-        }, eponym[1], " "),
+        }, eponymCount(eponym), " "),
         a({
           class: "eponym",
-          href: buildLink(eponym),
+          href: eponymURL(eponym),
           target: "_blank"
-        }, eponymDisplayFormat(eponym)),
-        // center-align the eponym
-        a({
-          class: "hidden-eponymcount",          
-        }, eponym[1], " ")
+        }, eponymDisplay(eponym)),
       ], eponyms)
     ),    
     div(date ? "Osm data from: " + date : "")
   )
 
-
-
-// const Eponyms = (title, eponyms, date) =>
-//   span(
-//     div({ id: "eponyms-country" }, title),
-//     // id("info"),
-//     R.map(eponym =>
-//       div(
-//         a({
-//           class: "eponym",
-//           href: buildLink(eponym),
-//           target: "_blank"
-//         }, eponymDisplayFormat(eponym)),
-//         div({
-//           class: "eponymcount-below",
-//           onclick: () => {
-//             dialog.innerText = eponymOccurence(eponym)
-//             dialog.showModal()
-//           }
-//         }, " (", eponym[1], ") "),
-//       ),
-//       eponyms),
-//     div(date ? "Osm data from: " + date : "")
-//   )
-
 const EponymsWorldwide = () =>
   Eponyms(
     "Worldwide",
     // Keep eponyms appearing in at least three countries only.
-    R.pipe(
-      R.reject(R.compose(R.gt(3), R.prop(1))),
-      R.sortWith([sortDirection()(R.prop(1))]),
-    )(allEponyms())
+    R.reject(
+      R.compose(R.gt(3), R.prop(0)),
+      allEponyms()
+    )
   )
 
 const EponymsSearch = (regex) =>
   Eponyms(
     "Searching...",
-    R.pipe(
-      R.filter(R.compose(R.prop(0), R.match(new RegExp(regex, "i")), R.prop(0))),
-      R.sortWith([sortDirection()(R.prop(1))]),
-    )(allEponyms()))
+    R.filter(
+      R.compose(R.prop(0), R.match(new RegExp(regex, "i")), R.prop(0)),
+      allEponyms()
+    )
+  )
 
 const EponymsCountry = country =>
   Eponyms(    
     country[1],
     R.pipe(      
       R.filter(R.compose(R.equals(country[0]), R.head)),
-      R.path([0, 2]),
-      R.sortWith([sortDirection()(R.prop(1))]),
+      // Remove country name and metadata
+      skipNameAndMetadata
     )(statistics),
     R.find(R.propEq(0, country[0]), statistics)[1])
 
@@ -230,36 +208,10 @@ id("countries").appendChild(
 //   else vSearchStr.val = ".*"
 // })
 
-// id("language").addEventListener("click", () => {  
-//   if (vLanguage.val === "EN") {    
-//     id("english").style.display = "none"
-//     id("native").style.display = "inline"
-//     vLanguage.val = "native"    
-//   } else {
-//     id("english").style.display = "inline"
-//     id("native").style.display = "none"
-//     vLanguage.val = "EN"
-//   }
-// })
-
-// id("sort").addEventListener("click", () => {
-//     if (vSort.val === "down") {      
-//       id("arrow-up").style.display = "none"
-//       id("arrow-down").style.display = "inline"
-//       vSort.val = "up"
-//     }
-//     else {
-//       id("arrow-up").style.display = "inline"
-//       id("arrow-down").style.display = "none"
-//       vSort.val = "down"
-//     }    
-//   }
-// )
-
 // Display persons on country change
 // If no country selected, display all persons
 id("persons").appendChild(
-  van.bind(vCountry, vSearchStr, vLanguage, vSort, (country, str) => {    
+  van.bind(vCountry, vSearchStr, (country, str) => {    
     if (str !== ".*")
       return EponymsSearch(str)
     else if (country !== "")
