@@ -53,13 +53,6 @@ const eponymOccurence = (eponym) =>
     R.join(", ")
   )(statistics)
 
-// https://stackoverflow.com/questions/72704941/how-do-i-close-dialog-by-clicking-outside-of-it
-const dialog = document.getElementById("showCountries")
-dialog.addEventListener("click", ({ target: dialog }) => {  
-  if (dialog.nodeName === 'DIALOG')
-    dialog.close('dismiss')
-})
-
 const Table = (data) => table(  
   tbody(data.map(row => tr(
     row.map(col => td(col)),
@@ -74,8 +67,8 @@ const Eponyms = (title, eponyms, date) =>
         a({
           class: "eponym-count",
           onclick: () => {
-            dialog.innerText = eponymOccurence(eponym)
-            dialog.showModal()
+            id("showCountries").innerText = eponymOccurence(eponym)
+            id("showCountries").showModal()
           }
         }, eponymCount(eponym), " "),
         a({
@@ -185,6 +178,8 @@ id("countries").appendChild(
   van.bind(vRegion, (vRegion) =>
     RegionCountries(vRegion)
 ))
+id("showCountries").addEventListener("click",
+  id("showCountries").close)
 
 // Replace the regions with a search input
 // id("search-button").addEventListener("click", () => {
