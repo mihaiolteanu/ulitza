@@ -1,5 +1,4 @@
-const { div, a, sup, span, input, b, button } = van.tags
-import { metadata } from "./out/metadata.js"
+const { div, a, sup, span, input, b, table, tbody, thead, tr, th, td} = van.tags
 import { statistics } from "./out/all.min.js"
 import { regionsNames, regionCountries, countryDisplayName } from "./regions.js"
 
@@ -55,26 +54,62 @@ dialog.addEventListener("click", ({ target: dialog }) => {
 
 const buildLink = l => `https://${l[2][0]}.wikipedia.org/wiki/${l[2][1]}`
 
+const Table = (data) => table(  
+  tbody(data.map(row => tr(
+    row.map(col => td(col)),
+  ))))
+
 const Eponyms = (title, eponyms, date) =>
   span(
     div({ id: "eponyms-country" }, title),
-    id("info"),
-    R.map(eponym =>
-      span({ class: "eponym" },
+    // div({ class: "eponym-count"}, "123"),
+    Table(
+      R.map(eponym => [
         a({
-          href: buildLink(eponym),
-          target: "_blank"
-        }, eponymDisplayFormat(eponym)),
-        a({
-          class: "eponymcount",
+          class: "eponym-count",
           onclick: () => {
             dialog.innerText = eponymOccurence(eponym)
             dialog.showModal()
           }
-        }, sup(eponym[1]), " ")),
-      eponyms),
+        }, eponym[1], " "),
+        a({
+          class: "eponym",
+          href: buildLink(eponym),
+          target: "_blank"
+        }, eponymDisplayFormat(eponym)),
+        // center-align the eponym
+        a({
+          class: "hidden-eponymcount",          
+        }, eponym[1], " ")
+      ], eponyms)
+    ),    
     div(date ? "Osm data from: " + date : "")
   )
+
+
+
+// const Eponyms = (title, eponyms, date) =>
+//   span(
+//     div({ id: "eponyms-country" }, title),
+//     // id("info"),
+//     R.map(eponym =>
+//       div(
+//         a({
+//           class: "eponym",
+//           href: buildLink(eponym),
+//           target: "_blank"
+//         }, eponymDisplayFormat(eponym)),
+//         div({
+//           class: "eponymcount-below",
+//           onclick: () => {
+//             dialog.innerText = eponymOccurence(eponym)
+//             dialog.showModal()
+//           }
+//         }, " (", eponym[1], ") "),
+//       ),
+//       eponyms),
+//     div(date ? "Osm data from: " + date : "")
+//   )
 
 const EponymsWorldwide = () =>
   Eponyms(
@@ -102,7 +137,7 @@ const EponymsCountry = country =>
       R.path([0, 2]),
       R.sortWith([sortDirection()(R.prop(1))]),
     )(statistics),
-    R.find(R.propEq(0, country[0]), metadata)[1])
+    R.find(R.propEq(0, country[0]), statistics)[1])
 
 const regionCountrisWithEponyms = (region) =>
   R.innerJoin(
@@ -162,7 +197,7 @@ id("eponyms-total-unique").appendChild(
   R.pipe(
     R.length,
     e => e.toLocaleString('en', { useGrouping: true }),
-    b
+    div
   )(allEponyms()))
 
 id("regions").appendChild(Regions)
@@ -174,52 +209,52 @@ id("countries").appendChild(
 ))
 
 // Replace the regions with a search input
-id("search-button").addEventListener("click", () => {
-  id("regions").style.display = "none"
-  id("search-input").style.display = "inline"
-  id("search-input").focus()
-})
+// id("search-button").addEventListener("click", () => {
+//   id("regions").style.display = "none"
+//   id("search-input").style.display = "inline"
+//   id("search-input").focus()
+// })
 
-// Replace the search input with the regions
-id("search-input").addEventListener("focusout", (ev) => {
-  console.log(ev.target.class)
-  id("regions").style.display = "block"
-  id("search-input").style.display = "none"
-  vSearchStr.val = ".*"
-})
+// // Replace the search input with the regions
+// id("search-input").addEventListener("focusout", (ev) => {
+//   console.log(ev.target.class)
+//   id("regions").style.display = "block"
+//   id("search-input").style.display = "none"
+//   vSearchStr.val = ".*"
+// })
 
-id("search-input").addEventListener("input", (t) => {
-  if (t.target.value.length > 2)
-      vSearchStr.val = t.target.value
-    // Reset
-  else vSearchStr.val = ".*"
-})
+// id("search-input").addEventListener("input", (t) => {
+//   if (t.target.value.length > 2)
+//       vSearchStr.val = t.target.value
+//     // Reset
+//   else vSearchStr.val = ".*"
+// })
 
-id("language").addEventListener("click", () => {  
-  if (vLanguage.val === "EN") {    
-    id("english").style.display = "none"
-    id("native").style.display = "inline"
-    vLanguage.val = "native"    
-  } else {
-    id("english").style.display = "inline"
-    id("native").style.display = "none"
-    vLanguage.val = "EN"
-  }
-})
+// id("language").addEventListener("click", () => {  
+//   if (vLanguage.val === "EN") {    
+//     id("english").style.display = "none"
+//     id("native").style.display = "inline"
+//     vLanguage.val = "native"    
+//   } else {
+//     id("english").style.display = "inline"
+//     id("native").style.display = "none"
+//     vLanguage.val = "EN"
+//   }
+// })
 
-id("sort").addEventListener("click", () => {
-    if (vSort.val === "down") {      
-      id("arrow-up").style.display = "none"
-      id("arrow-down").style.display = "inline"
-      vSort.val = "up"
-    }
-    else {
-      id("arrow-up").style.display = "inline"
-      id("arrow-down").style.display = "none"
-      vSort.val = "down"
-    }    
-  }
-)
+// id("sort").addEventListener("click", () => {
+//     if (vSort.val === "down") {      
+//       id("arrow-up").style.display = "none"
+//       id("arrow-down").style.display = "inline"
+//       vSort.val = "up"
+//     }
+//     else {
+//       id("arrow-up").style.display = "inline"
+//       id("arrow-down").style.display = "none"
+//       vSort.val = "down"
+//     }    
+//   }
+// )
 
 // Display persons on country change
 // If no country selected, display all persons
