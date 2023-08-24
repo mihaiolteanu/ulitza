@@ -162,7 +162,7 @@ const id = (id) => document.getElementById(id)
 
 id("regions").appendChild(Regions)
 
-id("ulitsa").addEventListener("click", () => {
+id("ulitza").addEventListener("click", () => {
   vRegion.val = ""
   vCountry.val = ""
   vSearchStr.val = ".*"

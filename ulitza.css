@@ -1,0 +1,153 @@
+body {
+    /* padding: 0px; */
+    /* line-height: 1.2; */
+}
+
+#selected-country, #selected-region {
+    font-size: 1.0em;
+    font-weight: bold;
+}
+
+#header, #header a {
+    background-color: #5f78c2;         
+    color: white;
+    padding: 0.1em;
+    /* text-align: center;          */
+}
+
+#regions-and-countries {
+    /* text-align: center; */
+    background-color: #d7e0f7;
+}
+
+#regions {
+    font-size: 1.09em;         
+}
+
+#regions-and-search {         
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+#content, #countries {
+    /* text-align: center; */
+    /* line-height: 2.35em; */
+    /* padding-left: 0.5em; */
+    padding-right: 0.5em;
+}
+
+table, tr {
+    /* text-align: center; */
+    border: 0 !important;
+    border-collapse: collapse;
+    /* Don't add huge spaces between words when eponym wraps-around */
+    text-align: start;
+}
+
+dialog {
+    font-size: 1.2em;         
+}
+
+@media screen and (min-width: 480px) {
+    #content {
+        border: 2px solid #FFA41B; /* #5f78c2;              */
+        /* border-radius: 15px; */
+        padding: 0em 1em;
+    }
+
+    dialog {
+        width: 40%
+    }
+}
+
+#regions a {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    /* color: white; */
+}
+
+#ulitza {
+    font-size: 1.90em;
+    font-weight: bold;
+    font-family: "Lucida Console";         
+    letter-spacing: 0.70rem;
+    /* padding-top: 35px; */
+}
+
+#header-summary {
+    /* color: lightgray; */
+    color: #f7efd5;
+    padding-bottom: 1em;
+}
+
+.eponym {
+    margin: 0.1em;
+    font-size: 1.15em;
+    border-radius: 52px;
+    /* border: 2px solid #edeff5; */
+    padding: 3px;
+    
+}
+
+.eponym:hover {
+    background-color: #edeff5;
+}
+
+.country {
+    /* margin-right: 4px; */
+    /* font-size: 1.15em; */
+    border-radius: 12px;
+    /* border: 2px solid #5f78c2; */
+    padding-bottom: 5em;
+}
+
+.eponym-count {
+    /* color: red; */
+    padding: 0.45em;
+    /* margin-left: 1em; */
+    background-color: #edeff5;
+    border-radius: 5em;         
+    /* border-right: 2px solid #5f78c2; */
+}
+
+.eponym-name {
+    padding-left: 1.25em;
+}   
+
+a, a:visited, a:hover {
+    text-decoration: none;
+    color: #333d54;
+}     
+
+#header-logo-and-links {
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+#eponyms-total-unique, #github {
+    /* color: #f5a111; */
+    /* padding-top: 5px; */
+}
+
+#eponyms-country {
+    font-size: 2em;
+    /* font-weight: bold; */
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+#search-input {
+    text-align: left;         
+}
+input {
+    margin-bottom: 0px;
+    /* font-size: 1.09em; */
+}
+
+#search-button, #cancel-search {     
+    ;
+}
