@@ -150,16 +150,6 @@ const Regions = span(
     regionsNames())
 )
 
-const Logo = a({
-  href: "#",
-  onclick: () => {
-    vRegion.val    = ""
-    vCountry.val   = ""
-    vSearchStr.val = ".*"
-  }
-}, "ulitza")
-
-
 const id = (id) => document.getElementById(id)
 
 // Display a unique count of eponyms
@@ -171,7 +161,13 @@ const id = (id) => document.getElementById(id)
 //   )(allEponyms()))
 
 id("regions").appendChild(Regions)
-id("ulitsa").appendChild(Logo)
+
+id("ulitsa").addEventListener("click", () => {
+  vRegion.val = ""
+  vCountry.val = ""
+  vSearchStr.val = ".*"
+})
+
 id("countries").appendChild(
   // Update shown countries on region change
   van.bind(vRegion, (vRegion) =>

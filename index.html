@@ -23,7 +23,7 @@
          font-weight: bold;
      }
 
-     #header, #footer, #header a, #footer a {
+     #header, #header a {
          background-color: #5f78c2;         
          color: white;
          padding: 0.1em;
@@ -82,7 +82,7 @@
          /* color: white; */
      }
 
-     #ulitsa {
+     #ulitza {
          font-size: 1.90em;
          font-weight: bold;
          font-family: "Lucida Console";         
@@ -90,7 +90,7 @@
          /* padding-top: 35px; */
      }
 
-     #summary {
+     #header-summary {
          /* color: lightgray; */
          color: #f7efd5;
          padding-bottom: 1em;
@@ -135,7 +135,7 @@
          color: #333d54;
      }     
 
-     #totals, #info {
+     #header-logo-and-links {
          padding-left: 0.3em;
          padding-right: 0.3em;
          display: flex;
@@ -170,15 +170,14 @@
     </style>
 </head>
 
-
 <body>    
     <dialog id="showCountries">
     </dialog>
     
     <div id="header">
-        <div id="totals">
+        <div id="header-logo-and-links">
             <!-- <span id="eponyms-total-unique" title="Total number of unique eponyms"></span> -->
-            <span id="ulitsa"></span>
+            <span id="ulitsa">ulitza</span>
             <span>
                 <a href="./about.html">about</a>
                 <a target="_blank" href="https://github.com/mihaiolteanu/ulitza"> github </a>
@@ -187,7 +186,7 @@
             </span>            
             
         </div>
-        <div id="summary"> popular street names and landmarks worldwide </div>        
+        <div id="header-summary"> popular street names and landmarks worldwide </div>        
     </div>
     
     <div id="regions-and-countries">
