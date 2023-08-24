@@ -12,12 +12,9 @@ const vSearchStr = van.state(".*")
 // The standard eponym format:
 // [count, [wiki_lang, wiki_name]]
 const eponymCount   = R.head
-const eponymArray   = R.tail 
-const eponymDisplay = R.pipe(
-  R.last,
-  R.last,
-  R.replace(/_/g, " "),
-)
+const eponymArray   = R.last
+const eponymRawName = R.compose(R.last, eponymArray)
+const eponymDisplay = R.compose(R.replace(/_/g, " "), eponymRawName)
 const eponymURL = R.pipe(
   R.last,
   l => `https://${l[0]}.wikipedia.org/wiki/${l[1]}`,
@@ -47,7 +44,8 @@ const allEponyms = R.memoizeWith(R.identity, () =>
 // Return a list of countries where the given eponym appears in.
 const eponymOccurence = (eponym) =>
   R.pipe(
-    R.filter(R.find(R.compose(R.equals(eponymArray(eponym)), eponymArray))),    
+    R.filter(R.find(
+      R.compose(R.equals(eponymArray(eponym)), eponymArray))),    
     R.map(R.head),
     R.map(countryDisplayName),
     R.join(", ")
@@ -94,10 +92,11 @@ const EponymsWorldwide = () =>
 const EponymsSearch = (regex) =>
   Eponyms(
     "Searching...",
-    R.filter(
-      R.compose(R.prop(0), R.match(new RegExp(regex, "i")), R.prop(0)),
-      allEponyms()
-    )
+    R.filter(R.pipe(
+      eponymRawName,
+      R.match(new RegExp(regex, "i")),
+      R.head
+    ), allEponyms())
   )
 
 const EponymsCountry = country =>
@@ -137,7 +136,7 @@ const RegionCountries = R.memoizeWith(R.identity, region => span(
 const Regions = span(
   R.map(region =>
     a({
-      href: `#${region}`,
+      // href: `#${region}`,
       // Show/hide region on click
       onclick: () => vRegion.val =
         vRegion.val === region ? "" : region,
@@ -164,12 +163,12 @@ const Logo = a({
 const id = (id) => document.getElementById(id)
 
 // Display a unique count of eponyms
-id("eponyms-total-unique").appendChild(
-  R.pipe(
-    R.length,
-    e => e.toLocaleString('en', { useGrouping: true }),
-    div
-  )(allEponyms()))
+// id("eponyms-total-unique").appendChild(
+//   R.pipe(
+//     R.length,
+//     e => e.toLocaleString('en', { useGrouping: true }),
+//     div
+//   )(allEponyms()))
 
 id("regions").appendChild(Regions)
 id("ulitsa").appendChild(Logo)
@@ -182,26 +181,30 @@ id("showCountries").addEventListener("click",
   id("showCountries").close)
 
 // Replace the regions with a search input
-// id("search-button").addEventListener("click", () => {
-//   id("regions").style.display = "none"
-//   id("search-input").style.display = "inline"
-//   id("search-input").focus()
-// })
+id("search-button").addEventListener("click", () => {
+  id("regions").style.display = "none"
+  id("search-input").style.display = "inline"
+  id("cancel-search").style.display = "inline"
+  id("search-button").style.display = "none"  
+  id("search-input").focus()
+  id("search-input").value = ""
+})
 
 // // Replace the search input with the regions
-// id("search-input").addEventListener("focusout", (ev) => {
-//   console.log(ev.target.class)
-//   id("regions").style.display = "block"
-//   id("search-input").style.display = "none"
-//   vSearchStr.val = ".*"
-// })
+id("search-input").addEventListener("focusout", () => {  
+  id("regions").style.display = "inline"
+  id("search-input").style.display = "none"
+  id("cancel-search").style.display = "none"
+  id("search-button").style.display = "inline"
+  vSearchStr.val = ".*"
+})
 
-// id("search-input").addEventListener("input", (t) => {
-//   if (t.target.value.length > 2)
-//       vSearchStr.val = t.target.value
-//     // Reset
-//   else vSearchStr.val = ".*"
-// })
+id("search-input").addEventListener("input", (t) => {
+  if (t.target.value.length > 2)
+      vSearchStr.val = t.target.value
+    // Reset
+  else vSearchStr.val = ".*"
+})
 
 // Display persons on country change
 // If no country selected, display all persons

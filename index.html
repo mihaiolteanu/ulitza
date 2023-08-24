@@ -7,14 +7,15 @@
     
     
     <!-- Resources -->
-    <script src="https://cdn.jsdelivr.net/npm/ramda@0.28.0/dist/ramda.min.js"></script>    
+    <script type="module" src="https://cdn.jsdelivr.net/npm/ramda@0.28.0/dist/ramda.min.js"></script>    
     <script type="module" src="https://vanjs.org/code/van-0.11.10.nomodule.min.js"></script>       
     
     <script type="module" src="./display.js"></script>    
     <style>
 
      body {
-         padding: 0px;         
+         /* padding: 0px; */
+         /* line-height: 1.2; */
      }
 
      #selected-country, #selected-region {
@@ -22,27 +23,41 @@
          font-weight: bold;
      }
 
-     #header, #header a {
+     #header, #footer, #header a, #footer a {
          background-color: #5f78c2;         
          color: white;
-         padding: 5px;         
-         text-align: center;         
+         padding: 0.1em;
+         /* text-align: center;          */
      }
 
      #regions-and-countries {
-         text-align: center;
+         /* text-align: center; */
          background-color: #d7e0f7;
      }
      
      #regions {
-         font-size: 1.09em;
+         font-size: 1.09em;         
+     }
+
+     #regions-and-search {         
+         display: flex;
+         justify-content: space-between;
+         flex-wrap: wrap;
      }
 
      #content, #countries {
-         text-align: center;
-         line-height: 2.35em;
-         padding-left: 0.5em;
+         /* text-align: center; */
+         /* line-height: 2.35em; */
+         /* padding-left: 0.5em; */
          padding-right: 0.5em;
+     }
+
+     table, tr {
+         /* text-align: center; */
+         border: 0 !important;
+         border-collapse: collapse;
+         /* Don't add huge spaces between words when eponym wraps-around */
+         text-align: start;
      }
 
      dialog {
@@ -51,9 +66,9 @@
      
      @media screen and (min-width: 480px) {
          #content {
-             border: 2px solid lightgray;             
+             border: 2px solid #FFA41B; /* #5f78c2;              */
              /* border-radius: 15px; */
-             /* padding: 1em; */
+             padding: 0em 1em;
          }
 
          dialog {
@@ -68,24 +83,26 @@
      }
 
      #ulitsa {
-         font-size: 2.30em;
-         /* font-weight: bold; */
+         font-size: 1.90em;
+         font-weight: bold;
          font-family: "Lucida Console";         
-         letter-spacing: 1.25rem;
+         letter-spacing: 0.70rem;
          /* padding-top: 35px; */
      }
 
      #summary {
          /* color: lightgray; */
-         color: #f7efd5
+         color: #f7efd5;
+         padding-bottom: 1em;
      }
-
+     
      .eponym {
-         margin-right: 4px;
+         margin: 0.1em;
          font-size: 1.15em;
-         border-radius: 12px;
-         border: 2px solid #edeff5;
-         padding: 5px;
+         border-radius: 52px;
+         /* border: 2px solid #edeff5; */
+         padding: 3px;
+         
      }
 
      .eponym:hover {
@@ -93,28 +110,37 @@
      }
 
      .country {
-         margin-right: 4px;
+         /* margin-right: 4px; */
          /* font-size: 1.15em; */
          border-radius: 12px;
-         border: 2px solid #5f78c2;
-         padding: 5px;
+         /* border: 2px solid #5f78c2; */
+         padding-bottom: 5em;
      }
 
-     sup, .eponymcount {
-         /* font-weight: bold; */
-         /* font-size: 0.70em; */
-         color: dimgray   
+     .eponym-count {
+         /* color: red; */
+         padding: 0.45em;
+         /* margin-left: 1em; */
+         background-color: #edeff5;
+         border-radius: 5em;         
+         /* border-right: 2px solid #5f78c2; */
      }
+
+     .eponym-name {
+         padding-left: 1.25em;
+     }   
 
      a, a:visited, a:hover {
          text-decoration: none;
-         color: #333d54
+         color: #333d54;
      }     
 
      #totals, #info {
-         /* padding-top: 0.5em; */
+         padding-left: 0.3em;
+         padding-right: 0.3em;
          display: flex;
          justify-content: space-between;
+         flex-wrap: wrap;
      }
 
      #eponyms-total-unique, #github {
@@ -122,23 +148,23 @@
          /* padding-top: 5px; */
      }
 
-     #eponyms-title {
-         font-size: 1.55em;
-         font-weight: bold;
-         padding-top: 0.75em;
+     #eponyms-country {
+         font-size: 2em;
+         /* font-weight: bold; */
+         padding-top: 1em;
+         padding-bottom: 1em;
      }
 
+     #search-input {
+         text-align: left;         
+     }
      input {
          margin-bottom: 0px;
-         font-size: 1.09em;
+         /* font-size: 1.09em; */
      }
 
-     img {
-         margin-bottom: 0rem;
-     }     
-
-     #language, #sort, #search-button, #surprise, #edit-me {
-         cursor: pointer
+     #search-button, #cancel-search {     
+         ;
      }
      
     </style>
@@ -147,47 +173,32 @@
 
 <body>    
     <dialog id="showCountries">
-    </dialog>    
+    </dialog>
+    
     <div id="header">
-        <div id="totals">        
-            <span id="eponyms-total-unique" title="Total number of unique eponyms"></span>
-            <div id="ulitsa"></div>
-            <span id="github">
-                <a target="_blank" href="https://github.com/mihaiolteanu/ulitza">
-                    <img src="./github-mark.svg" alt="github" width="30px">
-                </a>
-            </span>
+        <div id="totals">
+            <!-- <span id="eponyms-total-unique" title="Total number of unique eponyms"></span> -->
+            <span id="ulitsa"></span>
+            <span>
+                <a href="./about.html">about</a>
+                <a target="_blank" href="https://github.com/mihaiolteanu/ulitza"> github </a>
+                <a id="search-button" style="display:inline">search</a>
+                <a id="cancel-search" style="display:none">cancel</a>
+            </span>            
+            
         </div>
-        <div id="summary">Eponymous streets and landmarks worldwide</div>        
+        <div id="summary"> popular street names and landmarks worldwide </div>        
     </div>
     
-    <div id="regions-and-countries">        
-        <div id="regions"></div>        
-        <input id="search-input" type="search" size="12em" style="display:none"/>
+    <div id="regions-and-countries">
+        <div id="regions-and-search">            
+            <span id="regions"></span>
+            <input id="search-input" type="search" size="17em" style="display:none"/>            
+        </div>
         <div id="countries"></div>
     </div>
     
     <div id="content">        
-        <div id="info">            
-            <span>                
-                <span id="language">
-                    <img id="english" src="./language_icons/english.svg" style="display:inline" width="30px">
-                    <img id="native" src="./language_icons/letter-chinese.svg" style="display:none" width="30px">
-                </span>
-                <span id="sort">
-                    <img id="arrow-up"   src="./language_icons/crowd2.svg"   style="display:inline" width="30px">
-                    <img id="arrow-down" src="./language_icons/person.svg" style="display:none"   width="30px">
-                </span>
-            </span>            
-            
-            <span>
-                <img id="edit-me" src="./language_icons/edit.svg" title="Edit this country" width="30px">
-                <img id="search-button" src="./language_icons/search.svg" style="display:inline" width="30px">
-                <!-- <img src="./language_icons/surprise.svg" title="Surprise me!" width="30px">                 -->
-                <img id="surprise" src="./language_icons/gift-orange.svg" title="Surprise me!" width="30px">                
-            </span>
-            
-        </div>
         <div id="persons"></div>
-    </div>    
+    </div>
 </body>
