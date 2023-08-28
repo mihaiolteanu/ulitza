@@ -13,10 +13,6 @@ body {
     color: white;
 }
 
-a, a:visited, a:hover {
-    color: black;
-}
-
 #header-logo a:hover {
     text-decoration: none;
 }
@@ -25,7 +21,7 @@ a, a:visited, a:hover {
     font-size: 2.25em;
     font-weight: bold;
     font-family: "Lucida Console";
-    letter-spacing: 1.5rem;
+    letter-spacing: 1rem;
     text-align: center;
     margin-top: -0.1em;
     margin-bottom: -0.3em;
@@ -43,11 +39,15 @@ a, a:visited, a:hover {
 
 #regions-and-countries {
     text-align: center;
+    /* delimiter colour */
+    color: gray;
     background-color: #d7e0f7;    
 }
 
-#regions-and-search {
-    border-bottom: 2px solid #5f78c2;
+#countries {
+    text-align: left;
+    padding-left: 0.35em;
+    background-color: #f9f9f9;    
 }
 
 #regions, #search-input, .country, dialog {
@@ -55,20 +55,27 @@ a, a:visited, a:hover {
 }
 
 table, tr {    
-    border: 0 !important;
-    border-collapse: collapse;
+    /* border: 0 !important; */
+    /* border-collapse: collapse; */
     /* Don't add huge spaces between words when eponym wraps-around */
-    text-align: start;
+    text-align: start;    
+}
+
+td, th {
+    border-bottom: 0px;
+}
+
+td:first-child {
+    /* border-right: 2px solid lightgray;     */
 }
 
 @media screen and (min-width: 480px) {
     #content {
-        border: 2px solid #5f78c2 ; /* #FFA41B  #5f78c2;              */
-        /* border-radius: 15px; */
-        padding: 0em 1em;
+        border: 3px solid #d7e0f7;
+        padding: 0em 1.25em;
     }
     dialog {
-        width: 40%
+        width: 50%
     }
 }
 
@@ -76,44 +83,29 @@ table, tr {
     cursor: pointer;    
 }
 
-.eponym {
-    margin: 0.1em;
+.eponym {   
     font-size: 1.15em;
-    /* border-radius: 52px; */
-    /* border: 2px solid #edeff5; */
-    padding: 3px;
-    
 }
 
 .eponym-count {
-    font-size: 0.9em;
-}
-
-#eponyms-total-unique, #github {
-    /* color: #f5a111; */
-    /* padding-top: 5px; */
+    font-size: 0.95em;
 }
 
 #eponyms-country {
     text-align: center;
     font-size: 1.8em;
-    /* font-weight: bold; */
-    padding-top: 0.5em;
+    padding-top: 0.75em;
     padding-bottom: 0.25em;
-}
-
-#search-input {
-    ;    /* text-align: left; */
 }
 
 input {
     margin-bottom: 0px;    
 }
 
-#search-button, #cancel-search {     
-    ;
-}
-
 #osm-data {
     text-align: center;
+}
+
+a, a:visited, a:hover {
+    color: black;
 }

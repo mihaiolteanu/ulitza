@@ -71,7 +71,7 @@ const Eponyms = (title, eponyms, date) =>
             id("showCountries").innerText = eponymOccurence(eponym)
             id("showCountries").showModal()
           }
-        }, eponymCount(eponym), " "),
+        }, eponymCount(eponym) + "."),
         a({
           class: "eponym",
           href: eponymURL(eponym),
@@ -137,24 +137,25 @@ const RegionCountries = R.memoizeWith(R.identity, region => span(
     regionCountrisWithEponyms(region))))
 
 const Regions = span(
-  R.map(region =>
-    span(
-      span(" | "),
-      a({
-        class: "region",
-        // Show/hide region on click
-        onclick: () => vRegion.val =
-          vRegion.val === region ? "" : region,
-        id: {
-          deps: [vRegion],
-          f: R.ifElse(
-            R.equals(region), R.always("selected-region"), R.always("")
-          )
-        }
-      }, region),
-    ),
-    regionsNames()),
-  span(" | ")
+  R.pipe(
+    R.intersperse(" | "),
+    R.map(region =>
+      region === " | " ? region :
+        span(
+          a({
+            class: "region",
+            // Show/hide region on click
+            onclick: () => vRegion.val =
+              vRegion.val === region ? "" : region,
+            id: {
+              deps: [vRegion],
+              f: R.ifElse(
+                R.equals(region), R.always("selected-region"), R.always("")
+              )
+            }
+          }, region),
+        )),
+  )(regionsNames())
 )
 
 const id = (id) => document.getElementById(id)
