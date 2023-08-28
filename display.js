@@ -20,6 +20,9 @@ const eponymURL = R.pipe(
   l => `https://${l[0]}.wikipedia.org/wiki/${l[1]}`,
 )
 
+const countryGithubURL = country =>
+  `https://github.com/mihaiolteanu/ulitza/out/eponyms/${country}.json`
+
 // The standard country format:
 // [name, metadata, eponym, eponym, ....]
 const skipNameAndMetadata = (country) =>
@@ -34,8 +37,8 @@ const allEponyms = R.memoizeWith(R.identity, () =>
     R.mapObjIndexed(R.length),
     R.toPairs,
     R.sortWith([R.descend(R.prop(1))]),
-    // Transform back to standard eponym format (transformed into a string at
-    // the groupBy stage above)
+    // Transform back to standard eponym format (modified into a string with the
+    // groupBy above)
     R.map(R.adjust(0,
       R.juxt([R.take(2), R.drop(3)]),)),
     R.map(v => [v[1], v[0]]),    
@@ -58,8 +61,8 @@ const Table = (data) => table(
 
 const Eponyms = (title, eponyms, date) =>
   span(
-    div({ id: "eponyms-country" }, title),
-    // div({ class: "eponym-count"}, "123"),
+    div({ id: "eponyms-country", },
+      a({ href: countryGithubURL(title) }, title)),    
     Table(
       R.map(eponym => [
         a({
@@ -75,8 +78,8 @@ const Eponyms = (title, eponyms, date) =>
           target: "_blank"
         }, eponymDisplay(eponym)),
       ], eponyms)
-    ),    
-    div(date ? "Osm data from: " + date : "")
+    ),
+    div({id: "osm-data"}, date ? "Osm data from: " + date : "")
   )
 
 const EponymsWorldwide = () =>
@@ -123,43 +126,38 @@ const RegionCountries = R.memoizeWith(R.identity, region => span(
           vCountry.val = country,
           vRegion.val = ""
         },
-        href: `#${country[0]}`,
         id: {
           deps: [vCountry],
           f: R.ifElse(
             R.equals(country), R.always("selected-country"), R.always("")
           )
         }
-      }, country[1] + " ")),
+      }, country[1] + " "),
+      span(" | ")),
     regionCountrisWithEponyms(region))))
 
 const Regions = span(
   R.map(region =>
-    span({
-      class: "region",
-      // href: `#${region}`,
-      // Show/hide region on click
-      onclick: () => vRegion.val =
-        vRegion.val === region ? "" : region,
-      id: {
-        deps: [vRegion],
-        f: R.ifElse(
-          R.equals(region), R.always("selected-region"), R.always("")
-        )
-      }
-    }, region),
-    regionsNames())
+    span(
+      span(" | "),
+      a({
+        class: "region",
+        // Show/hide region on click
+        onclick: () => vRegion.val =
+          vRegion.val === region ? "" : region,
+        id: {
+          deps: [vRegion],
+          f: R.ifElse(
+            R.equals(region), R.always("selected-region"), R.always("")
+          )
+        }
+      }, region),
+    ),
+    regionsNames()),
+  span(" | ")
 )
 
 const id = (id) => document.getElementById(id)
-
-// Display a unique count of eponyms
-// id("eponyms-total-unique").appendChild(
-//   R.pipe(
-//     R.length,
-//     e => e.toLocaleString('en', { useGrouping: true }),
-//     div
-//   )(allEponyms()))
 
 id("regions").appendChild(Regions)
 
@@ -207,7 +205,7 @@ id("search-input").addEventListener("input", (t) => {
 
 // Display persons on country change
 // If no country selected, display all persons
-id("persons").appendChild(
+id("content").appendChild(
   van.bind(vCountry, vSearchStr, (country, str) => {    
     if (str !== ".*")
       return EponymsSearch(str)
