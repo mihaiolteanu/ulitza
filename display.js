@@ -1,4 +1,4 @@
-const { div, a, sup, span, input, b, table, tbody, thead, tr, th, td} = van.tags
+const { div, a, sup, span, input, b, table, tbody, tr, td } = van.tags
 import { statistics } from "./out/all.min.js"
 import { regionsNames, regionCountries, countryDisplayName } from "./regions.js"
 
@@ -81,7 +81,7 @@ const Eponyms = (title, eponyms, date) =>
 
 const EponymsWorldwide = () =>
   Eponyms(
-    "Worldwide",
+    "Worldwide frequency",
     // Keep eponyms appearing in at least three countries only.
     R.reject(
       R.compose(R.gt(3), R.prop(0)),
@@ -135,7 +135,8 @@ const RegionCountries = R.memoizeWith(R.identity, region => span(
 
 const Regions = span(
   R.map(region =>
-    a({
+    span({
+      class: "region",
       // href: `#${region}`,
       // Show/hide region on click
       onclick: () => vRegion.val =
@@ -176,7 +177,7 @@ id("countries").appendChild(
 id("showCountries").addEventListener("click",
   id("showCountries").close)
 
-// Replace the regions with a search input
+// Replace the regions with the search input
 id("search-button").addEventListener("click", () => {
   id("regions").style.display = "none"
   id("search-input").style.display = "inline"
@@ -187,7 +188,7 @@ id("search-button").addEventListener("click", () => {
 })
 
 // // Replace the search input with the regions
-id("search-input").addEventListener("focusout", () => {  
+id("search-input").addEventListener("focusout", () => {
   id("regions").style.display = "inline"
   id("search-input").style.display = "none"
   id("cancel-search").style.display = "none"
@@ -197,7 +198,9 @@ id("search-input").addEventListener("focusout", () => {
 
 id("search-input").addEventListener("input", (t) => {
   if (t.target.value.length > 2)
-      vSearchStr.val = t.target.value
+    vSearchStr.val = t.target.value
+  else if (t.target.value.length === 0)
+    id("search-input").dispatchEvent(new Event("focusout"))
     // Reset
   else vSearchStr.val = ".*"
 })
