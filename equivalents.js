@@ -1037,6 +1037,7 @@ const equivalents = {
                                         "Doutor Ulysses Guimarães"],
     ["Vinícius de Moraes",              "Vinícius de Morais",
                                         "Vinicius de Moraes"],
+    ["Visconde de Cairu",               "Visconde de Cairú"],
     ["Visconde de Mauá",                "Barão de Mauá"],
     ["Washington Luiz",                 "Washington Luís",
                                         "Washington Luis"],
