@@ -6291,6 +6291,12 @@ const equivalents = {
     ["Юсупа Акаева",          "Ю.Акаева"]
   ],
 
+
+  "senegal-and-gambia": [
+    ["Cheikh Anta Diop", "Cheick Anta Diop"]
+  ],
+  
+
   // SR
   "serbia": [
     ["Бановић Страхиње",      "Страхињића Бана"],
