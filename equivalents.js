@@ -1430,6 +1430,11 @@ const equivalents = {
   ],
 
 
+  "congo-democratic-republic": [
+    ["Kasa Vubu", "Kasa-Vubu"]
+  ],
+  
+
   "costa-rica": [
     ["Fernández Oreamuno",        "Próspero Fernández"],
     ["General Cañas",             "José María Cañas"],
