@@ -1439,6 +1439,8 @@ const equivalents = {
     ["Fernández Oreamuno",        "Próspero Fernández"],
     ["General Cañas",             "José María Cañas"],
     ["José María Castro Madriz",  "Castro Madriz"],
+    ["Juan Rafael Mora Porras",   "Libertador Juan Rafael Mora Porras"],
+    ["León Cortés",               "León Cortés Castro"],
     ["Tomás Guardia",             "General Tomás Guardia Gutiérrez",
                                   "General Tomás Guardia",
                                   "Gral Tomás Guardia Gutiérrez"]
