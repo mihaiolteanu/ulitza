@@ -5,8 +5,13 @@ body {
 
 #header {
     background-color: #5f78c2;    
-    padding: 0.15em;
+    padding: 0.55em;
+    padding-left: 1em;
     padding-bottom: 0.5em;
+}
+
+#header-links {
+    padding-left: 1em;
 }
 
 #header a {
@@ -18,27 +23,19 @@ body {
 }
 
 #header-logo {
-    font-size: 2.25em;
+    font-size: 2em;
     font-weight: bold;
     font-family: "Lucida Console";
     letter-spacing: 1rem;
-    text-align: center;
-    margin-top: -0.1em;
-    margin-bottom: -0.3em;
-}
-
-#header-summary {    
-    color: #f7efd5;
-    padding-bottom: 1em;
-    text-align: center;
 }
 
 #selected-country, #selected-region {
     font-weight: bold;
 }
 
-#regions-and-countries {
-    text-align: center;
+#regions-and-countries {    
+    padding-left: 1em;
+    padding-right: 1em;
     /* delimiter colour */
     color: gray;
     background-color: #d7e0f7;    
@@ -46,7 +43,7 @@ body {
 
 #countries {
     text-align: left;
-    padding-left: 0.35em;
+    padding-left: 0.35em;    
     background-color: #f9f9f9;    
 }
 
@@ -54,25 +51,14 @@ body {
     font-size: 1.2em;
 }
 
-table, tr {    
-    /* border: 0 !important; */
-    /* border-collapse: collapse; */
-    /* Don't add huge spaces between words when eponym wraps-around */
-    text-align: start;    
-}
-
-td, th {
-    border-bottom: 0px;
-}
-
-td:first-child {
-    /* border-right: 2px solid lightgray;     */
+#content {
+    padding: 0em 1em;
 }
 
 @media screen and (min-width: 480px) {
     #content {
         border: 3px solid #d7e0f7;
-        padding: 0em 1.25em;
+        padding: 0em 1em;
     }
     dialog {
         width: 50%
@@ -88,11 +74,12 @@ td:first-child {
 }
 
 .eponym-count {
-    font-size: 0.95em;
+    /* color: dimgray; */
+    /* font-size: 0.95em; */
 }
 
 #eponyms-country {
-    text-align: center;
+    /* text-align: center; */
     font-size: 1.8em;
     padding-top: 0.75em;
     padding-bottom: 0.25em;
@@ -100,10 +87,6 @@ td:first-child {
 
 input {
     margin-bottom: 0px;    
-}
-
-#osm-data {
-    text-align: center;
 }
 
 a, a:visited, a:hover {

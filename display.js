@@ -54,32 +54,27 @@ const eponymOccurence = (eponym) =>
     R.join(", ")
   )(statistics)
 
-const Table = (data) => table(  
-  tbody(data.map(row => tr(
-    row.map(col => td(col)),
-  ))))
-
 const Eponyms = (title, eponyms, date) =>
   span(
-    div({ id: "eponyms-country", },
+    span({ id: "eponyms-country", },
       a({ href: countryGithubURL(title) }, title)),    
-    Table(
-      R.map(eponym => [
+    div({ id: "persons" },
+      R.map(eponym => div(
+        a({
+          class: "eponym",
+          href: eponymURL(eponym),
+          target: "_blank"
+        }, eponymDisplay(eponym)),
         a({
           class: "eponym-count",
           onclick: () => {
             id("showCountries").innerText = eponymOccurence(eponym)
             id("showCountries").showModal()
           }
-        }, eponymCount(eponym) + "."),
-        a({
-          class: "eponym",
-          href: eponymURL(eponym),
-          target: "_blank"
-        }, eponymDisplay(eponym)),
-      ], eponyms)
+        }, " (" + eponymCount(eponym) + ") ")
+      ), eponyms)
     ),
-    div({id: "osm-data"}, date ? "Osm data from: " + date : "")
+    div({ id: "osm-data" }, date ? "Osm data from: " + date : "")
   )
 
 const EponymsWorldwide = () =>
