@@ -4662,6 +4662,7 @@ const equivalents = {
     ["Jan van Goyen",              "Van Goyen",
                                    "van Goyen",
                                    "Jan van Goijen"],
+    ["Jan van Nassau",             "Jan de Oude"],
     ["Jan van Riebeeck",           "Van Riebeeck",
                                    "Jan van Riebeek",
                                    "van Riebeeck",
