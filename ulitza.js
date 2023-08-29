@@ -5,7 +5,17 @@ import * as F from "fluture"
 import S from "sanctuary"
 import { countries, osmDownloadLink } from "./regions.js"
 import { equivalentDups, equivalentDupsAll } from "./equivalents.js"
-import { extractOsmData, parseOsmData, osmPath, inspectOsmData, linkDups, linkDupsAll } from "./generator.js"
+import {
+  extractOsmData,
+  parseOsmData,
+  osmPath,
+  inspectOsmData,
+  linkDups,
+  linksConsistency,
+  linksConsistencyAll,
+  linkDupsAll,
+  statistics
+} from "./generator.js"
 
 program
   .version("1.0")
@@ -55,24 +65,32 @@ program
   .description("Parse the given country")
   .action(parseOsmData)
 
+program
+  .command('statistics')
+  .description("Generate the stats file for all the countries")
+  .action(statistics)
+
+const handleCheck = message => res => R.ifElse(
+  () => R.isEmpty(res),
+  R.always("ignore"),
+  () => console.log(message + ":\n" + res.join("\n") + "\n")
+)(res)
 
 program
-  .command('eq-dups <country>')
-  .description("Search for eponym duplicates for the given country")
-  .action(R.compose(console.log, R.join("\n"), equivalentDups))
-
-
-program
-  .command('eq-dups-all')
-  .description("Search for eponym duplicates for all countries")
-  .action(equivalentDupsAll)
-
+  .command('check <country>')
+  .action(R.juxt([
+    R.compose(handleCheck("Duplicate Equivalents"), equivalentDups),
+    R.compose(handleCheck("Duplicate Links"),       linkDups),
+    R.compose(handleCheck("Inconsistent Links"),    linksConsistency),
+  ]))
 
 program
-  .command('link-dups <country>')
-  .description("Search for eponym link duplicates for the given country")
-  // .action(R.compose(console.log, R.join("\n"), linkDups))
-  .action(R.compose(console.log, linkDups))
+  .command('check-all')
+  .action(() => {
+    handleCheck("Countries with duplicate equivalents")(equivalentDupsAll())
+    handleCheck("Countries with duplicate links")      (linkDupsAll())
+    handleCheck("Countries with inconsistent links")   (linksConsistencyAll())
+  })
 
 
 program
