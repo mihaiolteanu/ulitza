@@ -6701,6 +6701,7 @@ const equivalents = {
                                        "Monturiol"],
     ["Newton",                         "Isaac Newton"],
     ["Nuestra Señora",                 "Nuestra Señora de la Paz",
+                                       "Santa María",
                                        "Virgen de Gracia",
                                        "Virgen de la Esperanza",
                                        "Nostra Senyora dels Àngels",
