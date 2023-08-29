@@ -4034,6 +4034,7 @@ const equivalents = {
   "kosovo": [
     ["Ismail Qemajli",  "Ismail Qemali"],
     ["Jusuf Gërvalla",  "Vëllezërit Gërvalla"],
+    ["Ndue Perleshi",   "Ndue Përlleshi"],
     ["Nëna Terezë",     "Nënë Tereza",
                         "Nëna Tereze",
                         "Nëna Tereza"],
