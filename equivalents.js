@@ -726,6 +726,7 @@ const equivalents = {
     ["Franklin Roosevelt",  "Roosevelt"],
     ["Guido Gezelle",       "Gezelle"],
     ["Henri Dunant",        "Dunant"],
+    ["Jacob van Maerlant",  "Van Maerlant"],
     ["Jacquet",             "Capitaine Aviateur Jacquet"],
     ["John F. Kennedy",     "John Kennedy",
                             "Kennedy"],
