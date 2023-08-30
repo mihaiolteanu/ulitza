@@ -1,4 +1,4 @@
-const { div, a, sup, span, input, b, table, tbody, tr, td } = van.tags
+const { a, div, span } = van.tags
 import { statistics } from "./out/all.min.js"
 import { regionsNames, regionCountries, countryDisplayName } from "./regions.js"
 
@@ -56,7 +56,7 @@ const eponymOccurence = (eponym) =>
 
 const Eponyms = (title, eponyms, date) =>
   span(
-    span({ id: "eponyms-country", },
+    div({ id: "eponyms-country" },
       a({ href: countryGithubURL(title) }, title)),    
     div({ id: "persons" },
       R.map(eponym => div(
@@ -65,13 +65,15 @@ const Eponyms = (title, eponyms, date) =>
           href: eponymURL(eponym),
           target: "_blank"
         }, eponymDisplay(eponym)),
+        " (",
         a({
           class: "eponym-count",
           onclick: () => {
             id("showCountries").innerText = eponymOccurence(eponym)
             id("showCountries").showModal()
           }
-        }, " (" + eponymCount(eponym) + ") ")
+        }, eponymCount(eponym)),
+        ") "
       ), eponyms)
     ),
     div({ id: "osm-data" }, date ? "Osm data from: " + date : "")
@@ -79,7 +81,7 @@ const Eponyms = (title, eponyms, date) =>
 
 const EponymsWorldwide = () =>
   Eponyms(
-    "Worldwide frequency",
+    "Worldwide",
     // Keep eponyms appearing in at least three countries only.
     R.reject(
       R.compose(R.gt(3), R.prop(0)),
@@ -172,21 +174,21 @@ id("showCountries").addEventListener("click",
   id("showCountries").close)
 
 // Replace the regions with the search input
-id("search-button").addEventListener("click", () => {
+id("search").addEventListener("click", () => {
   id("regions").style.display = "none"
   id("search-input").style.display = "inline"
   id("cancel-search").style.display = "inline"
-  id("search-button").style.display = "none"  
+  id("search").style.display = "none"  
   id("search-input").focus()
   id("search-input").value = ""
 })
 
 // // Replace the search input with the regions
-id("search-input").addEventListener("focusout", () => {
+id("cancel-search").addEventListener("click", () => {
   id("regions").style.display = "inline"
   id("search-input").style.display = "none"
   id("cancel-search").style.display = "none"
-  id("search-button").style.display = "inline"
+  id("search").style.display = "inline"
   vSearchStr.val = ".*"
 })
 
@@ -194,8 +196,8 @@ id("search-input").addEventListener("input", (t) => {
   if (t.target.value.length > 2)
     vSearchStr.val = t.target.value
   else if (t.target.value.length === 0)
-    id("search-input").dispatchEvent(new Event("focusout"))
-    // Reset
+    id("cancel-search").dispatchEvent(new Event("click"))
+  // Reset
   else vSearchStr.val = ".*"
 })
 
@@ -209,3 +211,9 @@ id("content").appendChild(
       return EponymsCountry(country)
     else return EponymsWorldwide()
   }))
+
+id("total-unique-eponyms").append(
+  R.pipe(
+    R.length,
+    e => e.toLocaleString('en', { useGrouping: true }),  
+  )(allEponyms()))
