@@ -3,6 +3,7 @@ import fs from "fs"
 import * as R from "./ramda.js"
 import * as F from "fluture"
 import S from "sanctuary"
+import chalk from "chalk"
 import { countries, osmDownloadLink } from "./regions.js"
 import { equivalentDups, equivalentDupsAll } from "./equivalents.js"
 import {
@@ -17,18 +18,20 @@ import {
   statistics
 } from "./generator.js"
 
+const handleCheck = (message, res) => R.ifElse(
+  () => R.isEmpty(res),
+  R.always("ignore"),
+  () => console.log(chalk.blue(message + ":\n") + res.join("\n") + "\n")
+)(res)
+
 program
   .version("1.0")
 
 program
-  .command("countries")
-  .description("Display all available osm countries.")
-  .action(R.compose(console.log, R.join("\n"), countries))
-
-
-program
   .command('download <country>')
-  .description("Fetch the latest osm pbf file for the given country")
+  .description("Download the latest osm pbf file for the given country. This\
+ action is only needed if you're updating to the latest data or if you're\
+ modifing the affixes or equivalent files.")
   .action(country =>
     R.pipe(
       osmDownloadLink,
@@ -42,62 +45,47 @@ program
           .then(buffer => fs.createWriteStream(osmPath(country)).write(buffer))
           .catch(console.log))),
       S.maybe
-        ("country not found; see the list of available countries with the <countries> command")
+        (chalk.blue("Country unavailable, try one of:\n") + R.join(" | ", countries()))
+        // ("country not found; see the list of available countries with the <countries> command")
         (R.always(`downloading ${country} latest osm data...`)),
       console.log
     )(country))
 
-
 program
   .command('extract <country>')
-  .description("Extract the raw data for the given country")
+  .description("Extract a first version of <country> osm data. Useful for manual\
+ inspection of streets, affixes, etc.")
   .action(extractOsmData)
 
+program
+  .command('update [country]')
+  .description("Update the eponyms links and counts for [country]. If [country]\
+ is not given, update the statistics file for all the countries.")
+  .action(country => country ? parseOsmData(country) : statistics())
+
+program
+  .command('check [country]')
+  .description("Verify if [country] has duplicate equivalent entries, duplicate urls or\
+ consistent urls. If the [country] is not specified, return a list of all the\
+ countries where such checks fail. You can then rerun the command for every listed country.")
+  .action(country => {
+    if (country) {
+      handleCheck("Duplicate Equivalents", equivalentDups(country))
+      handleCheck("Duplicate Links",       linkDups(country))
+      handleCheck("Inconsistent Links",    linksConsistency(country))
+    }
+    else {
+      handleCheck("Countries with duplicate equivalents", equivalentDupsAll())
+      handleCheck("Countries with duplicate links",       linkDupsAll())
+      handleCheck("Countries with inconsistent links",    linksConsistencyAll())
+    }
+  })
 
 program
   .command('inspect <country> <regex>')
-  .description("Inspect the given country osm data")
+  .description("Inspect the <country> raw osm data. Useful in finding new osm tags\
+ containing possible eponyms. Only needed if we're going to modify the generator.")
   .action(inspectOsmData)
-
-
-program
-  .command('parse <country>')
-  .description("Parse the given country")
-  .action(parseOsmData)
-
-program
-  .command('statistics')
-  .description("Generate the stats file for all the countries")
-  .action(statistics)
-
-const handleCheck = message => res => R.ifElse(
-  () => R.isEmpty(res),
-  R.always("ignore"),
-  () => console.log(message + ":\n" + res.join("\n") + "\n")
-)(res)
-
-program
-  .command('check <country>')
-  .action(R.juxt([
-    R.compose(handleCheck("Duplicate Equivalents"), equivalentDups),
-    R.compose(handleCheck("Duplicate Links"),       linkDups),
-    R.compose(handleCheck("Inconsistent Links"),    linksConsistency),
-  ]))
-
-program
-  .command('check-all')
-  .action(() => {
-    handleCheck("Countries with duplicate equivalents")(equivalentDupsAll())
-    handleCheck("Countries with duplicate links")      (linkDupsAll())
-    handleCheck("Countries with inconsistent links")   (linksConsistencyAll())
-  })
-
-
-program
-  .command('link-dups-all')
-  .description("Search for eponym link duplicates for all countries")
-  // .action(R.compose(console.log, R.join("\n"), linkDupsAll))
-  .action(R.compose(console.log, linkDupsAll))
 
 
 program.parse()
