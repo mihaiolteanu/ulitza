@@ -11,8 +11,7 @@
         <div id="header-links">
             <a href="/">home |</a>
             <a href="/about.html">about |</a>
-            <a target="_blank" href="https://github.com/mihaiolteanu/ulitza"> github |</a>
-            <a id="search" style="display:inline">search</a>
+            <a target="_blank" href="https://github.com/mihaiolteanu/ulitza"> github</a>
             <a id="cancel-search" style="display:none">cancel</a>
         </div>
         <div id="total-unique-eponyms" title="Total number of unique eponyms worldwide"> </div>
@@ -25,38 +24,83 @@
         <span> street names </span>
     </div>
     
-    
-    
     <div id="content">
-        <span>
-            <h3> What is ulitza</h3>
-            <p>
-                A view into each country's unique history as told by its most
-                famous heroes, leaders and poets. How are there warriors telling
-                their history in our case? Simple. We find out how each country
-                has chosen to name their own streets, squares, public
-                institutions and similar landmarks. Among these, we only select
-                the ones designating a person name. In short, eponyms. We then
-                let each country boast its own list of heroes that have shaped
-                its history. All entries have wikipedia links, so we can explore
-                in depth.
-            </p>
-            <p>
-                In some of the cases, the names reveal strong nationalistic
-                tendencies, where the fight for independence plays the leading
-                role. In other cases, they bear the scars of outside influences,
-                where strong empires have culturally eclipsed its neighbours or
-                colonial powers have spread their influence far and wide.
-            </p>
-            <p>
-                The homepage is a list of persons sorted by the number of
-                countries where they appear at least once.
-            </p>            
-        </span>
+        <br/>
+        <h4> About </h4>
+        <p>
+            Have you ever wondered what the most popular street names in
+            your country are? Who were all those men and women you see
+            everywhere on street signs? Who does your country consider to be
+            its most famous heroes, leaders, poets or artists of the past
+            that have had a long lasting influence on the public
+            imagination? Or of whatever other country you might have an
+            interest in? Great! So did I!
+        </p>
+
+        <h4> Method </h4>            
+        <p>            
+            All street data is taken from 
+            <a href="http://download.geofabrik.de/index.html">openstreetmap</a>
+            (osm). I've parsed it, cleaned it up, sorted it and I've added
+            wikipedia links for all such entries that are named after a
+            person (eponyms, from now on).
+        </p>
+
+        <p>
+            Since the osm entries are not always consistent, there is no
+            clear separation between names of streets, bridges, squares,
+            public buildings, etc. All such landmarks are taken into
+            consideration, as long as they are eponyms. So "street names" is
+            a bit of a useful lie.
+        </p>
+        
+        <p>
+            Names of legendary figures, fictional characters (books, plays),
+            or tribes have also sometimes been included. 
+
+            To avoid duplicate entries, there is only one name allowed per
+            city. Affixes like "street", "boulevard", "square", etc. are
+            removed. If more than one name refers to the same person, they
+            are considered equivalent and are not counted more than once.
+        </p>
+
+        <h4> Page structure </h4>
+        
+        <p>
+            The front page lists the most famous persons worldwide. That is,
+            if a person appears at least once in a given country, they
+            receive +1. For the country pages, the count refers to the
+            number of cities where that name appears at least once. In both
+            cases, clicking on the count reveals the countries where that
+            persons appears in. The wikipedia articles and the persons names
+            are all in English or in the country's own language, as an
+            alternative.                
+        </p>
+        
+        <p>
+            The top-write orange number is the total number of unique
+            eponyms currently available.
+        </p>
+
+        <h4> Contribute </h4>
+        <p>
+            I've had some trouble with arabic text, mostly in the way I'm
+            arranging the equivalent names due to right-to-left writing
+            direction. Parsing and figuring out eponyms for China,
+            Korea and Japan are complete misteries so none of them are
+            currently included. Help needed!
+        </p>
+
+        <p>
+            Check out the github page for every country (click on the
+            country name) and add, remove or adjust the wikipedia link.
+        </p>
+
 
         <div>
-            <h3> Etymology </h3>
-            From the Romanian <b>uliță</b>, meaning a narrow road, used most
+            <h4> Etymology </h4>
+            <b>ulitza</b>, a non-standard way of writing <b>uliță</b>, without using any
+            special characters, a Romanian word meaning a narrow road, used most
             frequently for streets in small villages borderd on both sides by
             houses, in contradiction to the city boulevards, for example.
 
@@ -65,56 +109,44 @@
             variants in most of the Eastern-Europeean countries and languages,
 
             <p>
-                <b>Aromanian</b>: ulitsã <br/>
-                <b>Belarus</b>: вуліца (vúlica) <br/>
-                <b>Bosnian</b>: ulica  <br/>
-                <b>Bulgarian</b>: у́лица (úlica) <br/>
-                <b>Croatia</b>: ulica <br/>
-                <b>Czech</b>: ulice, ulicě <br/>
-                <b>Hungarian</b>: utca <br/>
-                <b>Romanian</b>: uliță <br/>
-                <b>Polish</b>: ulica <br/>
-                <b>Slovak</b>: ulica <br/>
-                <b>Russian</b>: у́лица (úlica) <br/>
-                <b>Slovene</b>: úlica <br/>
-                <b>Ukrainian</b>: у́лиця (úlycja), ву́лиця (vúlycja)<br/>
+                <b>Aromanian </b>- ulitsã                           <br/>
+                <b>Belarus   </b>- вуліца (vúlica)                  <br/>
+                <b>Bosnian   </b>- ulica                            <br/>
+                <b>Bulgarian </b>- у́лица (úlica)                    <br/>
+                <b>Croatia   </b>- ulica                            <br/>
+                <b>Czech     </b>- ulice, ulicě                     <br/>
+                <b>Hungarian </b>- utca                             <br/>
+                <b>Romanian  </b>- uliță                            <br/>
+                <b>Polish    </b>- ulica                            <br/>
+                <b>Slovak    </b>- ulica                            <br/>
+                <b>Russian   </b>- у́лица (úlica)                    <br/>
+                <b>Slovene   </b>- úlica                            <br/>
+                <b>Ukrainian </b>- у́лиця (úlycja), ву́лиця (vúlycja) <br/>
             </p>
-        </div>
-
-        <div>
-            <h3> Method and data source </h3>
-            <p>
-                All data is taken from openstreetmap. 
-            </p>
-            <p>
-                All wikipedia links are to the English pages, if it exists. If
-                not, to the language of the country where the eponym appears
-                in. The display name is based on the wikipedia entry, and not on
-                the name as it actually appears on the streets and
-                landmarks. You can check the github page for each country to get
-                the raw info. 
-            </p>
-        </div>
+        </div>        
         
         <div>
-            <h3> Tools </h3>
-            Pipe dreams and functional fantasies made possible by
-            <a target="_blank" href="https://ramdajs.com/">Ramda</a> and
-            <a target="_blank" href="https://sanctuary.js.org/">Sanctuary</a>.
+            <h4> Tools </h4>
+            <li>
+                Pipe dreams and functional fantasies made possible by
+                <a target="_blank" href="https://ramdajs.com/">Ramda</a> and
+                <a target="_blank" href="https://sanctuary.js.org/">Sanctuary</a>.
+            </li>
+            
+            <li>
+                Beautiful Reactive minimalism offered by <a target="_blank" href="https://vanjs.org/">VanJS</a>.
+            </li>
 
-            <br/>
-            Beautiful Reactive minimalism offered by <a target="_blank" href="https://vanjs.org/">VanJS</a>.
-
-            <br/>
-            All code and data edited with the legendary <a target="_blank" href="https://www.gnu.org/software/emacs/">Emacs</a>.
-            May you live to be a hundred years old and still be young and
-            strong, like the immortal heroes awakened in these pages.
+            <li>                
+                All code and data edited with the legendary
+                <a target="_blank" href="https://www.gnu.org/software/emacs/">Emacs</a>.
+                May you live to be a hundred years old and still be young and
+                strong, like the immortal heroes awakened in these pages.
+            </li>
         </div>
 
-        <div>
-            <h3> Author </h3>
-            An original idea, research, design and
-            implementation by <a target="_blank" href="https://mihaiolteanu.me/">Mihai Olteanu</a>
-        </div>
+        <h4> Author </h4>
+        An original idea, research, design and
+        implementation by <a target="_blank" href="https://mihaiolteanu.me/">Mihai Olteanu</a>
     </div>
 </body>

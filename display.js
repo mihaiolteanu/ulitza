@@ -56,7 +56,7 @@ const eponymOccurence = (eponym) =>
 
 const Eponyms = (title, eponyms, date) =>
   span(
-    div({ id: "eponyms-country" },
+    div({ id: "country" },
       a({ href: countryGithubURL(title) }, title)),    
     div({ id: "persons" },
       R.map(eponym => div(

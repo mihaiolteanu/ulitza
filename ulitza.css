@@ -55,10 +55,6 @@ body {
     font-size: 1.2em;
 }
 
-#content {
-    padding: 0em 1em;
-}
-
 @media screen and (min-width: 480px) {
     #content {
         border-left:   3px solid #d7e0f7;
@@ -69,6 +65,11 @@ body {
     dialog {
         width: 35%
     }
+}
+
+#content {
+    padding: 0em 1em;
+    padding-bottom: 1em;
 }
 
 .region, .country, .eponym-count, #search, #cancel-search {
@@ -84,7 +85,7 @@ body {
     font-size: 0.95em;
 }
 
-#eponyms-country {
+#country {
     font-size: 1.8em;
     padding-top: 0.75em;
     padding-bottom: 0.55em;
