@@ -26,15 +26,17 @@ export const osmDownloadLink = (country) =>
       : `http://download.geofabrik.de/${region}/${country}-latest.osm.pbf`,    
   )(regions)
 
-const allCountryEntries = () => R.pipe(
+// Return a list of all entries, for all regions
+const countryEntries = () => R.pipe(
   R.chain(R.tail),
   R.chain(R.tail),  
   R.reduce(R.concat, [])
 )(regions)
 
-const countryEntry = country => R.find(R.propEq(0, country), allCountryEntries())
+// Return a single `country` entry (name, display name, frequency).
+const countryEntry = country => R.find(R.propEq(0, country), countryEntries())
 
-export const countries = R.compose(R.map(R.head), allCountryEntries)
+export const countries = R.compose(R.map(R.head), countryEntries)
 export const countryDisplayName     = R.compose(R.prop(1), countryEntry)
 export const countryEponymFrequency = R.compose(R.prop(2), countryEntry)
 export const countryStreetLength    = R.compose(R.prop(3), countryEntry)
