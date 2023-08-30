@@ -9,6 +9,8 @@ export const equivalentStreet = country => street =>
     R.head,    
   )(equivalents)
 
+// Check if there are any duplicate entries in the equivalents list for the
+// given country. Return a list of them, if there are.
 export const equivalentDups = country =>
   R.pipe(
     R.propOr([], country),
@@ -21,14 +23,20 @@ export const equivalentDups = country =>
     R.map(R.head),    
   )(equivalents)
 
+// Check if there any duplicate entries in the equivalents list, for any of the
+// countries. Return the name of the countries if there are.
 export const equivalentDupsAll = () =>
   R.pipe(
     R.keys,    
     R.map(R.juxt([R.identity, equivalentDups])),
-    R.reject(R.propEq([], 1)),    
+    R.reject(R.propEq([], 1)),
+    R.map(R.head)
   )(equivalents)
 
 
+// For emacs users, use google-translate package,
+// (setf google-translate-default-source-language "MK")
+// (setf google-translate-default-target-language "EN")
 const equivalents = {
   // SQ
   "albania": [
@@ -4218,7 +4226,6 @@ const equivalents = {
 
   
   "moldova": [
-    ["31 August 1989",            "31 August"],
     ["Alexandr Pușkin",           "Пушкина",
                                   "Pușkin"],
     ["Alexandru Donici",          "Alecu Donici"],
