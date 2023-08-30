@@ -14,24 +14,29 @@
 <body>    
     <dialog id="showCountries">
     </dialog>
-    <div id="header-links">            
-        <a href="/">home |</a>
-        <a href="/about.html">about |</a>
-        <a target="_blank" href="https://github.com/mihaiolteanu/ulitza"> github |</a>
-        <a id="search-button" style="display:inline">search</a>
-        <a id="cancel-search" style="display:none">cancel</a>
-    </div>    
-    <div id="header">    
-        <div id="header-logo">
+    <div id="container">
+        <div id="header-links">
+            <a href="/">home |</a>
+            <a href="/about.html">about |</a>
+            <a target="_blank" href="https://github.com/mihaiolteanu/ulitza"> github |</a>
+            <a id="search" style="display:inline">search</a>
+            <a id="cancel-search" style="display:none">cancel</a>
+        </div>
+        <div id="total-unique-eponyms" title="Total number of unique eponyms worldwide"> </div>
+    </div>
+    
+    <div id="header">
+        <span id="header-logo">
             <a href="/" id="ulitza">ulitza</a>
-        </div>        
-    </div>    
+        </span>
+        <span> street names </span>
+    </div>
     <div id="regions-and-countries">
-        <div id="regions-and-search">            
+        <div id="regions-and-search">
             <span id="regions"></span>
-            <input id="search-input" type="search" size="17em" style="display:none"/>            
+            <input id="search-input" type="search" size="17em" style="display:none"/>
         </div>
         <div id="countries"></div>
-    </div>    
+    </div>
     <div id="content"></div>
 </body>
