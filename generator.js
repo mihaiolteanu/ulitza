@@ -41,7 +41,7 @@ const writeStatsMin = data =>
 // freshness of osm data; the alternative is to extract the modified date from
 // the osm file (more complicated)
 const modifiedDateOSM = country => R.pipe(
-  unsortedFile,
+  osmPath,
   fs.statSync,
   f => f.mtime.toDateString().substring(4),
 )(country)
@@ -128,7 +128,7 @@ export const parseOsmData = (country) =>
     // the city names themselves are spelled differently (with or without
     // cedilla, for example).
     uniqBy(join("-")),
-    // The city name has server its purpose, discard it
+    // The city name has served its purpose, discard it.
     map(R.prop(1)),
     // Count identical street names.
     groupBy(R.identity),
@@ -224,7 +224,26 @@ export const linkDups = (country) =>
 
 export const linkDupsAll = () => R.pipe(  
   R.compose(R.map(R.replace(".json", "")), fs.readdirSync),  
-  R.map(R.juxt([R.identity, linkDups])),  
+  R.map(R.juxt([R.identity, linkDups])),
+  R.reject(R.propEq([], 1)),
+  R.map(R.head)
+)(eponymsPath)
+
+// Check if, for the given country name, any of the links contain special
+// characters or do not contain wikipedia urls. Return them, if they do
+export const linksConsistency = R.pipe(
+  readCountry,
+  R.tail,
+  R.map(R.prop(2)),
+  R.reject(R.isEmpty),
+  R.reject(R.compose(R.isEmpty, R.match(/%|^((?!wikipedia).)*$/i))),  
+)
+
+// Check if any of the countries fail to pass the link consistency
+// checks. Return their names if the do not.
+export const linksConsistencyAll = () => R.pipe(
+  R.compose(R.map(R.replace(".json", "")), fs.readdirSync),
+  R.map(R.juxt([R.identity, linksConsistency])),
   R.reject(R.propEq([], 1)),
   R.map(R.head)
 )(eponymsPath)
