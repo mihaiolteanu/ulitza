@@ -1,5 +1,5 @@
 const { a, div, span } = van.tags
-import { statistics } from "./out/all.min.js"
+import { statistics } from "./eponyms.min.js"
 import { regionsNames, regionCountries, countryDisplayName } from "./regions.js"
 
 const taplog = R.tap(console.log)

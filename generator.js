@@ -19,23 +19,23 @@ const write = file => data =>
 const read = R.compose(JSON.parse, fs.readFileSync)
 
 // RW out files
-const unsortedPath  = path.resolve("out", "unsorted") 
-const unsortedFile  = country => path.resolve(unsortedPath, country + ".json")
-const readUnsorted  = country => read(unsortedFile(country))
-const eponymsPath   = path.resolve("out", "eponyms") 
-const eponymsFile   = country => path.resolve(eponymsPath, country + ".json")
-const writeEponyms  = country => write(eponymsFile(country))
-const readEponyms   = country => read(eponymsFile(country))
+const rawPath      = path.resolve("raw")
+const rawFile      = country => path.resolve(rawPath, country + ".json")
+const readRaw      = country => read(rawFile(country))
+const eponymsPath  = "eponyms"
+const eponymsFile  = country => path.resolve(eponymsPath, country + ".json")
+const writeEponyms = country => write(eponymsFile(country))
+const readEponyms  = country => read(eponymsFile(country))
 
 const writeStats = (data) =>
   fs.writeFileSync(
-    path.resolve("out", "all.js"),
-    `export const statistics =` + stringify(data, { maxLength: 120 }))
+    path.resolve("eponyms.js"),
+    `// !Generated file. Do not edit by hand!\n export const statistics =` + stringify(data, { maxLength: 120 }))
 
 const writeStatsMin = data =>
   fs.writeFileSync(
-    path.resolve("out", "all.min.js"),
-    `export const statistics=` + JSON.stringify(data))
+    path.resolve("eponyms.min.js"),
+    `// !Generated file. Do not edit by hand!\n export const statistics=` + JSON.stringify(data))
 
 // Get the file modified date from the OS; good enough to get a glimpse of the
 // freshness of osm data; the alternative is to extract the modified date from
@@ -69,7 +69,7 @@ export const inspectOsmData = (country, regex) =>
     }))
 
 export const extractOsmData = (country) => {
-  const streets = fs.createWriteStream(unsortedFile(country))
+  const streets = fs.createWriteStream(rawFile(country))
   // Add metadata; only the osm last modified date, for now
   streets.write(`[["${modifiedDateOSM(country)}"]`)
   fs.createReadStream(osmPath(country))
@@ -113,7 +113,7 @@ export const extractOsmData = (country) => {
 
 export const parseOsmData = (country) =>
   R.pipe(
-    readUnsorted,
+    readRaw,
     // Skip the osm modified date
     R.tail,
     // Strip affixes and replace with equivalents;  keep city unchanged
@@ -152,7 +152,7 @@ export const parseOsmData = (country) =>
     R.sortWith([R.descend(R.prop(1))]),
     hydrateStreets(country),
     // Add back the osm modified date
-    R.prepend(R.head(readUnsorted(country))),
+    R.prepend(R.head(readRaw(country))),
     writeEponyms(country),
     statistics,
   )(country)
@@ -203,7 +203,7 @@ export const statistics = () => R.pipe(
       R.prepend(R.head(readCountry(country))),
       R.prepend(country),
     )(country)),
-  // Only include countries with at least one street
+  // Only include countries with at least one recorded eponym
   R.reject(R.compose(R.equals(2), R.length)),
   R.tap(writeStats),
   writeStatsMin
