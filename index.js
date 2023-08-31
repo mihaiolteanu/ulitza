@@ -214,8 +214,8 @@ id("content").appendChild(
     else return EponymsWorldwide()
   }))
 
-id("total-unique-eponyms").append(
-  R.pipe(
-    R.length,
-    e => e.toLocaleString('en', { useGrouping: true }),  
-  )(allEponyms()))
+// id("total-unique-eponyms").append(
+//   R.pipe(
+//     R.length,
+//     e => e.toLocaleString('en', { useGrouping: true }),  
+//   )(allEponyms()))
