@@ -1,8 +1,6 @@
 # About
 
-Ulitza is a list of the most popular street names of every country. All the
-streets included are named after persons. So a list of eponyms, in short. See
-additional info at [about](https://www.ulitza.com/about)
+[https://www.ulitza.com/about](https://www.ulitza.com/about)
 
 # Usage 
 
