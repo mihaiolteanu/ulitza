@@ -1,5 +1,4 @@
 node_modules
 osm_data
-package.json
 raw/*.json
 .log
