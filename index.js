@@ -21,7 +21,9 @@ const eponymURL = R.pipe(
 )
 
 const countryGithubURL = country =>
-  `https://github.com/mihaiolteanu/ulitza/out/eponyms/${country}.json`
+  R.includes(country, ["Worldwide", "Search"])
+    ? `https://github.com/mihaiolteanu/ulitza/blob/main/eponyms/`
+    : `https://github.com/mihaiolteanu/ulitza/blob/main/eponyms/${country.toLowerCase()}.json`
 
 // The standard country format:
 // [name, metadata, eponym, eponym, ....]
@@ -57,7 +59,7 @@ const eponymOccurence = (eponym) =>
 const Eponyms = (title, eponyms, date) =>
   span(
     div({ id: "country" },
-      a({ href: countryGithubURL(title) }, title)),    
+      a({ target: "_blank", href: countryGithubURL(title) }, title)),
     div({ id: "persons" },
       R.map(eponym => div(
         a({
@@ -91,7 +93,7 @@ const EponymsWorldwide = () =>
 
 const EponymsSearch = (regex) =>
   Eponyms(
-    "Searching...",
+    "Search",
     R.filter(R.pipe(
       eponymRawName,
       R.match(new RegExp(regex, "i")),
