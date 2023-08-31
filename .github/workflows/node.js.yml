@@ -20,6 +20,6 @@ jobs:
 
     - uses: EndBug/add-and-commit@v9
       with:
-        add: ["eponyms.js", "eponyms.min.js"]
+        add: '["eponyms.js", "eponyms.min.js"]'
         author_name: Mihai
         message: "update eponyms from CI"
