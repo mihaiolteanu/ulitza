@@ -29,8 +29,7 @@ program
 
 program
   .command('download <country>')
-  .description("Download the <country>-latest.osm.pbf file from geofabrik.de\
- to \"osm_data\". This file contains all the unprocessed street data.")
+  .description("Download the latest osm data for the given <country>.")
   .action(country =>
     R.pipe(
       osmDownloadLink,
@@ -52,27 +51,21 @@ program
 
 program
   .command('extract <country>')
-  .description("Parse and extract street data from an already existing\
- <country>-latest.osm.pbf file. This extracted data is still in raw form\
- and is used to manually inspect it for possible affixes before generating\
- the eponyms file. The output is saved to \"raw/<country>.json\"")  
+  .description("Extract a first, raw, version of all the street names for\
+ the given <country>.")
   .action(extractOsmData)
 
 program
   .command('update [country]')
-  .description("Parse the raw/[country].json file and generate a list of street names\
- together with their number of occurences. The output of this command is saved to\
-`eponyms/[country].json`. If this file already exist, the command adds, as a final step,\
- all the existing wikipedia links to the newly generated one. The generated file can be\
- manually modified to add new wikipedia links. If the [country] is not specified, generate\
- the eponyms.json and eponyms.min.json files containing all the eponyms for all the countries.")
+  .description("Generate the eponym file for the given [country]. If [country]\
+ is not specified, generate the eponym file containing the data for all countries.")
   .action(country => country ? parseOsmData(country) : statistics())
 
 program
   .command('check [country]')
   .description("Verify if [country] has duplicate equivalent entries, duplicate urls or\
  consistent urls. If the [country] is not specified, return a list of all the\
- countries where such checks fail. You can then rerun the command for every listed country.")
+ countries where such checks fail.")
   .action(country => {
     if (country) {
       handleCheck("Duplicate Equivalents", equivalentDups(country))
