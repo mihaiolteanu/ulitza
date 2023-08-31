@@ -29,9 +29,8 @@ program
 
 program
   .command('download <country>')
-  .description("Download the latest osm pbf file for the given country. This\
- action is only needed if you're updating to the latest data or if you're\
- modifing the affixes or equivalent files.")
+  .description("Download the <country>-latest.osm.pbf file from geofabrik.de\
+ to \"osm_data\". This file contains all the unprocessed street data.")
   .action(country =>
     R.pipe(
       osmDownloadLink,
@@ -47,20 +46,26 @@ program
       S.maybe
         (chalk.blue("Country unavailable, try one of:\n") + R.join(" | ", countries()))
         // ("country not found; see the list of available countries with the <countries> command")
-        (R.always(`downloading ${country} latest osm data...`)),
+        (R.always(`Downloading the latest osm data to osm_data/${country}...`)),
       console.log
     )(country))
 
 program
   .command('extract <country>')
-  .description("Extract a first version of <country> osm data. Useful for manual\
- inspection of streets, affixes, etc.")
+  .description("Parse and extract street data from an already existing\
+ <country>-latest.osm.pbf file. This extracted data is still in raw form\
+ and is used to manually inspect it for possible affixes before generating\
+ the eponyms file. The output is saved to \"raw/<country>.json\"")  
   .action(extractOsmData)
 
 program
   .command('update [country]')
-  .description("Update the eponyms links and counts for [country]. If [country]\
- is not given, update the statistics file for all the countries.")
+  .description("Parse the raw/[country].json file and generate a list of street names\
+ together with their number of occurences. The output of this command is saved to\
+`eponyms/[country].json`. If this file already exist, the command adds, as a final step,\
+ all the existing wikipedia links to the newly generated one. The generated file can be\
+ manually modified to add new wikipedia links. If the [country] is not specified, generate\
+ the eponyms.json and eponyms.min.json files containing all the eponyms for all the countries.")
   .action(country => country ? parseOsmData(country) : statistics())
 
 program
