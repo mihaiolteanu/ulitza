@@ -52,7 +52,7 @@ body {
 }
 
 #regions, #search-input, .country, dialog {
-    font-size: 1.2em;
+    /* font-size: 1.2em; */
 }
 
 @media screen and (min-width: 480px) {
@@ -77,16 +77,15 @@ body {
 }
 
 .eponym {   
-    font-size: 1.15em;
+    font-size: 1.1em;
 }
 
 .eponym-count {
-    /* color: dimgray; */
     font-size: 0.95em;
 }
 
 #country {
-    font-size: 1.8em;
+    font-size: 1.7em;
     padding-top: 0.75em;
     padding-bottom: 0.55em;
 }
