@@ -14,8 +14,7 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 18.x
-        cache: 'npm'
-    - run: cd ulitza
+        cache: 'npm'    
     - run: npm ci
     - run: node ./ulitza.js update
 
