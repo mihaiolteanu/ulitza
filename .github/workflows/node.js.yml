@@ -15,6 +15,7 @@ jobs:
       with:
         node-version: 18.x
         cache: 'npm'
+    - run: cd ulitza/ulitza
     - run: npm ci
     - run: node ./ulitza.js update
 
