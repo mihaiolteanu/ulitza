@@ -1,6 +1,6 @@
 # About
 
-[https://www.ulitza.com/about](https://www.ulitza.com/about)
+[https://ulitza.net/about](https://ulitza.net/about)
 
 # Usage 
 
