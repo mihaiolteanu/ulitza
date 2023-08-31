@@ -5,7 +5,7 @@
 # Usage 
 
 ```
-Usage: node ./ulitza.js [options] [command]
+Usage: node ./ulitza.js [command]
 
 Commands:
   download <country>         Download the latest osm data for the given
