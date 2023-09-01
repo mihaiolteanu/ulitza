@@ -97,7 +97,7 @@ const EponymsSearch = (regex) =>
     "Search",
     R.filter(R.pipe(
       eponymRawName,
-      R.match(new RegExp(regex, "i")),
+      R.match(new RegExp(R.replace(" ", "_", regex), "i")),
       R.head
     ), allEponyms())
   )
