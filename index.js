@@ -56,7 +56,7 @@ const eponymOccurence = (eponym) =>
     R.join(", ")
   )(statistics)
 
-const Eponyms = (title, eponyms, date) =>
+const Eponyms = R.memoizeWith((_, eponyms) => eponyms, (title, eponyms, date) =>
   span(
     div({ id: "country" },
       a({ target: "_blank", href: countryGithubURL(title) }, title)),
@@ -78,8 +78,9 @@ const Eponyms = (title, eponyms, date) =>
         ") "
       ), eponyms)
     ),
-    div({ id: "osm-data" }, date ? "Osm data from: " + date : "")
+    div({ id: "osm-data" }, date ? "Latest data: " + date : "")
   )
+)
 
 const EponymsWorldwide = () =>
   Eponyms(
@@ -111,7 +112,7 @@ const EponymsCountry = country =>
     )(statistics),
     R.find(R.propEq(0, country[0]), statistics)[1])
 
-const regionCountrisWithEponyms = (region) =>
+const regionCountriesWithEponyms = (region) =>
   R.innerJoin(
     (a, b) => a[0] === b,
     regionCountries(region),
@@ -125,15 +126,9 @@ const RegionCountries = R.memoizeWith(R.identity, region => span(
           vCountry.val = country,
           vRegion.val = ""
         },
-        id: {
-          deps: [vCountry],
-          f: R.ifElse(
-            R.equals(country), R.always("selected-country"), R.always("")
-          )
-        }
-      }, country[1] + " "),
+      }, country[1]),
       span(" | ")),
-    regionCountrisWithEponyms(region))))
+    regionCountriesWithEponyms(region))))
 
 const Regions = span(
   R.pipe(
@@ -161,7 +156,7 @@ const id = (id) => document.getElementById(id)
 
 id("regions").appendChild(Regions)
 
-id("ulitza").addEventListener("click", () => {
+id("logo").addEventListener("click", () => {
   vRegion.val = ""
   vCountry.val = ""
   vSearchStr.val = ".*"
