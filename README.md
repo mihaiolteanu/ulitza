@@ -1,6 +1,9 @@
-# About
+Have you ever wondered what the most popular street names in your country are?
+Who were all those men and women you see everywhere on street signs? Now you can
+find out with [ulitza.net](https://ulitza.net)! For your country and for
+all the countries worldwide.
 
-[https://ulitza.net/about](https://ulitza.net/about)
+See the [ulitza.net/about](https://ulitza.net/about) page for more info.
 
 # Usage 
 

@@ -24,128 +24,128 @@
         <span> street names </span>
     </div>
     
-    <div id="content">
-        <br/>        
+    <div id="about">
+        <h4 style="overflow: hidden;">What is</h4>
         <p>
-            Have you ever wondered what the most popular street names in
-            your country are? Who were all those men and women you see
-            everywhere on street signs? Who does your country consider to be
-            its most famous heroes, leaders, poets or artists of the past
-            that have had a long lasting influence on the public
-            imagination? Or of whatever other country you might have an
-            interest in? Great! So did I!
+            Have you ever wondered what the most popular street names in your
+            country are? Who were all those men and women you see everywhere on
+            street signs? Now you can find out! For your country and for all the
+            countries worldwide.
         </p>
 
-        <h4> Method </h4>            
-        <p>            
-            All street data is taken from 
-            <a href="http://download.geofabrik.de/index.html">openstreetmap</a>
-            (osm). I've parsed it, cleaned it up, sorted it and I've added
-            wikipedia links for all such entries that are named after a
-            person (eponyms, from now on).
+        <h4> Method </h4>
+        <p>
+            I've analyzed all the street names from 
+            <a target="_blank" href="http://download.geofabrik.de/index.html">OpenStreetMap</a>
+            (osm) and kept only those named after a person (eponyms). For each
+            country in turn I've sorted the names by their frequency and I've
+            added wikipedia links to them.
         </p>
 
         <p>
-            Since the osm entries are not always consistent, there is no
-            clear separation between names of streets, bridges, squares,
-            public buildings, etc. All such landmarks are taken into
-            consideration, as long as they are eponyms. So "street names" is
-            a bit of a useful lie.
+            The osm data is not consistent from country to country and there is
+            no clear separation between names of streets, bridges, squares,
+            public buildings or any other similar landmarks. As a result, all
+            such landmarks are taken into consideration, as long as they are
+            eponyms. So <q>street names</q> was a bit of a useful lie to get you
+            this far.
         </p>
         
         <p>
-            Names of legendary figures, fictional characters (books, plays),
-            or tribes have also sometimes been included. 
-
-            To avoid duplicate entries, there is only one name allowed per
-            city. Affixes like "street", "boulevard", "square", etc. are
-            removed. If more than one name refers to the same person, they
-            are considered equivalent and are not counted more than once.
+            I've sometimes also included the names of 
+            <a target="_blank" href="https://en.wikipedia.org/wiki/Dulcinea_del_Toboso">fictional characters</a>,
+            or a
+            <a target="_blank" href="https://en.wikipedia.org/wiki/Guaycuru_peoples">group of people</a>
+            if those are well-known or important from a historical point of view.
         </p>
-
-        <h4> Page structure </h4>
+        <p>
+            To avoid duplicate entries, there is only one name allowed per city.
+            <a target="_blank" href="https://github.com/mihaiolteanu/ulitza/blob/main/affixes.js">Affixes</a>
+            like <q>street</q>, <q>boulevard</q>, <q>square</q> and similar ones, are
+            removed. If more than one name refers to the same person, they are
+            considered <a href="_blank" href="https://github.com/mihaiolteanu/ulitza/blob/main/equivalents.js#L40">equivalent</a>
+            and are not counted more than once.
+        </p>
         
         <p>
-            The front page lists the most famous persons worldwide. That is,
-            if a person appears at least once in a given country, they
-            receive +1. For the country pages, the count refers to the
-            number of cities where that name appears at least once. In both
-            cases, clicking on the count reveals the countries where that
-            persons appears in. The wikipedia articles and the persons names
-            are all in English or in the country's own language, as an
-            alternative.                
+            Besides the per-country eponyms frequency, having all this data
+            allows for an extra piece of information. Who are the persons
+            appearing most often around the world? The front page presents just
+            that. Every count besides every name is clickable and lists the name
+            of countries where that name appears in.
         </p>
         
-        <!-- <p>
-             The top-write orange number is the total number of unique
-             eponyms currently available.
-             </p> -->
-
-        <h4> Contribute </h4>
+        <h4> Limitations </h4>
         <p>
-            I've had some trouble with arabic text, mostly in the way I'm
-            arranging the equivalent names due to right-to-left writing
-            direction. Parsing and figuring out eponyms for China,
-            Korea and Japan are complete misteries so none of them are
-            currently included. Help!
+            I'm mostly familiar with the European names and those were the
+            easiest to find out and fill wikipedia links for. Even the US,
+            Canada, Australia and the UK are sometimes hard to figure out since
+            they contain only the family name and it's not always clear who it
+            refers to.
+        </p>
+        <p>
+            Arabic is another challange but one that I was able to overcome here
+            and there. A knowledgable eye is still needed here, as well.
         </p>
 
         <p>
-            Check out the github page for every country (click on the
-            country name) and add, remove or adjust the wikipedia link.
+            China, Korea and Japan are, unfortunately, a complete mistery to
+            me. I cannot even figure out what the affixes are, so that I can
+            remove them. India is mixed-up and it's hard for an outsider to
+            figure out the structure of the osm data. Help would greatly be
+            appreciated in these cases, as well.
+        </p>              
+
+        <p>
+            If your favorite country or hero is missing or I've attributed some
+            links to the wrong persons, the error is mine, and it is an error or
+            an omission and not a deliberate act. I'm more than happy to correct
+            or add the missing data if proven beyond doubt that the information
+            provided is correct. Check the github page and, more importantly, the
+            <a target="_blank" href="https://github.com/mihaiolteanu/ulitza/tree/main/eponyms">eponyms</a>
+            folder where all the eponyms and all the magic happens.
         </p>
 
+        <h4> Etymology </h4>
+        <p>
+            <b>ulitza</b> is a non-standard way of writing <b>uliță</b> without
+            using any special characters (cedilla, in this case) as to keep the
+            pronounciation. It is a Romanian word meaning a narrow road, used
+            most frequently for streets in small villages borderd on both sides
+            by houses, in contradiction to the city boulevards, for example.
+        </p>
 
-        <div>
-            <h4> Etymology </h4>
-            <b>ulitza</b>, a non-standard way of writing <b>uliță</b>, without using any
-            special characters, a Romanian word meaning a narrow road, used most
-            frequently for streets in small villages borderd on both sides by
-            houses, in contradiction to the city boulevards, for example.
-
-            Originally a proto-slavic word,
-            <a target="_blank" href="https://en.wiktionary.org/wiki/ulica">ulita</a>, it has many
-            variants in most of the Eastern-Europeean countries and languages,
-
-            <p>
-                <b>Aromanian </b>- ulitsã                           <br/>
-                <b>Belarus   </b>- вуліца (vúlica)                  <br/>
-                <b>Bosnian   </b>- ulica                            <br/>
-                <b>Bulgarian </b>- у́лица (úlica)                    <br/>
-                <b>Croatia   </b>- ulica                            <br/>
-                <b>Czech     </b>- ulice, ulicě                     <br/>
-                <b>Hungarian </b>- utca                             <br/>
-                <b>Romanian  </b>- uliță                            <br/>
-                <b>Polish    </b>- ulica                            <br/>
-                <b>Slovak    </b>- ulica                            <br/>
-                <b>Russian   </b>- у́лица (úlica)                    <br/>
-                <b>Slovene   </b>- úlica                            <br/>
-                <b>Ukrainian </b>- у́лиця (úlycja), ву́лиця (vúlycja) <br/>
-            </p>
-        </div>        
+        <p>
+            It is derived from a proto-slavic word,
+            <a target="_blank" href="https://en.wiktionary.org/wiki/ulica">ulita</a>,
+            and it has many variants in most of the Eastern-Europeean countries,
+            like <q>ulica</q> (Bosnia, Bulgaria, Croatia, Poland, Slovenia),
+            <q>utca</q> (Hungary), <q>ulice</q> (Czech Republic), <q>у́лица</q>(úlica)
+            (Russia, Ukraine) or <q>вуліца</q> (vúlica) (Belarus).
+        </p>
         
-        <div>
-            <h4> Tools </h4>
-            <li>
-                Pipe dreams and functional fantasies made possible by
-                <a target="_blank" href="https://ramdajs.com/">Ramda</a> and
-                <a target="_blank" href="https://sanctuary.js.org/">Sanctuary</a>.
-            </li>
-            
-            <li>
-                Beautiful Reactive minimalism offered by <a target="_blank" href="https://vanjs.org/">VanJS</a>.
-            </li>
+        <h4> Tools </h4>
+        <p>
+            Pipe dreams and functional fantasies made possible by
+            <a target="_blank" href="https://ramdajs.com/">Ramda</a>.
+        </p>
+        
+        <p>
+            Beautiful reactive minimalism offered by Tao Xin's
+            <a target="_blank" href="https://vanjs.org/">VanJS</a>.
+        </p>
 
-            <li>                
-                All code and data edited with the legendary
-                <a target="_blank" href="https://www.gnu.org/software/emacs/">Emacs</a>.
-                May you live to be a hundred years old and still be young and
-                strong, like the immortal heroes awakened in these pages.
-            </li>
-        </div>
+        <p>                
+            All writing and editing realized with the legendary
+            <a target="_blank" href="https://www.gnu.org/software/emacs/">Emacs</a>.
+            May you live to be a hundred years and still be young and strong,
+            like the immortal heroes awakened in these pages.
+        </p>
 
         <h4> Author </h4>
-        An original idea, research, design and
-        implementation by <a target="_blank" href="https://mihaiolteanu.me/">Mihai Olteanu</a>
+        <p>
+            An original idea and implementation by
+            <a target="_blank" href="https://mihaiolteanu.me/">Mihai Olteanu</a>.
+        </p>
     </div>
 </body>

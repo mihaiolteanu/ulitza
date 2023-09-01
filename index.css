@@ -21,10 +21,6 @@ body {
     padding-right: 0.45em;
 }
 
-#header-logo a:hover {
-    text-decoration: none;
-}
-
 #header-logo {
     font-size: 2.35em;
     font-family: "Lucida Console";
@@ -56,7 +52,7 @@ body {
 }
 
 @media screen and (min-width: 480px) {
-    #content {
+    #content, #about {
         border-left:   3px solid #d7e0f7;
         border-right:  3px solid #d7e0f7;
         border-bottom: 3px solid #d7e0f7;
@@ -67,9 +63,10 @@ body {
     }
 }
 
-#content {
+#content, #about {
     padding: 0em 1em;
     padding-bottom: 1em;
+    overflow: hidden;
 }
 
 .region, .country, .eponym-count, #search, #cancel-search {
@@ -96,9 +93,17 @@ body {
 }
 
 input {
-    margin-bottom: 0px;    
+    margin-bottom: 0px;
 }
 
 a, a:visited, a:hover {
     color: black;
+}
+
+#about a {
+    color: #5f78c2;
+}
+
+#header a:hover {
+    text-decoration: none;
 }
