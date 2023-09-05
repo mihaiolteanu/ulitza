@@ -30,12 +30,12 @@ const readEponyms  = country => read(eponymsFile(country))
 const writeStats = (data) =>
   fs.writeFileSync(
     path.resolve("eponyms.js"),
-    `// !Generated file. Do not edit by hand!\n export const statistics =` + stringify(data, { maxLength: 120 }))
+    `export const statistics =` + stringify(data, { maxLength: 120 }))
 
 const writeStatsMin = data =>
   fs.writeFileSync(
     path.resolve("eponyms.min.js"),
-    `// !Generated file. Do not edit by hand!\n export const statistics=` + JSON.stringify(data))
+    `export const statistics=` + JSON.stringify(data))
 
 // Get the file modified date from the OS; good enough to get a glimpse of the
 // freshness of osm data; the alternative is to extract the modified date from
