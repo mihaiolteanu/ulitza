@@ -4602,7 +4602,7 @@ const equivalents = {
     ["Handels",                    "Händel",
                                    "Handel"],
     ["Hans Memling",               "Memling"],
-    ["Hammarskjöld",               "Dag Hammarskjöld"]
+    ["Hammarskjöld",               "Dag Hammarskjöld"],
     ["Harry Bannink",              "Bannink",
                                    "Banninks"],
     ["Haya van Someren",           "Haya van Someren-Downer"],
