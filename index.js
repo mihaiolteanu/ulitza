@@ -1,4 +1,4 @@
-const { a, div, span } = van.tags
+const { a, div, span, button } = van.tags
 import { statistics } from "./eponyms.min.js"
 import { regionsNames, regionCountries, countryDisplayName } from "./regions.js"
 
@@ -68,7 +68,7 @@ const Eponyms = R.memoizeWith((_, eponyms) => eponyms, (title, eponyms, date) =>
           target: "_blank"
         }, eponymDisplay(eponym)),
         " (",
-        a({
+        span({
           class: "eponym-count",
           onclick: () => {
             id("showCountries").innerText = eponymOccurence(eponym)
@@ -135,20 +135,19 @@ const Regions = span(
     R.intersperse(" | "),
     R.map(region =>
       region === " | " ? region :
-        span(
-          a({
-            class: "region",
-            // Show/hide region on click
-            onclick: () => vRegion.val =
-              vRegion.val === region ? "" : region,
-            id: {
-              deps: [vRegion],
-              f: R.ifElse(
-                R.equals(region), R.always("selected-region"), R.always("")
-              )
-            }
-          }, region),
-        )),
+        span({
+          class: "region",
+          // Show/hide region on click
+          onclick: () => vRegion.val =
+            vRegion.val === region ? "" : region,
+          id: {
+            deps: [vRegion],
+            f: R.ifElse(
+              R.equals(region), R.always("selected-region"), R.always("")
+            )
+          }
+        }, region),
+    ),
   )(regionsNames())
 )
 

@@ -71,7 +71,12 @@ body {
 }
 
 .region, .country, .eponym-count, #search, #cancel-search {
-    cursor: pointer;    
+    cursor: pointer;
+    color: black;
+}
+
+.region {
+    font-size: 1.1em;
 }
 
 .eponym {   
