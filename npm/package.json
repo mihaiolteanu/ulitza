@@ -1,0 +1,29 @@
+{
+  "name": "ulitza",
+  "type": "module",  
+  "version": "1.0.5",
+  "description": "Lists of streets and landmarks named after a person (eponyms) for all countries worldwide",
+  "main": "index.js",  
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mihaiolteanu/ulitza.git"
+  },
+  "keywords": [
+    "street",
+    "names",
+    "eponyms",
+    "openstreetmap"
+  ],
+  "author": "Mihai Olteanu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mihaiolteanu/ulitza/issues"
+  },
+  "homepage": "https://github.com/mihaiolteanu/ulitza#readme",
+  "dependencies": {
+    "ramda": "^0.29.0"
+  },
+  "devDependencies": {
+    "@types/ramda": "^0.29.5"
+  }
+}
