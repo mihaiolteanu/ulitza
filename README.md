@@ -4,13 +4,6 @@ Lists of streets and landmarks named after a person (eponyms) for all countries
 worldwide. All data is extracted from openstreetmap, parsed, cleaned and
 carefully edited by hand.
 
-<p float="left">
-  <img src="./screenshots/worldwide.png" width="231" />
-  <img src="./screenshots/spain.png" width="230" />
-</p>
-
-(screenshots from [ulitza.net](https://ulitza.net))
-
 Each list is sorted by the number of cities that have streets or landmarks named
 after that person, or by the number of countries in the case of the "worldwide"
 view.
