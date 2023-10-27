@@ -1,6 +1,6 @@
 import {Transform} from "stream"
 import path from "path"
-import fs from 'fs'
+import fs from 'fs-extra'
 import osm_parser from 'osm-pbf-parser'
 import stringify from "json-stringify-pretty-compact"
 import * as R from "ramda"
@@ -19,7 +19,7 @@ const write = file => data =>
 const read = R.compose(JSON.parse, fs.readFileSync)
 
 // RW out files
-const rawPath      = path.resolve("raw")
+const rawPath      = path.resolve(fs.ensureDirSync("raw") || "raw")
 const rawFile      = country => path.resolve(rawPath, country + ".json")
 const readRaw      = country => read(rawFile(country))
 const eponymsPath  = "eponyms"
