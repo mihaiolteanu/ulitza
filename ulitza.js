@@ -17,6 +17,7 @@ import {
   linkDupsAll,
   statistics
 } from "./generator.js"
+import { htmlPage } from "./wiki.js"
 
 const handleCheck = (message, res) => R.ifElse(
   () => R.isEmpty(res),
@@ -85,5 +86,9 @@ program
  containing possible eponyms. Only needed if we're going to modify the generator.")
   .action(inspectOsmData)
 
+program
+  .command('html <country>')
+  .description('Generate a html page for the given <country>.')
+  .action(htmlPage)
 
 program.parse()

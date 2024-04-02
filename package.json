@@ -25,9 +25,14 @@
         "fs-extra": "^11.1.1",
         "global": "^4.4.0",
         "json-stringify-pretty-compact": "^4.0.0",
+        "mustache": "^4.2.0",
         "osm-pbf-parser": "^2.3.0",
-        "ramda": "^0.29.0",
+        "ramda": "^0.29.1",
         "ramda-fantasy": "^0.8.0",
         "sanctuary": "^3.1.0"
+    },
+    "devDependencies": {
+        "@types/mustache": "^4.2.5",
+        "@types/ramda": "^0.29.12"
     }
 }

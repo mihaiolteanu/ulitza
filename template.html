@@ -1,0 +1,41 @@
+<head>
+    <meta charset="utf-8">    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="The most famous persons, heroes, poets or
+                scientists in the history of {{country}}, judged by the
+                frequency of streets in {{country}} named after them">
+    <meta name="keywords" content="persons, heroes, poets, scientists, street names,
+                {{country}}, eponyms">
+    <title>
+        Famous persons in {{country}}'s history based on street names
+    </title>
+    <link rel="stylesheet" type="text/css" href="../../index.css" />
+    <link rel="stylesheet" type="text/css" href="../index.css" />
+    <script type="module" src="../../index.js"></script>    
+</head>
+
+<body>
+    <div id="menu"></div>
+    <div id="header"></div>
+
+    <div id="contents">
+        <h1 id="title">Famous persons in {{country}}'s history based on street names</h1>
+        <div id="statistics">
+            <a href="..">← other countries</a>
+            <a target="_blank" href="https://github.com/mihaiolteanu/ulitza/blob/main/eponyms/{{{country}}}.json">edit on github</a>
+        </div>
+        
+        {{#persons}}
+        <a target="_blank" href="{{{url}}}">
+            <div class="eponym">
+                <h2 class="name">{{name}}</h2>
+                <img class="image" loading="lazy" src="{{{image}}}" alt="{{name}}"/>
+                <span class="count">{{count}}</span>
+                <span class="summary">{{summary}}</span>
+            </div>
+        </a>        
+        {{/persons}}
+
+        <div><b>{{persons_count}}</b> unique persons spotted on <b>{{streets_count}}</b> streets</div>
+    </div>
+</body>
