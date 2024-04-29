@@ -181,32 +181,20 @@ const hydrateStreets = (country) => streets =>
     )(country)
     : streets
 
-export const statistics = () => R.pipe(
+const worldwideEponyms = () => R.pipe(
   R.compose(R.map(R.replace(".json", "")), fs.readdirSync),
-  R.map(country =>
-    R.pipe(
-      readCountry,
-      // Skip metadata
-      R.tail,
-      // Only keep eponyms
-      R.filter(R.compose(R.startsWith("http"), R.prop(2))),
-      // Keep count and wiki link only
-      R.map(R.tail),
-      // Don't include the whole link (redundant data), but only the page
-      // language and its path, eg. [en, Stephen_the_Great].
-      R.map(R.adjust(1, R.pipe(
-        R.split("/"),
-        R.props([2, 4]),
-        v => [R.split(".", v[0])[0], v[1]])
-      )),
-      // Add back the metadata
-      R.prepend(R.head(readCountry(country))),
-      R.prepend(country),
-    )(country)),
-  // Only include countries with at least one recorded eponym
-  R.reject(R.compose(R.equals(2), R.length)),
-  R.tap(writeStats),
-  writeStatsMin
+  // Remove the last-updated line
+  R.chain(R.compose(R.tail, readCountry)),
+  // Keep name of persons only
+  R.filter(R.compose(R.startsWith("http"), R.prop(2))),
+  R.groupBy(R.prop(2)),
+  // R.mapObjIndexed(R.reduce((acc, el) => acc + el[1], 0)),
+  R.mapObjIndexed(R.juxt([R.length, R.reduce((acc, el) => acc + el[1], 0)])),
+  R.toPairs,
+  R.map(R.flatten),
+  R.sortBy(R.prop(1)),
+  R.reverse,
+  // console.log
 )(eponymsPath)
 
 // Check the `country`.json file for same link assigned to multiple entries.  If
