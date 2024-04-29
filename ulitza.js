@@ -4,7 +4,7 @@ import * as R from "./ramda.js"
 import * as F from "fluture"
 import S from "sanctuary"
 import chalk from "chalk"
-import { countries, osmDownloadLink } from "./regions.js"
+import { countries, osmLink } from "./regions.js"
 import { equivalentDups, equivalentDupsAll } from "./equivalents.js"
 import {
   extractOsmData,
@@ -33,7 +33,7 @@ program
   .description("Download the latest osm data for the given <country>.")
   .action(country =>
     R.pipe(
-      osmDownloadLink,
+      osmLink,
       link => link === "" ? S.Nothing : S.Just(link),
       // promises are not a vaild datatype for Maybe, use Fluture
       R.map(F.encaseP(fetch)),
