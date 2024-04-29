@@ -1,37 +1,47 @@
+// In the case of name of persons on street signs, there is variantion in the
+// way these names are written down. Some use prefixes like doctor, poet,
+// comandante or other nouns and in other cases the name is either just the
+// family name if the person is well known, sometimes the middle name is
+// avoided or other times initials are employed. In cases where all these
+// variations refer to the exact same person, it makes sense to gather all this
+// diversity under a single, standard name. It sometimes happens that the same
+// street in the same city is tagged differently so it makes sense to consider
+// it as just one instance of that name.
+
+// All the data under the equivalents entry is manually added and is based on
+// the street names seen on openstreetmap.
+
 import * as R from "ramda"
 
-export const equivalentStreet = country => street =>
-  R.pipe(
-    R.propOr([], country),
-    R.find(R.find(R.equals(street))),
-    // Return the street name as is, if no equivalent found.
-    R.defaultTo([street]),
-    R.head,    
-  )(equivalents)
+export const equivalentStreet = country => street => R.pipe(
+  R.propOr([], country),
+  R.find(R.find(R.equals(street))),
+  // Return the street name as is, if no equivalent found.
+  R.defaultTo([street]),
+  R.head,    
+)(equivalents)
 
 // Check if there are any duplicate entries in the equivalents list for the
 // given country. Return a list of them, if there are.
-export const equivalentDups = country =>
-  R.pipe(
-    R.propOr([], country),
-    R.flatten,
-    R.groupBy(R.identity),
-    R.mapObjIndexed(R.length),
-    R.toPairs,
-    // Remove non-duplicates
-    R.reject(R.propEq(1, 1)),    
-    R.map(R.head),    
-  )(equivalents)
+export const equivalentDups = country => R.pipe(
+  R.propOr([], country),
+  R.flatten,
+  R.groupBy(R.identity),
+  R.mapObjIndexed(R.length),
+  R.toPairs,
+  // Remove non-duplicates
+  R.reject(R.propEq(1, 1)),    
+  R.map(R.head),    
+)(equivalents)
 
 // Check if there any duplicate entries in the equivalents list, for any of the
 // countries. Return the name of the countries if there are.
-export const equivalentDupsAll = () =>
-  R.pipe(
-    R.keys,    
-    R.map(R.juxt([R.identity, equivalentDups])),
-    R.reject(R.propEq([], 1)),
-    R.map(R.head)
-  )(equivalents)
+export const equivalentDupsAll = () => R.pipe(
+  R.keys,    
+  R.map(R.juxt([R.identity, equivalentDups])),
+  R.reject(R.propEq([], 1)),
+  R.map(R.head)
+)(equivalents)
 
 
 // For emacs users, use google-translate package,

@@ -1,6 +1,16 @@
+// Street names appear in multiple forms and can be suffixed or affixed with
+// nouns like boulevard, street, avenue or the multiple variants available in
+// all the different countries worldwide. Sometimes even the same street in the
+// same city is tagged with different such affixes. The only sane an natural
+// method if we want to extract frequencies is to strip all these affixes and
+// keep only the relevant part (the name of the person, for exemple).
+
+// All the affixes in this file are manually added and are based on the tags
+// seen on openstreetmap data.
+
 import * as R from "ramda"
 
-// Streep affixes for this street; use the regex for the given `country`
+// Strip all affixes for the given street name
 export const stripAffixes = country =>
   R.compose(R.trim, R.replace(affixes[country], ""))
 
