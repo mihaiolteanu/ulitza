@@ -14,10 +14,9 @@ import {
   linkDups,
   linksConsistency,
   linksConsistencyAll,
-  linkDupsAll,
-  statistics
+  linkDupsAll,  
+  htmlPage
 } from "./generator.js"
-import { htmlPage } from "./wiki.js"
 
 const handleCheck = (message, res) => R.ifElse(
   () => R.isEmpty(res),
