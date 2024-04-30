@@ -183,20 +183,20 @@ const hydrateStreets = (country) => streets =>
     )(country)
     : streets
 
+// Gather all persons from all countries and make a summary of the most frequent
+// persons and the total number of streets they appear on.
 const worldwideEponyms = () => R.pipe(
   R.compose(R.map(R.replace(".json", "")), fs.readdirSync),
   // Remove the last-updated line
   R.chain(R.compose(R.tail, readCountry)),
   // Keep name of persons only
   R.filter(R.compose(R.startsWith("http"), R.prop(2))),
-  R.groupBy(R.prop(2)),
-  // R.mapObjIndexed(R.reduce((acc, el) => acc + el[1], 0)),
+  R.groupBy(R.prop(2)),  
   R.mapObjIndexed(R.juxt([R.length, R.reduce((acc, el) => acc + el[1], 0)])),
   R.toPairs,
   R.map(R.flatten),
   R.sortBy(R.prop(1)),
-  R.reverse,
-  // console.log
+  R.reverse  
 )(eponymsPath)
 
 // Check the `country`.json file for same link assigned to multiple entries.  If
@@ -276,27 +276,39 @@ const applyHtmlTemplate = country => persons =>
 
 // Generate an html page with all the eponyms, wiki summary, wiki link and
 // thumbnail for the given country
-export const htmlPage = country => readFile(`./eponyms/${country}.json`, { encoding: "utf8"})
-  .then(JSON.parse)
-  .then(R.pipe(
-    // Skip the date.
-    R.tail,
-    // Skip street names not named after a person
-    R.reject(R.compose(R.isEmpty, R.prop(2))),    
-    // Keep the count and the wiki url for each person and fetch extra info from
-    // wikipedia based on the person's name from the url
-    R.map(entry =>
-      R.compose(wiki, R.prop(2))(entry)
-        .then((v => ({count: entry[1], url: entry[2], ...v})))),
-    v => Promise.all(v),
-    // Gather all the data
-    then(R.applySpec({
-      country:       () => upCase(country),
-      persons_count: R.length,
-      streets_count: R.compose(R.sum, R.map(R.prop("count"))),
-      persons:       R.identity
-    })),
-    // then(console.log),
-    then(applyHtmlTemplate(country)),
-  ))
-  .catch(err => console.log(err))
+const htmlPage = country => entries => R.pipe(
+  // Keep the count and the wiki url for each person and fetch extra info from
+  // wikipedia based on the person's name from the url    
+  R.map(entry => wiki(entry[0])
+    .then((v => ({url: entry[0], count: entry[1], ...v})))),    
+  v => Promise.all(v),    
+  // // Gather all the data
+  then(R.applySpec({
+    country:       () => upCase(country),
+    persons_count: R.length,
+    streets_count: R.compose(R.sum, R.map(R.prop("count"))),    
+    persons:       R.identity
+  })),
+  // then(console.log)
+  then(applyHtmlTemplate(country)),
+)(entries)
+
+export const htmlPageCountry = country => R.pipe(
+  readEponyms,
+  // Skip date
+  R.tail,
+  // Skip street names not named after a person
+  R.reject(R.compose(R.isEmpty, R.prop(2))),
+  // Url first, count in second position, skip the name
+  R.map(R.tail),
+  R.map(R.reverse),
+  htmlPage(country)
+)(country)
+
+export const htmlPageWorldwide = () => R.pipe(
+  worldwideEponyms,
+  // Over 10000 entries if we don't take out some of them
+  R.filter(e => e[1] > 15),
+  // console.log  
+  htmlPage("worldwide")
+)()

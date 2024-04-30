@@ -15,7 +15,8 @@ import {
   linksConsistency,
   linksConsistencyAll,
   linkDupsAll,  
-  htmlPage
+  htmlPageCountry,
+  htmlPageWorldwide
 } from "./generator.js"
 
 const handleCheck = (message, res) => R.ifElse(
@@ -88,6 +89,11 @@ program
 program
   .command('html <country>')
   .description('Generate a html page for the given <country>.')
-  .action(htmlPage)
+  .action(htmlPageCountry)
+
+program
+  .command('html-worldwide')
+  .description('Generate a html page with the worldwide eponyms frequencies.')
+  .action(htmlPageWorldwide)
 
 program.parse()
