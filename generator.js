@@ -6,11 +6,9 @@ import stringify from "json-stringify-pretty-compact"
 import * as R from "ramda"
 import { equivalentStreet } from "./equivalents.js"
 import {stripAffixes} from "./affixes.js"
-import { countryEponymFrequency } from "./regions.js"
+import { minEponymFrequency } from "./regions.js"
 import { readFile, writeFile } from "fs/promises"
 import M from 'mustache'
-
-const { pipe, map, join, uniqBy, groupBy, mapObjIndexed, length, toPairs} = R
 
 export const osmPath = country => path.resolve("osm_data", country + "-latest.osm.pbf")
 const inspectPath = country => path.resolve("out", country + "-inspect.json") 
@@ -29,16 +27,6 @@ const eponymsFile  = country => path.resolve(eponymsPath, country + ".json")
 const writeEponyms = country => write(eponymsFile(country))
 const readEponyms  = country => read(eponymsFile(country))
 
-const writeStats = (data) =>
-  fs.writeFileSync(
-    path.resolve("eponyms.js"),
-    `export const statistics =` + stringify(data, { maxLength: 120 }))
-
-const writeStatsMin = data =>
-  fs.writeFileSync(
-    path.resolve("eponyms.min.js"),
-    `export const statistics=` + JSON.stringify(data))
-
 // Get the file modified date from the OS; good enough to get a glimpse of the
 // freshness of osm data; the alternative is to extract the modified date from
 // the osm file (more complicated)
@@ -50,25 +38,24 @@ const modifiedDateOSM = country => R.pipe(
 
 // Explore the osm data.  I've used this to explore what osm fields contain
 // street data.
-export const inspectOsmData = (country, regex) => 
-  fs.createReadStream(osmPath(country))
-    .on("open", () => fs.writeFileSync(inspectPath(country), "create new file"))
-    .pipe(new osm_parser())
-    .pipe(new Transform({
-      objectMode: true,
-      transform: (chunk, _encoding, callback) =>
-        R.pipe(
-          R.map(JSON.stringify),
-          R.filter(R.test(new RegExp(regex, "i"))),
-          R.map(JSON.parse),
-          // Ignore non-interesting fields
-          R.map(R.omit(["id", "lat", "lon", "info", "refs", "members"])),
-          out => out.length > 0 ?
-            fs.appendFileSync(inspectPath(country), JSON.stringify(out, null, 2))
-            : "ignore",
-          () => callback(null, null)
-        )(chunk)
-    }))
+export const inspectOsmData = (country, regex) => fs.createReadStream(osmPath(country))
+  .on("open", () => fs.writeFileSync(inspectPath(country), "create new file"))
+  .pipe(new osm_parser())
+  .pipe(new Transform({
+    objectMode: true,
+    transform: (chunk, _encoding, callback) =>
+      R.pipe(
+        R.map(JSON.stringify),
+        R.filter(R.test(new RegExp(regex, "i"))),
+        R.map(JSON.parse),
+        // Ignore non-interesting fields
+        R.map(R.omit(["id", "lat", "lon", "info", "refs", "members"])),
+        out => out.length > 0 ?
+          fs.appendFileSync(inspectPath(country), JSON.stringify(out, null, 2))
+          : "ignore",
+        () => callback(null, null)
+      )(chunk)
+  }))
 
 export const extractOsmData = (country) => {
   const streets = fs.createWriteStream(rawFile(country))
@@ -79,7 +66,7 @@ export const extractOsmData = (country) => {
     .pipe(new Transform({
       objectMode: true,
       transform: (chunk, _encoding, callback) =>
-        pipe(
+        R.pipe(
           // Keep only pbf entries of type `node` and `way`.  If other pbf entries
           // are found to contain relevant street name data, include them here.      
           R.filter(R.compose(
@@ -104,7 +91,7 @@ export const extractOsmData = (country) => {
         )(chunk)
     }))
     .on("data", R.pipe(
-      uniqBy(join("-")),
+      R.uniqBy(R.join("-")),
       R.map(s => streets.write(",\n" + stringify(s)))
     ))
     .on("finish", () => {
@@ -113,51 +100,49 @@ export const extractOsmData = (country) => {
     })
 }
 
-export const parseOsmData = (country) =>
-  R.pipe(
-    readRaw,
-    // Skip the osm modified date
-    R.tail,
-    // Strip affixes and replace with equivalents;  keep city unchanged
-    R.map(R.adjust(1, R.compose(equivalentStreet(country), stripAffixes(country)))),
-    // Even without the previous step, but moreso after it, there will be
-    // identical [city, name] entries. I've decided to allow only a single
-    // eponym per city, even though there might be eponyms for streets, squares
-    // or other landmarks representing the same person, all in the same city.
-    // This is a fair defense against misspelled streets or ones tagged multiple
-    // times with slightly different affixes or equivalents, all in the same
-    // city.  Counting all these would be a mistake.  Still, in some instances,
-    // the city names themselves are spelled differently (with or without
-    // cedilla, for example).
-    uniqBy(join("-")),
-    // The city name has served its purpose, discard it.
-    map(R.prop(1)),
-    // Count identical street names.
-    groupBy(R.identity),
-    mapObjIndexed(length),
-    // Transform to [streetName, count] array
-    R.toPairs,
-    // Remove streets composed of numbers, letters or other names less than 3
-    // characters to reduce the output file size; most than likely these do not
-    // designate persons.  Note: it might not apply for China/Korea/Taiwan/etc.
-    R.reject(R.compose(
-      R.gte(3),
-      R.length,
-      R.prop(0))
-    ),
-    // Protect against garbage entries and very long files (lots of streets)
-    R.reject(R.compose(
-      R.gt(countryEponymFrequency(country)),
-      R.prop(1))
-    ),
-    // Sort by most frequent street names first.
-    R.sortWith([R.descend(R.prop(1))]),
-    hydrateStreets(country),
-    // Add back the osm modified date
-    R.prepend(R.head(readRaw(country))),
-    writeEponyms(country),
-    statistics,
-  )(country)
+export const parseOsmData = (country) => R.pipe(
+  readRaw,
+  // Skip the osm modified date
+  R.tail,
+  // Strip affixes and replace with equivalents;  keep city unchanged
+  R.map(R.adjust(1, R.compose(equivalentStreet(country), stripAffixes(country)))),
+  // Even without the previous step, but moreso after it, there will be
+  // identical [city, name] entries. I've decided to allow only a single
+  // eponym per city, even though there might be eponyms for streets, squares
+  // or other landmarks representing the same person, all in the same city.
+  // This is a fair defense against misspelled streets or ones tagged multiple
+  // times with slightly different affixes or equivalents, all in the same
+  // city.  Counting all these would be a mistake.  Still, in some instances,
+  // the city names themselves are spelled differently (with or without
+  // cedilla, for example).
+  R.uniqBy(R.join("-")),
+  // The city name has served its purpose, discard it.
+  R.map(R.prop(1)),
+  // Count identical street names.
+  R.groupBy(R.identity),
+  R.mapObjIndexed(R.length),
+  // Transform to [streetName, count] array
+  R.toPairs,
+  // Remove streets composed of numbers, letters or other names less than 3
+  // characters to reduce the output file size; most than likely these do not
+  // designate persons.  Note: it might not apply for China/Korea/Taiwan/etc.
+  R.reject(R.compose(
+    R.gte(3),
+    R.length,
+    R.prop(0))
+  ),
+  // Protect against garbage entries and very long files (lots of streets)
+  R.reject(R.compose(
+    R.gt(minEponymFrequency(country)),
+    R.prop(1))
+  ),
+  // Sort by most frequent street names first.
+  R.sortWith([R.descend(R.prop(1))]),
+  hydrateStreets(country),
+  // Add back the osm modified date
+  R.prepend(R.head(readRaw(country))),
+  writeEponyms(country),    
+)(country)
 
 const readCountry = R.pipe(
   eponymsFile,
@@ -200,17 +185,16 @@ const worldwideEponyms = () => R.pipe(
 )(eponymsPath)
 
 // Check the `country`.json file for same link assigned to multiple entries.  If
-// found, these should be included under a single person in the equivalents
+// found, manually include them under a single person in the equivalents
 // section.
-export const linkDups = (country) =>
-  R.pipe(
-    readCountry,    
-    R.groupBy(R.prop(2)),
-    R.mapObjIndexed(R.length),
-    R.toPairs,
-    R.reject(R.propEq(1, 1)),    
-    R.reject(R.propEq('', 0))    
-  )(country)
+export const linkDups = (country) => R.pipe(
+  readCountry,    
+  R.groupBy(R.prop(2)),
+  R.mapObjIndexed(R.length),
+  R.toPairs,
+  R.reject(R.propEq(1, 1)),    
+  R.reject(R.propEq('', 0))    
+)(country)
 
 export const linkDupsAll = () => R.pipe(  
   R.compose(R.map(R.replace(".json", "")), fs.readdirSync),  

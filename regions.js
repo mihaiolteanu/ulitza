@@ -19,7 +19,7 @@ const countryEntries = () => R.pipe(
 // Return a single `country` entry (name, frequency).
 const countryEntry = country => R.find(R.propEq(0, country), countryEntries())
 export const countries = R.compose(R.map(R.head), countryEntries)
-export const countryEponymFrequency = R.compose(R.prop(1), countryEntry)
+export const minEponymFrequency = R.compose(R.prop(1), countryEntry)
 
 // All regions and countries as they appear in the openstreetmap (osm) database,
 // http://download.geofabrik.de/
