@@ -243,7 +243,7 @@ const wiki = async url => {
   return fetch(`https://${page_language}.wikipedia.org/api/rest_v1/page/summary/${page_name}`)
     .then(v => v.json())
     .then(r => ({
-      name: R.replace(/_/g, " ", page_name),
+      url,
       image: R.pipe(
         R.propOr("", "thumbnail"),
         R.propOr("../placeholder.png", "source"))
@@ -296,3 +296,131 @@ export const htmlPageWorldwide = () => R.pipe(
   // console.log  
   htmlPage("worldwide")
 )()
+const keywords = [
+  "actor",
+  "actress",
+  "apostle",
+  "archbishop",
+  "architect",
+  "artist",
+  "astrologer",
+  "astronomer",
+  "author",
+  "businessman",
+  "bishop",
+  "chancellor",
+  "composer",
+  "cosmonaut",
+  "chemist",
+  "designer",
+  "diplomat",
+  "doctor",
+  "dramatist",
+  "economist",
+  "educator",
+  "engineer",
+  "emperor",
+  "essayist",
+  "explorer",
+  "friar",
+  "geographer",
+  "general",
+  "hero",
+  "historian",
+  "illustrator",
+  "industrialist",
+  "inventor",
+  "journalist",
+  "jurist",
+  "king",
+  "lawyer",
+  "marshal",
+  "martyr",
+  "mathematician",
+  "mayor",
+  "microbiologist",
+  "military",
+  "musician",
+  "naturalist",
+  "navigator",
+  "nobleman",
+  "noblewoman",
+  "novelist",
+  "pastor",
+  "painter",
+  "pedagogue",
+  "pharmacist",
+  "philologist",
+  "philosopher",
+  "physician",
+  "physicist",
+  "pianist",
+  "pilot",
+  "playwright",
+  "poet",
+  "polymath",
+  "politician",
+  "preacher",
+  "president",
+  "priest",  
+  "prince",
+  "printmaker",
+  "professor",
+  "publicist",
+  "revolutionary",  
+  "ruler",
+  "saint",
+  "scientist",
+  "sculptor",
+  "she",
+  "singer",
+  "sociologist",
+  "soldier",
+  "statesman",
+  "teacher",
+  "theatre",
+  "theologian",
+  "translator",
+  "violinist",
+  "voivode",
+  "woman",
+  "writer"
+]
+
+const extractPersonsData = (country) => R.pipe(
+  readEponyms,
+  // Skip date
+  R.tail,
+  // Skip street names not named after a person
+  R.reject(R.compose(R.isEmpty, R.prop(2))),
+  // Send the url to wiki()
+  R.map(R.compose(wiki, R.prop(2))),  
+  v => Promise.all(v),
+  // Use the name of the person as the key of the object. The object now
+  // contains the image and the summary of that person, as see on wikipedia.
+  then(R.map(w => ({
+    [w.url]: R.omit(["url"], w)
+  }))),
+  // Add or update the persons db
+  then(R.mergeAll),
+  then(R.mergeDeepLeft(read("persons.json"))),
+  then(write("persons.json"))  
+)(country)
+
+
+const extractKeywords = (str) => R.pipe(
+  // Avoid matching general when the word is generally, for example.
+  R.map(k => str.match(new RegExp(" " + k + "( |,|\\.|;)", "i"))),
+  R.filter(R.empty),
+  // The matched string
+  R.map(R.prop(0)),
+  R.map(R.trim),
+  R.map(R.replace(/(,|\.|;)/, "")),
+  R.map(s => s.toLowerCase())
+)(keywords)
+
+const updateKeywords = () => R.pipe(
+  read,
+  R.map(e => R.assoc("keywords", extractKeywords(e.summary), e)),
+  write("persons.json")
+)("persons.json")
