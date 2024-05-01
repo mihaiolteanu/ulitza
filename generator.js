@@ -244,6 +244,7 @@ const wiki = async url => {
     .then(v => v.json())
     .then(r => ({
       url,
+      name: R.prop("title", r),
       image: R.pipe(
         R.propOr("", "thumbnail"),
         R.propOr("../placeholder.png", "source"))
@@ -261,27 +262,27 @@ const applyHtmlTemplate = country => persons =>
 // Generate an html page with all the eponyms, wiki summary, wiki link and
 // thumbnail for the given country
 const htmlPage = country => entries => R.pipe(
-  // Keep the count and the wiki url for each person and fetch extra info from
-  // wikipedia based on the person's name from the url    
-  R.map(entry => wiki(entry[0])
-    .then((v => ({url: entry[0], count: entry[1], ...v})))),    
-  v => Promise.all(v),    
-  // // Gather all the data
-  then(R.applySpec({
+  // Add extra info, like summary and image from the persons db
+  R.map(e => ({
+    url: e[0],
+    count: e[1],
+    ...read("persons.json")[e[0]]
+  })),
+  R.applySpec({
     country:       () => upCase(country),
     persons_count: R.length,
-    streets_count: R.compose(R.sum, R.map(R.prop("count"))),    
-    persons:       R.identity
-  })),
-  // then(console.log)
-  then(applyHtmlTemplate(country)),
+    streets_count: R.compose(R.sum, R.map(R.prop("count"))),
+    keywords_summary: R.compose(R.take(5), keywordsCount, R.map(R.prop("keywords"))),
+    keywords:         R.compose(R.drop(5), keywordsCount, R.map(R.prop("keywords"))),
+    persons:          R.identity
+  }),
+  applyHtmlTemplate(country),
 )(entries)
 
 export const htmlPageCountry = country => R.pipe(
   readEponyms,
-  // Skip date
+  // Skip date and skip street names not named after a person
   R.tail,
-  // Skip street names not named after a person
   R.reject(R.compose(R.isEmpty, R.prop(2))),
   // Url first, count in second position, skip the name
   R.map(R.tail),
@@ -296,6 +297,7 @@ export const htmlPageWorldwide = () => R.pipe(
   // console.log  
   htmlPage("worldwide")
 )()
+
 const keywords = [
   "actor",
   "actress",
@@ -387,7 +389,7 @@ const keywords = [
   "writer"
 ]
 
-const extractPersonsData = (country) => R.pipe(
+const updatePersonsDb = (country) => R.pipe(
   readEponyms,
   // Skip date
   R.tail,
@@ -404,9 +406,9 @@ const extractPersonsData = (country) => R.pipe(
   // Add or update the persons db
   then(R.mergeAll),
   then(R.mergeDeepLeft(read("persons.json"))),
-  then(write("persons.json"))  
+  then(write("persons.json")),
+  then(updateKeywords)
 )(country)
-
 
 const extractKeywords = (str) => R.pipe(
   // Avoid matching general when the word is generally, for example.
@@ -424,3 +426,23 @@ const updateKeywords = () => R.pipe(
   R.map(e => R.assoc("keywords", extractKeywords(e.summary), e)),
   write("persons.json")
 )("persons.json")
+
+// keywords - array of arrays of keywords. Count the number of occurence for all
+// the unique keywords
+const keywordsCount = (keywords) => R.pipe(
+  R.flatten,
+  R.uniq,
+  a => R.zipObj(a, R.repeat(0, a.length)),
+  R.mapObjIndexed((_, key) => R.pipe(
+    R.map(R.includes(key)),
+    R.count(R.equals(true)),
+    R.applySpec({
+      keyword: R.always(key),
+      count: R.identity,      
+      percent: c => ((c / keywords.length) * 100).toFixed(1)
+    })
+  )(keywords)),
+  R.values,
+  R.sortBy(R.prop("count")),
+  R.reverse,  
+)(keywords)
