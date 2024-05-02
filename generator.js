@@ -239,7 +239,7 @@ const wiki = async url => {
     R.head
   )(url)
   // Poor man's rate limiter to avoid the 200 requests / second limit for Wiki API
-  await delay((Math.random() + 20) * 200)
+  await delay((Math.random() + 50) * 200)
   return fetch(`https://${page_language}.wikipedia.org/api/rest_v1/page/summary/${page_name}`)
     .then(v => v.json())
     .then(r => ({
@@ -271,10 +271,11 @@ const htmlPage = country => entries => R.pipe(
   R.applySpec({
     country:       () => upCase(country),
     persons_count: R.length,
-    streets_count: R.compose(R.sum, R.map(R.prop("count"))),
-    keywords_summary: R.compose(R.take(5), keywordsCount, R.map(R.prop("keywords"))),
-    keywords:         R.compose(R.drop(5), keywordsCount, R.map(R.prop("keywords"))),
-    persons:          R.identity
+    streets_count: R.compose(R.sum, R.map(R.prop("count"))),    
+    keywords:      R.compose(keywordsCount, R.map(R.prop("keywords"))),
+    // Sometimes the summary is too short and the resulting borders are shorter
+    // than the rest
+    persons:       R.map(R.evolve({ summary: str => str.padEnd(100, '  ')}))
   }),
   applyHtmlTemplate(country),
 )(entries)
@@ -298,95 +299,21 @@ export const htmlPageWorldwide = () => R.pipe(
   htmlPage("worldwide")
 )()
 
-const keywords = [
-  "actor",
-  "actress",
-  "apostle",
-  "archbishop",
-  "architect",
-  "artist",
-  "astrologer",
-  "astronomer",
-  "author",
-  "businessman",
-  "bishop",
-  "chancellor",
-  "composer",
-  "cosmonaut",
-  "chemist",
-  "designer",
-  "diplomat",
-  "doctor",
-  "dramatist",
-  "economist",
-  "educator",
-  "engineer",
-  "emperor",
-  "essayist",
-  "explorer",
-  "friar",
-  "geographer",
-  "general",
-  "hero",
-  "historian",
-  "illustrator",
-  "industrialist",
-  "inventor",
-  "journalist",
-  "jurist",
-  "king",
-  "lawyer",
-  "marshal",
-  "martyr",
-  "mathematician",
-  "mayor",
-  "microbiologist",
-  "military",
-  "musician",
-  "naturalist",
-  "navigator",
-  "nobleman",
-  "noblewoman",
-  "novelist",
-  "pastor",
-  "painter",
-  "pedagogue",
-  "pharmacist",
-  "philologist",
-  "philosopher",
-  "physician",
-  "physicist",
-  "pianist",
-  "pilot",
-  "playwright",
-  "poet",
-  "polymath",
-  "politician",
-  "preacher",
-  "president",
-  "priest",  
-  "prince",
-  "printmaker",
-  "professor",
-  "publicist",
-  "revolutionary",  
-  "ruler",
-  "saint",
-  "scientist",
-  "sculptor",
-  "she",
-  "singer",
-  "sociologist",
-  "soldier",
-  "statesman",
-  "teacher",
-  "theatre",
-  "theologian",
-  "translator",
-  "violinist",
-  "voivode",
-  "woman",
-  "writer"
+const keywords = [ "actor", "actress", "apostle", "archbishop", "architect",
+  "artist", "astrologer", "astronomer", "author", "businessman", "bishop",
+  "chancellor", "composer", "cosmonaut", "chemist", "designer", "diplomat",
+  "doctor", "dramatist", "economist", "educator", "engineer", "emperor",
+  "essayist", "explorer", "friar", "geographer", "general", "hajduk", "hero",
+  "historian", "illustrator", "industrialist", "inventor", "journalist",
+  "jurist", "king", "lawyer", "marshal", "martyr", "mathematician", "mayor",
+  "microbiologist", "military", "musician", "naturalist", "navigator",
+  "nobleman", "noblewoman", "novelist", "pastor", "painter", "pedagogue",
+  "pharmacist", "philologist", "philosopher", "physician", "physicist",
+  "pianist", "pilot", "playwright", "poet", "polymath", "politician",
+  "preacher", "president", "priest", "prince", "printmaker", "professor",
+  "publicist", "revolutionary", "ruler", "saint", "scientist", "sculptor",
+  "she", "singer", "sociologist", "soldier", "statesman", "teacher", "theatre",
+  "theologian", "translator", "violinist", "voivode", "woman", "writer"
 ]
 
 const updatePersonsDb = (country) => R.pipe(
@@ -405,7 +332,7 @@ const updatePersonsDb = (country) => R.pipe(
   }))),
   // Add or update the persons db
   then(R.mergeAll),
-  then(R.mergeDeepLeft(read("persons.json"))),
+  then(R.mergeDeepRight(read("persons.json"))),
   then(write("persons.json")),
   then(updateKeywords)
 )(country)
