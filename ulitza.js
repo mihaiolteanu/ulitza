@@ -1,6 +1,6 @@
 import { program } from "commander"
 import fs from "fs"
-import * as R from "./ramda.js"
+import * as R from "ramda"
 import * as F from "fluture"
 import S from "sanctuary"
 import chalk from "chalk"

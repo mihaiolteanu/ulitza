@@ -1,6 +1,6 @@
 // OSM links to specific country file containing the street name data plus the
 // regions and all available countries.
-import * as R from "./ramda.js"
+import * as R from "ramda"
 
 export const osmLink = country => R.pipe(  
   // Select the region containing the searched country
