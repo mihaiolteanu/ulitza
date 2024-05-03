@@ -1,6 +1,7 @@
 node_modules
-osm_data
-raw
+data/osm_data
+data/raw
+data/html
 .log
 eponyms.js
 eponyms.min.js

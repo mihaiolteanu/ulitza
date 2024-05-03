@@ -16,6 +16,7 @@ import {
   linksConsistencyAll,
   linkDupsAll,  
   htmlPageCountry,
+  htmlPageAllCountries,
   htmlPageWorldwide
 } from "./generator.js"
 
@@ -90,6 +91,11 @@ program
   .command('html <country>')
   .description('Generate a html page for the given <country>.')
   .action(htmlPageCountry)
+
+program
+  .command('html-all-countries')
+  .description('Generate a html page all coutries.')
+  .action(htmlPageAllCountries)
 
 program
   .command('html-worldwide')

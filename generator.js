@@ -10,7 +10,7 @@ import { minEponymFrequency } from "./regions.js"
 import { readFile, writeFile } from "fs/promises"
 import M from 'mustache'
 
-export const osmPath = country => path.resolve("osm_data", country + "-latest.osm.pbf")
+export const osmPath = country => path.resolve("data/osm_data", country + "-latest.osm.pbf")
 const inspectPath = country => path.resolve("out", country + "-inspect.json") 
 
 // RW json data
@@ -19,14 +19,16 @@ const write = file => data =>
 const read = R.compose(JSON.parse, fs.readFileSync)
 
 // RW out files
-const rawPath      = path.resolve(fs.ensureDirSync("raw") || "raw")
+const rawPath      = path.resolve(fs.ensureDirSync("data/raw") || "raw")
 const rawFile      = country => path.resolve(rawPath, country + ".json")
 const readRaw      = country => read(rawFile(country))
-const eponymsPath  = "eponyms"
+const eponymsPath  = "data/countries"
 const eponymsFile  = country => path.resolve(eponymsPath, country + ".json")
 const writeEponyms = country => write(eponymsFile(country))
 const readEponyms  = country => read(eponymsFile(country))
-
+const writePersons = write("data/persons.json")
+const readPersons  = () => read("data/persons.json")
+  
 // Get the file modified date from the OS; good enough to get a glimpse of the
 // freshness of osm data; the alternative is to extract the modified date from
 // the osm file (more complicated)
@@ -239,7 +241,9 @@ const wiki = async url => {
     R.head
   )(url)
   // Poor man's rate limiter to avoid the 200 requests / second limit for Wiki API
-  await delay((Math.random() + 50) * 200)
+  // For really big countries, if this still doesn't work, temporarily remove
+  // part of the streets in the country.json file and retrieve the data in pieces.
+  await delay((Math.random() + 25) * 200)
   return fetch(`https://${page_language}.wikipedia.org/api/rest_v1/page/summary/${page_name}`)
     .then(v => v.json())
     .then(r => ({
@@ -247,6 +251,7 @@ const wiki = async url => {
       name: R.prop("title", r),
       image: R.pipe(
         R.propOr("", "thumbnail"),
+        // Less popular wiki entries sometimes don't have a picture.
         R.propOr("../placeholder.png", "source"))
       (r),
       summary: R.propOr("", "extract")(r)
@@ -255,28 +260,29 @@ const wiki = async url => {
 
 // Apply the html template to country and the list of persons and save it.
 const applyHtmlTemplate = country => persons => 
-  readFile("./template.html", { encoding: 'utf8' })  
+  readFile("./data/template.html", { encoding: 'utf8' })  
     .then(template =>       
-      writeFile(`./html/${country}.html`, M.render(template, persons), 'utf8'))
+      writeFile(`./data/html/${country}.html`, M.render(template, persons), 'utf8'))
 
 // Generate an html page with all the eponyms, wiki summary, wiki link and
 // thumbnail for the given country
 const htmlPage = country => entries => R.pipe(
-  // Add extra info, like summary and image from the persons db
+  // Add extra info, like summary and image from the persons db  
   R.map(e => ({
     url: e[0],
     count: e[1],
-    ...read("persons.json")[e[0]]
+    ...readPersons()[e[0]]
   })),
+  // If the person is not in the persons.json db, do not include it.
+  R.filter(R.has("name")),  
   R.applySpec({
     country:       () => upCase(country),
     persons_count: R.length,
     streets_count: R.compose(R.sum, R.map(R.prop("count"))),    
-    keywords:      R.compose(keywordsCount, R.map(R.prop("keywords"))),
-    // Sometimes the summary is too short and the resulting borders are shorter
-    // than the rest
+    keywords:      R.compose(keywordsCount, R.reject(R.isNil), R.map(R.prop("keywords"))),
+    // Sometimes the summary is too short and it looks weird on the page
     persons:       R.map(R.evolve({ summary: str => str.padEnd(100, '  ')}))
-  }),
+  }),  
   applyHtmlTemplate(country),
 )(entries)
 
@@ -291,11 +297,15 @@ export const htmlPageCountry = country => R.pipe(
   htmlPage(country)
 )(country)
 
+export const htmlPageAllCountries = () => R.pipe(
+  R.compose(R.map(R.replace(".json", "")), fs.readdirSync),  
+  R.map(htmlPageCountry)
+)(eponymsPath)
+
 export const htmlPageWorldwide = () => R.pipe(
   worldwideEponyms,
   // Over 10000 entries if we don't take out some of them
-  R.filter(e => e[1] > 15),
-  // console.log  
+  R.filter(e => e[1] > 2),
   htmlPage("worldwide")
 )()
 
@@ -332,12 +342,12 @@ const updatePersonsDb = (country) => R.pipe(
   }))),
   // Add or update the persons db
   then(R.mergeAll),
-  then(R.mergeDeepRight(read("persons.json"))),
-  then(write("persons.json")),
-  then(updateKeywords)
+  then(R.mergeDeepRight(readPersons())),
+  then(writePersons),
+  then(keywordsUpdate)
 )(country)
 
-const extractKeywords = (str) => R.pipe(
+const keywordsExtract = (str) => R.pipe(
   // Avoid matching general when the word is generally, for example.
   R.map(k => str.match(new RegExp(" " + k + "( |,|\\.|;)", "i"))),
   R.filter(R.empty),
@@ -348,27 +358,29 @@ const extractKeywords = (str) => R.pipe(
   R.map(s => s.toLowerCase())
 )(keywords)
 
-const updateKeywords = () => R.pipe(
-  read,
-  R.map(e => R.assoc("keywords", extractKeywords(e.summary), e)),
-  write("persons.json")
-)("persons.json")
+const keywordsUpdate = () => R.pipe(
+  readPersons,
+  R.map(e => R.assoc("keywords", keywordsExtract(e.summary), e)),
+  writePersons
+)()
 
-// keywords - array of arrays of keywords. Count the number of occurence for all
-// the unique keywords
+// keywords - array of arrays of strings.
+// Count the number of occurence for all the unique keywords
 const keywordsCount = (keywords) => R.pipe(
   R.flatten,
-  R.uniq,
-  a => R.zipObj(a, R.repeat(0, a.length)),
-  R.mapObjIndexed((_, key) => R.pipe(
+  R.reject(R.isNil),
+  R.uniq,  
+  a => R.zipObj(a, R.repeat(0, a.length)),  
+  R.mapObjIndexed((_, key) => R.pipe(    
     R.map(R.includes(key)),
+    
     R.count(R.equals(true)),
     R.applySpec({
       keyword: R.always(key),
       count: R.identity,      
-      percent: c => ((c / keywords.length) * 100).toFixed(1)
+      // percent: c => ((c / keywords.length) * 100).toFixed(1)
     })
-  )(keywords)),
+  )(keywords)),  
   R.values,
   R.sortBy(R.prop("count")),
   R.reverse,  

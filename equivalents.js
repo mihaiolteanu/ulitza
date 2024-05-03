@@ -6835,7 +6835,7 @@ const equivalents = {
     ["San José de Calasanz",           "Sant Josep de Calassanç"],
     ["San Juan Bautista",              "Sant Joan Baptista"],
     ["San Juan Bautista de la Salle",  "Salle"],
-    ["San Juan Bosco",                 "Don Bosco"],
+    ["San Juan Bosco",                 "Don Bosco", "San Juan Bosco"],
     ["San Juan de la Cruz",            "Sant Joan de la Creu"],
     ["San Julián",                     "San Julian"],
     ["San Lorenzo",                    "Sant Llorenç"],
