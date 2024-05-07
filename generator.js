@@ -278,6 +278,8 @@ const htmlPage = country => entries => R.pipe(
     persons.keywords = R.pipe(
       R.props(["keywords", "keywords_extra"]),
       R.flatten,
+      addKeywordsEquivalents,
+      R.flatten,
       R.reject(R.isNil),
       R.uniq
     )(persons)
@@ -325,15 +327,21 @@ export const htmlPageWorldwide = () => R.pipe(
 const ignore = ["she", "female"]
 
 const equivalents = {
-  artist: ["music", "dramatist", "painter", "sculptor", "theatre", "film director", "screenwriter"],
-  music: ["organist", "conductor", "singer", "songwriter", "soprano", "tenor", "violonist", "guitarist"],
-  military: ["colonel", "general", "marshal", "commander", "privateer", "admiral", "lieutenant", "guerrilla figther", "officer"],
+  artist: ["music", "dramatist", "actor", "painter", "sculptor", "theatre", "film director", "screenwriter"],
+  music: ["organist", "conductor", "singer", "songwriter", "soprano", "tenor",
+  "violonist", "guitarist", "composer"],
+  military: ["colonel", "general", "marshal", "commander", "privateer",
+  "admiral", "lieutenant", "guerrilla figther", "officer", "conquistador"],
   writer: ["journalist", "poet", "novelist", "philosopher", "playwright", "historian", "folklorist", "translator", "publicist", "essayist", "dramatist"],
   woman: ["she", "noblewoman", "female", "nun", "sister", "duchess", "actress"],
-  ruler: ["king", "queen", "voivode", "duke", "count", "sultan", "caliph"],
-  religion: ["pastor", "theologian", "patriarch", "saint", "cleric", "abbot", "prelate", "bishop", "monk", "nun"],
-  scientist: ["anatomist", "archaeologist", "bacteriologist", "biochemist", "physicist", "entomologist"],
-  sport: ["athlete", "footbaler", "runner", "bicycle racer", "cyclist", "racing driver", "tennis player", "swimmer", "gymnast"]
+  ruler: ["king", "queen", "voivode", "duke", "count", "sultan", "caliph", "chancellor"],
+  religion: ["pastor", "theologian", "patriarch", "saint", "cleric", "abbot",
+    "prelate", "bishop", "monk", "nun", "apostle", "archbishop"],
+  scientist: ["anatomist", "archaeologist", "bacteriologist", "biochemist",
+    "physicist", "entomologist", "zoologist", "agronomist", "architect",
+    "astronomer", "biologist", "botanist", "chemist"],
+  sport: ["athlete", "abbot", "footbaler", "runner", "bicycle racer", "cyclist",
+  "racing driver", "tennis player", "swimmer", "gymnast", "boxer"]
 }
 
 const keywords = ["abbot", "actor", "activist", "actress", "admiral", "agronomist",
@@ -367,6 +375,19 @@ const keywords = ["abbot", "actor", "activist", "actress", "admiral", "agronomis
   "trade unionist", "union leader", "translator", "violinist", "voivode", "woman",
   "writer", "zoologist"
 ]
+
+// Some keywords/occupations are subdomains of a higher domain, like a poet is a
+// writer, too. Add those hight domains to the list of keywords
+const addKeywordsEquivalents = keys => R.concat(keys,
+  R.map(key => R.pipe(
+    R.toPairs,  
+    R.filter(R.pipe(
+      R.last,
+      R.includes(key)
+    )),  
+    R.map(R.head),  
+    R.uniq
+  )(equivalents), keys)) 
 
 const updatePersonsDb = (country) => R.pipe(
   readEponyms,
