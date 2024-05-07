@@ -272,14 +272,25 @@ const htmlPage = country => entries => R.pipe(
     url: e[0],
     count: e[1],
     ...readPersons()[e[0]]
-  })),
+  })),  
+  // Merge all keywords into `keywords`
+  R.map(persons => {
+    persons.keywords = R.pipe(
+      R.props(["keywords", "keywords_extra"]),
+      R.flatten,
+      R.reject(R.isNil),
+      R.uniq
+    )(persons)
+    return persons
+  }),
+  R.map(R.omit(["keywords_extra"])),  
   // If the person is not in the persons.json db, do not include it.
   R.filter(R.has("name")),  
   R.applySpec({
     country:       () => upCase(country),
     persons_count: R.length,
-    streets_count: R.compose(R.sum, R.map(R.prop("count"))),    
-    keywords:      R.compose(keywordsCount, R.reject(R.isNil), R.map(R.prop("keywords"))),
+    streets_count: R.compose(R.sum, R.map(R.prop("count"))),
+    keywords:      R.compose(keywordsCount, R.map(R.flatten), R.map(R.props(["keywords"]))),
     // Sometimes the summary is too short and it looks weird on the page
     persons:       R.map(R.evolve({ summary: str => str.padEnd(100, '  ')}))
   }),  
@@ -304,26 +315,57 @@ export const htmlPageAllCountries = () => R.pipe(
 
 export const htmlPageWorldwide = () => R.pipe(
   worldwideEponyms,
-  // Over 10000 entries if we don't take out some of them
+  // There are over 10000 entries, take out some of them
   R.filter(e => e[1] > 2),
   htmlPage("worldwide")
 )()
 
-const keywords = [ "actor", "actress", "apostle", "archbishop", "architect",
-  "artist", "astrologer", "astronomer", "author", "businessman", "bishop",
-  "chancellor", "composer", "cosmonaut", "chemist", "designer", "diplomat",
-  "doctor", "dramatist", "economist", "educator", "engineer", "emperor",
-  "essayist", "explorer", "friar", "geographer", "general", "hajduk", "hero",
-  "historian", "illustrator", "industrialist", "inventor", "journalist",
-  "jurist", "king", "lawyer", "marshal", "martyr", "mathematician", "mayor",
-  "microbiologist", "military", "musician", "naturalist", "navigator",
-  "nobleman", "noblewoman", "novelist", "pastor", "painter", "pedagogue",
-  "pharmacist", "philologist", "philosopher", "physician", "physicist",
-  "pianist", "pilot", "playwright", "poet", "polymath", "politician",
-  "preacher", "president", "priest", "prince", "printmaker", "professor",
-  "publicist", "revolutionary", "ruler", "saint", "scientist", "sculptor",
-  "she", "singer", "sociologist", "soldier", "statesman", "teacher", "theatre",
-  "theologian", "translator", "violinist", "voivode", "woman", "writer"
+// manually added
+// psychologist
+const ignore = ["she", "female"]
+
+const equivalents = {
+  artist: ["music", "dramatist", "painter", "sculptor", "theatre", "film director", "screenwriter"],
+  music: ["organist", "conductor", "singer", "songwriter", "soprano", "tenor", "violonist", "guitarist"],
+  military: ["colonel", "general", "marshal", "commander", "privateer", "admiral", "lieutenant", "guerrilla figther", "officer"],
+  writer: ["journalist", "poet", "novelist", "philosopher", "playwright", "historian", "folklorist", "translator", "publicist", "essayist", "dramatist"],
+  woman: ["she", "noblewoman", "female", "nun", "sister", "duchess", "actress"],
+  ruler: ["king", "queen", "voivode", "duke", "count", "sultan", "caliph"],
+  religion: ["pastor", "theologian", "patriarch", "saint", "cleric", "abbot", "prelate", "bishop", "monk", "nun"],
+  scientist: ["anatomist", "archaeologist", "bacteriologist", "biochemist", "physicist", "entomologist"],
+  sport: ["athlete", "footbaler", "runner", "bicycle racer", "cyclist", "racing driver", "tennis player", "swimmer", "gymnast"]
+}
+
+const keywords = ["abbot", "actor", "activist", "actress", "admiral", "agronomist",
+  "alchemist", "anarchist", "anatomist", "apostle", "archaeologist",
+  "archbishop", "architect", "artist", "astrologer", "astronomer", "athlete",
+  "author", "aviator", "bacteriologist", "biochemist", "businessman",
+  "biologist", "bishop", "botanist", "boxer", "caliph", "cartographer",
+  "chancellor", "cleric", "colonel", "conductor", "commander", "composer",
+  "conquistador", "cosmonaut", "chemist", "cyclist", "designer", "diplomat",
+  "doctor", "dramatist", "duchess", "duke", "economist", "educator", "engineer",
+  "emperor", "entomologist", "entrepreneur", "essayist", "ethnologist",
+  "explorer", "female", "filmmaker", "film director", "folklorist",
+  "footballer", "friar", "general", "geographer", "geologist", "guerrilla fighter",
+  "hajduk", "hero", "historian", "illustrator", "industrialist",
+  "inventor", "organist", "jazz", "journalist", "judge", "jurist", "king",
+  "knight", "lawyer", "legendary", "librarian", "linguist", "lieutenant",
+  "magistrate", "marshal", "martyr", "mathematician", "mayor", "merchant",
+  "microbiologist", "military", "missionary", "monk", "musician",
+  "musicologist", "mythology", "nationalist", "naturalist", "navigator",
+  "neurologist", "nobleman", "noblewoman", "novelist", "officer", "orator",
+  "pastor", "painter", "partisan", "patriarch", "patriot", "pedagogue",
+  "pharmacist", "philanthropist", "philologist", "philosopher", "photographer",
+  "physician", "physicist", "pianist", "pilot", "playwright", "poet",
+  "polymath", "politician", "preacher", "prelate", "president", "priest",
+  "prince", "princess", "printmaker", "prime minister", "privateer",
+  "professor", "publicist", "queen", "resistance fighter", "racing driver",
+  "revolutionary", "risorgimento", "ruler", "sailor", "saint", "scholar",
+  "scientist", "screenwriter", "sculptor", "she", "singer", "sociologist",
+  "soldier", "songwriter", "soprano", "statesman", "sultan", "surgeon",
+  "teacher", "tenor", "tennis player", "theatre", "theologian",
+  "trade unionist", "union leader", "translator", "violinist", "voivode", "woman",
+  "writer", "zoologist"
 ]
 
 const updatePersonsDb = (country) => R.pipe(
@@ -347,7 +389,7 @@ const updatePersonsDb = (country) => R.pipe(
   then(keywordsUpdate)
 )(country)
 
-const keywordsExtract = (str) => R.pipe(
+const keywordsFromSummary = (str) => R.pipe(
   // Avoid matching general when the word is generally, for example.
   R.map(k => str.match(new RegExp(" " + k + "( |,|\\.|;)", "i"))),
   R.filter(R.empty),
@@ -360,13 +402,14 @@ const keywordsExtract = (str) => R.pipe(
 
 const keywordsUpdate = () => R.pipe(
   readPersons,
-  R.map(e => R.assoc("keywords", keywordsExtract(e.summary), e)),
+  R.map(e => R.assoc("keywords", keywordsFromSummary(e.summary), e)),
   writePersons
 )()
 
 // keywords - array of arrays of strings.
 // Count the number of occurence for all the unique keywords
 const keywordsCount = (keywords) => R.pipe(
+  R.reject(R.isNil),
   R.flatten,
   R.reject(R.isNil),
   R.uniq,  
