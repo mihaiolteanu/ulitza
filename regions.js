@@ -2,14 +2,6 @@
 // regions and all available countries.
 import * as R from "ramda"
 
-export const osmLink = country => R.pipe(  
-  // Select the region containing the searched country
-  R.find(R.find(R.find(R.propEq(0, country)))),
-  // Region's name
-  R.head,
-  region => `http://download.geofabrik.de/${region}/${country}-latest.osm.pbf`,    
-)(regions)
-
 // All countries, for all regions
 const countryEntries = () => R.pipe(  
   R.chain(R.tail),  
@@ -18,15 +10,20 @@ const countryEntries = () => R.pipe(
 
 // Return a single `country` entry (name, frequency).
 const countryEntry = country => R.find(R.propEq(0, country), countryEntries())
+
 export const countries = R.compose(R.map(R.head), countryEntries)
+
 export const minEponymFrequency = R.compose(R.prop(1), countryEntry)
+
+export const countryRegion = (country) => R.pipe(
+  R.find(R.find(R.find(c => c[0] === country))),
+  R.head
+)(regions)
 
 // All regions and countries as they appear in the openstreetmap (osm) database,
 // http://download.geofabrik.de/
 const regions = [
-  // Region name (osm)
-  ["africa", [
-    // Country name (osm)            Eponym Minimum Frequency
+  ["africa", [    
     ["algeria",                      3],
     ["angola",                       2],
     ["benin",                        2],

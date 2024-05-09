@@ -1,24 +1,23 @@
 import { program } from "commander"
 import fs from "fs"
 import * as R from "ramda"
-import * as F from "fluture"
-import S from "sanctuary"
 import chalk from "chalk"
 import { countries, osmLink } from "./regions.js"
 import { equivalentDups, equivalentDupsAll } from "./equivalents.js"
-import {
-  extractOsmData,
-  parseOsmData,
-  osmPath,
-  inspectOsmData,
-  linkDups,
-  linksConsistency,
-  linksConsistencyAll,
-  linkDupsAll,  
-  htmlPageCountry,
-  htmlPageAllCountries,
-  htmlPageWorldwide
-} from "./generator.js"
+// import {
+//   extractOsmData,
+//   parseOsmData,
+//   osmPath,
+//   inspectOsmData,
+//   linkDups,
+//   linksConsistency,
+//   linksConsistencyAll,
+//   linkDupsAll,  
+// } from "./generator.js"
+
+import { htmlPageCountry, htmlPageWorldwide, htmlPageAllCountries } from "./html_pages.js"
+import { downloadOsm, extractOsmData, inspectOsmData } from "./osm.js"
+import { occupationsUpdate } from "./persons.js"
 
 const handleCheck = (message, res) => R.ifElse(
   () => R.isEmpty(res),
@@ -32,24 +31,7 @@ program
 program
   .command('download <country>')
   .description("Download the latest osm data for the given <country>.")
-  .action(country =>
-    R.pipe(
-      osmLink,
-      link => link === "" ? S.Nothing : S.Just(link),
-      // promises are not a vaild datatype for Maybe, use Fluture
-      R.map(F.encaseP(fetch)),
-      R.map(F.fork
-        (console.log)
-        (v => v.arrayBuffer()
-          .then(Buffer.from)
-          .then(buffer => fs.createWriteStream(osmPath(country)).write(buffer))
-          .catch(console.log))),
-      S.maybe
-        (chalk.blue("Country unavailable, try one of:\n") + R.join(" | ", countries()))
-        // ("country not found; see the list of available countries with the <countries> command")
-        (R.always(`Downloading the latest osm data to osm_data/${country}...`)),
-      console.log
-    )(country))
+  .action(downloadOsm)
 
 program
   .command('extract <country>')
@@ -101,5 +83,11 @@ program
   .command('html-worldwide')
   .description('Generate a html page with the worldwide eponyms frequencies.')
   .action(htmlPageWorldwide)
+
+program
+  .command('occupations-update')
+  .description('Update the occupations list for each person in the persons.json\
+  file based on the specified "ocupations" and "categories" lists.')
+  .action(occupationsUpdate)
 
 program.parse()
