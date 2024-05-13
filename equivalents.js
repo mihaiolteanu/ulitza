@@ -409,7 +409,7 @@ const equivalents = {
     ["Flinders",    "Matthew Flinders"],
     ["George",      "King Georges"],
     ["St Georges",  "St. George"],
-    ["St Johns",    "St John"]
+    ["St Johns",    "St John"],
     ["William",     "Williams",
                     "King William"]
   ],
@@ -3085,7 +3085,7 @@ const equivalents = {
                          "St Thomas'"],
     ["Victoria",         "Queen Victoria"],
     ["Watt",             "James Watt",
-                         "Watts"]
+                         "Watts"],
     ["Wallis",           "Barnes Wallis"],
     ["Wellington",       "Duke of Wellington"],    
   ],
@@ -4345,7 +4345,7 @@ const equivalents = {
                            "Jenderal Achmad Yani",
                            "Jenderal Ahmad Yani",
                            "A. Yani"],
-    ["Basuki Rahmat",      "Jenderal Basuki Rachmat"]
+    ["Basuki Rahmat",      "Jenderal Basuki Rachmat"],
     ["Bayint Naung",       "ဘုရင့်နောင်"],
     ["Bogyoke",            "ဗိုလ်ချုပ်",
                            "Aung San"],

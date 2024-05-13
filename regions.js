@@ -1,19 +1,19 @@
-// OSM links to specific country file containing the street name data plus the
-// regions and all available countries.
 import * as R from "ramda"
 
-// All countries, for all regions
+// All country names and street frequencies, for all regions
 const countryEntries = () => R.pipe(  
   R.chain(R.tail),  
   R.reduce(R.concat, [])
 )(regions)
 
-// Return a single `country` entry (name, frequency).
-const countryEntry = country => R.find(R.propEq(0, country), countryEntries())
-
+// All country names, for all regions
 export const countries = R.compose(R.map(R.head), countryEntries)
 
-export const minEponymFrequency = R.compose(R.prop(1), countryEntry)
+export const minStreetFrequency = country => R.pipe(
+  countryEntries,
+  R.find(R.compose(R.equals(country), R.prop(0))),
+  R.prop(1),  
+)()
 
 export const countryRegion = (country) => R.pipe(
   R.find(R.find(R.find(c => c[0] === country))),

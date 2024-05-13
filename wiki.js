@@ -1,12 +1,30 @@
-// Each person has an occupation, like scientist, writer, etc or belongs to a
-// category of ocupations like military. 
+// The wikipedia links, manually added for each person, are used to extract a
+// short summary and an image thumbnail using the wikipedia REST API v1. From
+// that short summary I also extract the person's occupation(s), like poet,
+// politician or hero. This is a faster (and a temporary way) to tag each person
+// and enable the filtering-by-occupation feature. The manually added
+// occupations are added under the occupations_extra field (the slow but more
+// accurate way). All this data is saved under a single wiki.json file since
+// there are persons that overlap across countries and can be reused. If a
+// person was a colonel or general, for example, I'm also taking an additional
+// parsing step and add the military occupation to them. Similarly for other
+// occupations (see the end of file).
 
 import * as R from "ramda"
+import fs from 'fs-extra'
+import stringify from "json-stringify-pretty-compact"
+import { readCountry } from "./osm.js"
+
+// RW json data
+const write = file => data =>
+  fs.writeFileSync(file, stringify(data, { maxLength: 120 }))
+const read = R.compose(JSON.parse, fs.readFileSync)
+
+const writeWiki  = write("data/wiki.json")
+export const readWiki   = () => read("data/wiki.json")
 
 const then = fn => pr => pr.then(fn);
 const delay = ms => new Promise(res => setTimeout(res, ms))
-// upcase first letter
-const upCase = str => str.charAt(0).toUpperCase() + str.slice(1);
 
 // Given a valid wikipedia url, return info about the page, such as name, image
 // and a summary
@@ -30,14 +48,14 @@ const wiki = async url => {
       image: R.pipe(
         R.propOr("", "thumbnail"),
         // Less popular wiki entries sometimes don't have a picture.
-        R.propOr("../placeholder.png", "source"))
-      (r),
+        R.propOr("../placeholder.png", "source")
+      )(r),
       summary: R.propOr("", "extract")(r)
     }))
 }
 
-const updatePersonsDb = (country) => R.pipe(
-  readEponyms,
+export const updateWiki = (country) => R.pipe(
+  readCountry,
   // Skip date
   R.tail,
   // Skip street names not named after a person
@@ -50,11 +68,11 @@ const updatePersonsDb = (country) => R.pipe(
   then(R.map(w => ({
     [w.url]: R.omit(["url"], w)
   }))),
-  // Add or update the persons db
+  // Add or update the local wiki
   then(R.mergeAll),
-  then(R.mergeDeepRight(readPersons())),
-  then(writePersons),
-  then(keywordsUpdate)
+  then(R.mergeDeepRight(readWiki())),
+  then(writeWiki),
+  then(occupationsUpdate)
 )(country)
 
 // Some keywords/occupations are subdomains of a higher domain, like a poet is a
@@ -84,9 +102,9 @@ const occupationsFromSummary = (str) => R.pipe(
 // Update the "ocupations" list for each person.
 // Useful when adding/removing entries in the ocupations or categories lists
 export const occupationsUpdate = () => R.pipe(
-  readPersons,
+  readWiki,
   R.map(e => R.assoc("occupations", occupationsFromSummary(e.summary), e)),
-  writePersons
+  writeWiki
 )()
 
 // Count the number of occurence for all unique occupations
@@ -99,14 +117,13 @@ export const occupationsCount = (persons) => R.pipe(
   R.uniq,  
   a => R.zipObj(a, R.repeat(0, a.length)),  
   R.mapObjIndexed((_, key) => R.pipe(    
-    R.map(R.includes(key)),
-    
+    R.map(R.includes(key)),    
     R.count(R.equals(true)),
     R.applySpec({
       keyword: R.always(key),
       count: R.identity      
     })
-  )(keywords)),  
+  )(persons)),  
   R.values,
   R.sortBy(R.prop("count")),
   R.reverse,  
@@ -124,7 +141,6 @@ export const occupationsMerge = (person) => {
   )(person)
   return R.omit(["occupations_extra"], person)
 }
-
 
 // manually added
 // psychologist

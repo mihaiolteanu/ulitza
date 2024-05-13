@@ -1,10 +1,15 @@
-import { occupationsCount, occupationsMerge } from "./persons.js"
-import M from 'mustache'
 import * as R from "ramda"
+import fs from 'fs-extra'
+import { readFile, writeFile } from "fs/promises"
+import M from 'mustache'
+import { occupationsCount, occupationsMerge, readWiki } from "./wiki.js"
+import { worldwideEponyms, readCountry, countriesPath } from "./osm.js"
 
+// upcase first letter
+const upCase = str => str.charAt(0).toUpperCase() + str.slice(1);
 
 export const htmlPageCountry = country => R.pipe(
-  readEponyms,
+  readCountry,
   // Skip date and skip street names not named after a person
   R.tail,
   R.reject(R.compose(R.isEmpty, R.prop(2))),
@@ -17,7 +22,7 @@ export const htmlPageCountry = country => R.pipe(
 export const htmlPageAllCountries = () => R.pipe(
   R.compose(R.map(R.replace(".json", "")), fs.readdirSync),  
   R.map(htmlPageCountry)
-)(eponymsPath)
+)(countriesPath)
 
 export const htmlPageWorldwide = () => R.pipe(
   worldwideEponyms,
@@ -26,24 +31,23 @@ export const htmlPageWorldwide = () => R.pipe(
   htmlPage("worldwide")
 )()
 
-
 // Apply the html template to country and the list of persons and save it.
 const applyHtmlTemplate = country => persons => 
   readFile("./data/template.html", { encoding: 'utf8' })  
     .then(template =>       
       writeFile(`./data/html/${country}.html`, M.render(template, persons), 'utf8'))
 
-// Generate an html page with all the eponyms, wiki summary, wiki link and
+// Generate an html page with all persons, wiki summary, wiki link and
 // thumbnail for the given country
 const htmlPage = country => entries => R.pipe(
-  // Add extra info, like summary and image from the persons db  
+  // Add extra info, like summary and image from the local wiki
   R.map(e => ({
     url: e[0],
     count: e[1],
-    ...readPersons()[e[0]]
+    ...readWiki()[e[0]]
   })),  
   R.map(occupationsMerge),  
-  // If the person is not in the persons.json db, do not include it.
+  // If the person is not in the local wiki, do not include it.
   R.filter(R.has("name")),  
   R.applySpec({
     country:       () => upCase(country),
@@ -55,4 +59,3 @@ const htmlPage = country => entries => R.pipe(
   }),  
   applyHtmlTemplate(country),
 )(entries)
-

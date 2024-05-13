@@ -1,23 +1,11 @@
 import { program } from "commander"
-import fs from "fs"
 import * as R from "ramda"
 import chalk from "chalk"
-import { countries, osmLink } from "./regions.js"
 import { equivalentDups, equivalentDupsAll } from "./equivalents.js"
-// import {
-//   extractOsmData,
-//   parseOsmData,
-//   osmPath,
-//   inspectOsmData,
-//   linkDups,
-//   linksConsistency,
-//   linksConsistencyAll,
-//   linkDupsAll,  
-// } from "./generator.js"
-
 import { htmlPageCountry, htmlPageWorldwide, htmlPageAllCountries } from "./html_pages.js"
-import { downloadOsm, extractOsmData, inspectOsmData } from "./osm.js"
-import { occupationsUpdate } from "./persons.js"
+import { downloadOsm, extractOsmData, inspectOsmData, parseOsmData, linkDups,
+  linksConsistency, linkDupsAll, linksConsistencyAll } from "./osm.js"
+import { occupationsUpdate, updateWiki } from "./wiki.js"
 
 const handleCheck = (message, res) => R.ifElse(
   () => R.isEmpty(res),
@@ -40,10 +28,9 @@ program
   .action(extractOsmData)
 
 program
-  .command('update [country]')
-  .description("Generate the eponym file for the given [country]. If [country]\
- is not specified, generate the eponym file containing the data for all countries.")
-  .action(country => country ? parseOsmData(country) : statistics())
+  .command('update <country>')
+  .description("Generate the eponym file for the given <country>.")
+  .action(parseOsmData)
 
 program
   .command('check [country]')
@@ -68,6 +55,11 @@ program
   .description("Inspect the <country> raw osm data. Useful in finding new osm tags\
  containing possible eponyms. Only needed if we're going to modify the generator.")
   .action(inspectOsmData)
+
+program
+  .command('wiki <country>')
+  .description('Extract/update info for <country>\'s persons from wikipedia and save them locally.')
+  .action(updateWiki)
 
 program
   .command('html <country>')

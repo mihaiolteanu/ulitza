@@ -4,54 +4,36 @@ import fs from 'fs-extra'
 import osm_parser from 'osm-pbf-parser'
 import stringify from "json-stringify-pretty-compact"
 import * as R from "ramda"
-import * as F from "fluture"
-import S from "sanctuary"
-import chalk from "chalk"
 import { equivalentStreet } from "./equivalents.js"
 import {stripAffixes} from "./affixes.js"
-import { countries, minEponymFrequency, countryRegion } from "./regions.js"
-import { readFile, writeFile } from "fs/promises"
+import { minStreetFrequency, countryRegion } from "./regions.js"
+// import { then } from "./pills.js"
 
-export const osmPath = country => path.resolve("data/osm_data", country + "-latest.osm.pbf")
-const inspectPath = country => path.resolve("out", country + "-inspect.json") 
+export const osmPath = country => path.resolve("data/osm_pbf", country + "-latest.osm.pbf")
+const inspectPath = country => path.resolve("data/osm_inspect", country + "-inspect.json") 
 
 // RW json data
 const write = file => data =>
   fs.writeFileSync(file, stringify(data, { maxLength: 120 }))
 const read = R.compose(JSON.parse, fs.readFileSync)
+const then = fn => pr => pr.then(fn);
 
 // RW out files
-const rawPath      = path.resolve(fs.ensureDirSync("data/raw") || "raw")
-const rawFile      = country => path.resolve(rawPath, country + ".json")
-const readRaw      = country => read(rawFile(country))
-const eponymsPath  = "data/countries"
-const eponymsFile  = country => path.resolve(eponymsPath, country + ".json")
-const writeEponyms = country => write(eponymsFile(country))
-const readEponyms  = country => read(eponymsFile(country))
-const writePersons = write("data/persons.json")
-const readPersons  = () => read("data/persons.json")
-
-export const osmLink = country => R.pipe(    
-  countryRegion,  
-  region => `http://download.geofabrik.de/${region}/${country}-latest.osm.pbf`,    
-)(country)
+const rawPath       = path.resolve(fs.ensureDirSync("data/osm_raw") || "data/osm_raw")
+const rawFile       = country => path.resolve(rawPath, country + ".json")
+const readRaw       = country => read(rawFile(country))
+export const countriesPath = "data/countries"
+const countryFile   = country => path.resolve(countriesPath, country + ".json")
+const writeCountry  = R.compose(write, countryFile)
+export const readCountry   = R.compose(read, countryFile)
 
 export const downloadOsm = (country) => R.pipe(
-  osmLink,
-  R.tap(console.log),
-  link => link === "" ? S.Nothing : S.Just(link),
-  // promises are not a vaild datatype for Maybe, use Fluture
-  R.map(F.encaseP(fetch)),
-  R.map(F.fork
-        (console.log)
-        (v => v.arrayBuffer()
-          .then(Buffer.from)
-          .then(buffer => fs.createWriteStream(osmPath(country)).write(buffer))
-          .catch(console.log))),
-  S.maybe(chalk.blue("Country unavailable, try one of:\n") + R.join(" | ", countries()))
-        // ("country not found; see the list of available countries with the <countries> command")
-        (R.always(`Downloading the latest osm data to osm_data/${country}...`)),
-  console.log
+  countryRegion,
+  region => `http://download.geofabrik.de/${region}/${country}-latest.osm.pbf`,  
+  fetch,
+  then(v => v.arrayBuffer()),
+  then(Buffer.from),
+  then(buffer => fs.createWriteStream(osmPath(country)).write(buffer)),  
 )(country)
 
 // Get the file modified date from the OS; good enough to get a glimpse of the
@@ -160,7 +142,7 @@ export const parseOsmData = (country) => R.pipe(
   ),
   // Protect against garbage entries and very long files (lots of streets)
   R.reject(R.compose(
-    R.gt(minEponymFrequency(country)),
+    R.gt(minStreetFrequency(country)),
     R.prop(1))
   ),
   // Sort by most frequent street names first.
@@ -168,19 +150,13 @@ export const parseOsmData = (country) => R.pipe(
   hydrateStreets(country),
   // Add back the osm modified date
   R.prepend(R.head(readRaw(country))),
-  writeEponyms(country),    
+  writeCountry(country),    
 )(country)
 
-const readCountry = R.pipe(
-  eponymsFile,
-  fs.readFileSync,
-  JSON.parse
-)
-
 const hydrateStreets = (country) => streets =>
-  fs.existsSync(eponymsFile(country)) ?
+  fs.existsSync(countryFile(country)) ?
     R.pipe(
-      readEponyms,
+      readCountry,
       prevStreets =>
         R.map(entry =>
           R.pipe(
@@ -197,7 +173,7 @@ const hydrateStreets = (country) => streets =>
 
 // Gather all persons from all countries and make a summary of the most frequent
 // persons and the total number of streets they appear on.
-const worldwideEponyms = () => R.pipe(
+export const worldwideEponyms = () => R.pipe(
   R.compose(R.map(R.replace(".json", "")), fs.readdirSync),
   // Remove the last-updated line
   R.chain(R.compose(R.tail, readCountry)),
@@ -209,7 +185,7 @@ const worldwideEponyms = () => R.pipe(
   R.map(R.flatten),
   R.sortBy(R.prop(1)),
   R.reverse  
-)(eponymsPath)
+)(countriesPath)
 
 // Check the `country`.json file for same link assigned to multiple entries.  If
 // found, manually include them under a single person in the equivalents
@@ -228,7 +204,7 @@ export const linkDupsAll = () => R.pipe(
   R.map(R.juxt([R.identity, linkDups])),
   R.reject(R.propEq([], 1)),
   R.map(R.head)
-)(eponymsPath)
+)(countriesPath)
 
 // Check if, for the given country name, any of the links contain special
 // characters or do not contain wikipedia urls. Return them, if they do
@@ -247,4 +223,4 @@ export const linksConsistencyAll = () => R.pipe(
   R.map(R.juxt([R.identity, linksConsistency])),
   R.reject(R.propEq([], 1)),
   R.map(R.head)
-)(eponymsPath)
+)(countriesPath)
