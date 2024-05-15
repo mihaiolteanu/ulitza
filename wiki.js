@@ -2,18 +2,17 @@
 // short summary and an image thumbnail using the wikipedia REST API v1. From
 // that short summary I also extract the person's occupation(s), like poet,
 // politician or hero. This is a faster (and a temporary way) to tag each person
-// and enable the filtering-by-occupation feature. The manually added
-// occupations are added under the occupations_extra field (the slow but more
-// accurate way). All this data is saved under a single wiki.json file since
-// there are persons that overlap across countries and can be reused. If a
-// person was a colonel or general, for example, I'm also taking an additional
-// parsing step and add the military occupation to them. Similarly for other
-// occupations (see the end of file).
-
+// and enable the filtering-by-occupation feature, though it is not quite
+// exact. The manually added occupations are added under the occupations_extra
+// field (the slow but more accurate way). All this data is saved under a single
+// wiki.json file since there are persons that overlap across countries and can
+// be reused. If a person was a colonel or general, for example, I'm also taking
+// an additional parsing step and add the military occupation to them. Similarly
+// for other occupations (see the end of this file).
 import * as R from "ramda"
 import fs from 'fs-extra'
 import stringify from "json-stringify-pretty-compact"
-import { readCountry } from "./osm.js"
+import { readCountry } from "./pills.js"
 
 // RW json data
 const write = file => data =>

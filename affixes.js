@@ -1,12 +1,13 @@
 // Street names appear in multiple forms and can be suffixed or affixed with
-// nouns like boulevard, street, avenue or the multiple variants available in
-// all the different countries worldwide. Sometimes even the same street in the
-// same city is tagged with different such affixes. The only sane an natural
-// method if we want to extract frequencies is to strip all these affixes and
-// keep only the relevant part (the name of the person, for exemple).
-
-// All the affixes in this file are manually added and are based on the tags
-// seen on openstreetmap data.
+// nouns like boulevard, street, avenue and multiple other such variants, be
+// them in English or in the respective country's language. Sometimes even the
+// same street in the same city is tagged with different such affixes. The only
+// sane an natural method if we want to extract frequencies is to strip all
+// these affixes and keep only the relevant part, which is the name of the
+// person in our case.
+// All the affixes in this file, specified as regexes, are manually added and
+// are based on the street names seen in data/osm_raw/<country>.json files after
+// the "extract <country>" step.
 
 import * as R from "ramda"
 
@@ -133,7 +134,7 @@ const affixes = {
   "poland":                        /^(plac|aleja|aleje|trakt|przy|osiedle|rynek|stary|pod|na) |(ego|ski|-Straße| Straße)$/i,
   "polynesie-francaise":           /^(rue|boulevard|avenue|route|chemin) (du |de |)| (road)$/i,
   "portugal":                      /^(rua|largo|avenida|travessa|estrada|praça|praceta|av.|caminho|vale|quinta|bairpropParque) (caminho |)(de |dos |do |das |da |)/i,
-  "romania":                       /^(strada|aleea|bulevardul|calea|drumul|piața|piata|intrarea|șoseaua|str.|splaiul|prelungirea)( lui |)|( utca)$/i,
+  "romania":                       /^(strada|aleea|bulevardul|calea|drumul|piața|piata|intrarea|șoseaua|str.|splaiul|prelungirea|fundătura)( lui |)|( utca)$/i,
   "russia":                        /^(улица|переулок|проезд|проспект|Площадь|бульвар|Большая|(улица |дорога |аллея )([1-9])-(я|й|го|е) )|^[0-9]+-.*|(ская улица|ский переулок|ский проезд|улица|переулок|проезд|проспект|Площадь| бульвар| шоссе| тракт)$/ig,
   "scotland":                      / (street|road)$/i,
   "senegal-and-gambia":            /^(rue|route|avenue|boulevard|quai) (des |de la |de |la |du |)| (road|highway|street|avenue)$|[a-z][a-z](-| )[0-9]+$/ig,
@@ -167,3 +168,7 @@ const affixes = {
   "zambia":                        / (road|street|avenue|boulevard)$/i,
   "zimbabwe":                      / (street|road|avenue|drive|boulevard|close|way|rd)$/i
 }
+
+// console.log(
+//   stripAffixes("romania")("strada mihai eminescu")
+// )

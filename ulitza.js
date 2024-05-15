@@ -23,38 +23,40 @@ program
 
 program
   .command('extract <country>')
-  .description("Extract a first, raw, version of all the street names for\
- the given <country>.")
+  .description("Extract a first, raw, version of all the street names for <country>.")
   .action(extractOsmData)
-
-program
-  .command('update <country>')
-  .description("Generate the eponym file for the given <country>.")
-  .action(parseOsmData)
-
-program
-  .command('check [country]')
-  .description("Verify if [country] has duplicate equivalent entries, duplicate urls or\
- consistent urls. If the [country] is not specified, return a list of all the\
- countries where such checks fail.")
-  .action(country => {
-    if (country) {
-      handleCheck("Duplicate Equivalents", equivalentDups(country))
-      handleCheck("Duplicate Links",       linkDups(country))
-      handleCheck("Inconsistent Links",    linksConsistency(country))
-    }
-    else {
-      handleCheck("Countries with duplicate equivalents", equivalentDupsAll())
-      handleCheck("Countries with duplicate links",       linkDupsAll())
-      handleCheck("Countries with inconsistent links",    linksConsistencyAll())
-    }
-  })
 
 program
   .command('inspect <country> <regex>')
   .description("Inspect the <country> raw osm data. Useful in finding new osm tags\
- containing possible eponyms. Only needed if we're going to modify the generator.")
+ containing possible streets. Only needed if we're going to modify the generator.")
   .action(inspectOsmData)
+
+program
+  .command('update <country>')
+  .description("Generate the eponym file for <country>.")
+  .action(parseOsmData)
+
+program
+  .command('check <country>')
+  .description("Verify if <country> has duplicate equivalent entries, duplicate urls or\
+ consistent urls.")
+  .action(country => {
+    handleCheck("Duplicate Equivalents", equivalentDups(country))
+    handleCheck("Duplicate Links",       linkDups(country))
+    handleCheck("Inconsistent Links",    linksConsistency(country))    
+  })
+
+program
+  .command('check-all')
+  .description("Check all countries for duplicate equivalent entries, duplicate\
+  urls or consistent urls. Return a list of all the countries where such checks\
+  fail, if any.")
+  .action(() => {
+    handleCheck("Countries with duplicate equivalents", equivalentDupsAll())
+    handleCheck("Countries with duplicate links",       linkDupsAll())
+    handleCheck("Countries with inconsistent links",    linksConsistencyAll())
+  })
 
 program
   .command('wiki <country>')
@@ -68,7 +70,7 @@ program
 
 program
   .command('html-all-countries')
-  .description('Generate a html page all coutries.')
+  .description('Generate a html page for all countries in a single step.')
   .action(htmlPageAllCountries)
 
 program

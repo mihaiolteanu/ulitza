@@ -1,12 +1,9 @@
 import * as R from "ramda"
-import fs from 'fs-extra'
-import { readFile, writeFile } from "fs/promises"
 import M from 'mustache'
+import { readFile, writeFile } from "fs/promises"
 import { occupationsCount, occupationsMerge, readWiki } from "./wiki.js"
-import { worldwideEponyms, readCountry, countriesPath } from "./osm.js"
-
-// upcase first letter
-const upCase = str => str.charAt(0).toUpperCase() + str.slice(1);
+import { personsWorldwide } from "./osm.js"
+import { readCountry, availableCountries } from "./pills.js"
 
 export const htmlPageCountry = country => R.pipe(
   readCountry,
@@ -19,23 +16,17 @@ export const htmlPageCountry = country => R.pipe(
   htmlPage(country)
 )(country)
 
-export const htmlPageAllCountries = () => R.pipe(
-  R.compose(R.map(R.replace(".json", "")), fs.readdirSync),  
+export const htmlPageAllCountries = R.pipe(
+  availableCountries,
   R.map(htmlPageCountry)
-)(countriesPath)
+)
 
 export const htmlPageWorldwide = () => R.pipe(
-  worldwideEponyms,
+  personsWorldwide,
   // There are over 10000 entries, take out some of them
   R.filter(e => e[1] > 2),
   htmlPage("worldwide")
 )()
-
-// Apply the html template to country and the list of persons and save it.
-const applyHtmlTemplate = country => persons => 
-  readFile("./data/template.html", { encoding: 'utf8' })  
-    .then(template =>       
-      writeFile(`./data/html/${country}.html`, M.render(template, persons), 'utf8'))
 
 // Generate an html page with all persons, wiki summary, wiki link and
 // thumbnail for the given country
@@ -59,3 +50,12 @@ const htmlPage = country => entries => R.pipe(
   }),  
   applyHtmlTemplate(country),
 )(entries)
+
+// Apply the html template to country and the list of persons and save it.
+const applyHtmlTemplate = country => persons => 
+  readFile("./data/template.html", { encoding: 'utf8' })  
+    .then(template =>       
+      writeFile(`./data/html/${country}.html`, M.render(template, persons), 'utf8'))
+
+// upcase first letter
+const upCase = str => str.charAt(0).toUpperCase() + str.slice(1);

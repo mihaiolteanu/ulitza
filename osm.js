@@ -1,5 +1,4 @@
 import {Transform} from "stream"
-import path from "path"
 import fs from 'fs-extra'
 import osm_parser from 'osm-pbf-parser'
 import stringify from "json-stringify-pretty-compact"
@@ -7,25 +6,7 @@ import * as R from "ramda"
 import { equivalentStreet } from "./equivalents.js"
 import {stripAffixes} from "./affixes.js"
 import { minStreetFrequency, countryRegion } from "./regions.js"
-// import { then } from "./pills.js"
-
-export const osmPath = country => path.resolve("data/osm_pbf", country + "-latest.osm.pbf")
-const inspectPath = country => path.resolve("data/osm_inspect", country + "-inspect.json") 
-
-// RW json data
-const write = file => data =>
-  fs.writeFileSync(file, stringify(data, { maxLength: 120 }))
-const read = R.compose(JSON.parse, fs.readFileSync)
-const then = fn => pr => pr.then(fn);
-
-// RW out files
-const rawPath       = path.resolve(fs.ensureDirSync("data/osm_raw") || "data/osm_raw")
-const rawFile       = country => path.resolve(rawPath, country + ".json")
-const readRaw       = country => read(rawFile(country))
-export const countriesPath = "data/countries"
-const countryFile   = country => path.resolve(countriesPath, country + ".json")
-const writeCountry  = R.compose(write, countryFile)
-export const readCountry   = R.compose(read, countryFile)
+import { countryFile, availableCountries, pbfFile, inspectFile, rawFile, read, readCountry, writeCountry, then } from "./pills.js"
 
 export const downloadOsm = (country) => R.pipe(
   countryRegion,
@@ -33,22 +14,22 @@ export const downloadOsm = (country) => R.pipe(
   fetch,
   then(v => v.arrayBuffer()),
   then(Buffer.from),
-  then(buffer => fs.createWriteStream(osmPath(country)).write(buffer)),  
+  then(buffer => fs.createWriteStream(pbfFile(country)).write(buffer)),  
 )(country)
 
 // Get the file modified date from the OS; good enough to get a glimpse of the
 // freshness of osm data; the alternative is to extract the modified date from
 // the osm file (more complicated)
 const modifiedDateOSM = country => R.pipe(
-  osmPath,
+  pbfFile,
   fs.statSync,
   f => f.mtime.toDateString().substring(4),
 )(country)
 
 // Explore the osm data.  I've used this to explore what osm fields contain
 // street data.
-export const inspectOsmData = (country, regex) => fs.createReadStream(osmPath(country))
-  .on("open", () => fs.writeFileSync(inspectPath(country), "create new file"))
+export const inspectOsmData = (country, regex) => fs.createReadStream(pbfFile(country))
+  .on("open", () => fs.writeFileSync(inspectFile(country), "create new file"))
   .pipe(new osm_parser())
   .pipe(new Transform({
     objectMode: true,
@@ -60,7 +41,7 @@ export const inspectOsmData = (country, regex) => fs.createReadStream(osmPath(co
         // Ignore non-interesting fields
         R.map(R.omit(["id", "lat", "lon", "info", "refs", "members"])),
         out => out.length > 0 ?
-          fs.appendFileSync(inspectPath(country), JSON.stringify(out, null, 2))
+          fs.appendFileSync(inspectFile(country), JSON.stringify(out, null, 2))
           : "ignore",
         () => callback(null, null)
       )(chunk)
@@ -70,7 +51,7 @@ export const extractOsmData = (country) => {
   const streets = fs.createWriteStream(rawFile(country))
   // Add metadata; only the osm last modified date, for now
   streets.write(`[["${modifiedDateOSM(country)}"]`)
-  fs.createReadStream(osmPath(country))
+  fs.createReadStream(pbfFile(country))
     .pipe(new osm_parser())
     .pipe(new Transform({
       objectMode: true,
@@ -110,7 +91,7 @@ export const extractOsmData = (country) => {
 }
 
 export const parseOsmData = (country) => R.pipe(
-  readRaw,
+  R.compose(read, rawFile),
   // Skip the osm modified date
   R.tail,
   // Strip affixes and replace with equivalents;  keep city unchanged
@@ -148,8 +129,8 @@ export const parseOsmData = (country) => R.pipe(
   // Sort by most frequent street names first.
   R.sortWith([R.descend(R.prop(1))]),
   hydrateStreets(country),
-  // Add back the osm modified date
-  R.prepend(R.head(readRaw(country))),
+  // Add back the osm modified date R.compose(R.prepend, R.head read, rawFile)
+  R.prepend(R.compose(R.head, read, rawFile)(country)),
   writeCountry(country),    
 )(country)
 
@@ -173,8 +154,8 @@ const hydrateStreets = (country) => streets =>
 
 // Gather all persons from all countries and make a summary of the most frequent
 // persons and the total number of streets they appear on.
-export const worldwideEponyms = () => R.pipe(
-  R.compose(R.map(R.replace(".json", "")), fs.readdirSync),
+export const personsWorldwide = () => R.pipe(
+  availableCountries,
   // Remove the last-updated line
   R.chain(R.compose(R.tail, readCountry)),
   // Keep name of persons only
@@ -184,14 +165,14 @@ export const worldwideEponyms = () => R.pipe(
   R.toPairs,
   R.map(R.flatten),
   R.sortBy(R.prop(1)),
-  R.reverse  
-)(countriesPath)
+  R.reverse
+)()
 
 // Check the `country`.json file for same link assigned to multiple entries.  If
 // found, manually include them under a single person in the equivalents
 // section.
 export const linkDups = (country) => R.pipe(
-  readCountry,    
+  readCountry,
   R.groupBy(R.prop(2)),
   R.mapObjIndexed(R.length),
   R.toPairs,
@@ -199,15 +180,15 @@ export const linkDups = (country) => R.pipe(
   R.reject(R.propEq('', 0))    
 )(country)
 
-export const linkDupsAll = () => R.pipe(  
-  R.compose(R.map(R.replace(".json", "")), fs.readdirSync),  
+export const linkDupsAll = R.pipe(  
+  availableCountries,
   R.map(R.juxt([R.identity, linkDups])),
   R.reject(R.propEq([], 1)),
   R.map(R.head)
-)(countriesPath)
+)
 
-// Check if, for the given country name, any of the links contain special
-// characters or do not contain wikipedia urls. Return them, if they do
+// Return any links containing special characters for the given country or links
+// other than wikipedia ones.
 export const linksConsistency = R.pipe(
   readCountry,
   R.tail,
@@ -217,10 +198,10 @@ export const linksConsistency = R.pipe(
 )
 
 // Check if any of the countries fail to pass the link consistency
-// checks. Return their names if the do not.
-export const linksConsistencyAll = () => R.pipe(
-  R.compose(R.map(R.replace(".json", "")), fs.readdirSync),
+// checks. Return their names if they do not.
+export const linksConsistencyAll = R.pipe(
+  availableCountries,
   R.map(R.juxt([R.identity, linksConsistency])),
   R.reject(R.propEq([], 1)),
   R.map(R.head)
-)(countriesPath)
+)

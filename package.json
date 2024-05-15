@@ -33,7 +33,10 @@
         "sanctuary": "^3.1.0"
     },
     "devDependencies": {
+        "@eslint/js": "^9.2.0",
         "@types/mustache": "^4.2.5",
-        "@types/ramda": "^0.29.12"
+        "@types/ramda": "^0.29.12",
+        "eslint": "^9.2.0",
+        "globals": "^15.2.0"
     }
 }

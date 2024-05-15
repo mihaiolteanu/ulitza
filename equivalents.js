@@ -5,11 +5,12 @@
 // avoided or other times initials are employed. In cases where all these
 // variations refer to the exact same person, it makes sense to gather all this
 // diversity under a single, standard name. It sometimes happens that the same
-// street in the same city is tagged differently so it makes sense to consider
-// it as just one instance of that name.
+// street in the same city is tagged differently so this is a defense against
+// counting it twice.
 
-// All the data under the equivalents entry is manually added and is based on
-// the street names seen on openstreetmap.
+// All the data under the equivalents entry is manually added and are based on
+// the street names seen in data/osm_raw/<country>.json files after the "extract
+// <country>" step.
 
 import * as R from "ramda"
 
@@ -5964,7 +5965,8 @@ const equivalents = {
                                       "D. Gherea"],
     ["Cristian Tell",                 "General Christian Tell"],
     ["Cuza Vodă",                     "Alexandru Ioan Cuza",
-                                      "Cuza-Vodă"],
+                                      "Cuza-Vodă",
+                                      "A. I. Cuza"],
     ["Diaconu Coresi",                "Diaconul Coresi"],
     ["Doctor Ion Cantacuzino",        "Doctor Cantacuzino",
                                       "Ioan Cantacuzino"],
