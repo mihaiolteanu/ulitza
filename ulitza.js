@@ -2,7 +2,7 @@ import { program } from "commander"
 import * as R from "ramda"
 import chalk from "chalk"
 import { equivalentDups, equivalentDupsAll } from "./equivalents.js"
-import { htmlPageCountry, htmlPageWorldwide, htmlPageAllCountries } from "./html_pages.js"
+import { htmlPageCountry, htmlPageWorldwide, htmlPageAllCountries } from "./html.js"
 import { osmDownload, osmExtract, osmInspect, osmParse } from "./osm.js"
 import { occupationsUpdate, updateWiki, linkDups, linkDupsAll, linksConsistency, linksConsistencyAll } from "./persons.js"
 
