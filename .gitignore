@@ -1,8 +1,5 @@
 node_modules
-data/osm_pbf
-data/osm_raw
-data/osm_inspect
-data/html
-.log
-eponyms.js
-eponyms.min.js
+data/osm/pbf
+data/osm/raw
+data/osm/inspect
+data/html/countries

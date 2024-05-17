@@ -1,35 +1,29 @@
-import {Transform} from "stream"
+import { Transform } from "stream"
 import fs from 'fs-extra'
 import osm_parser from 'osm-pbf-parser'
 import stringify from "json-stringify-pretty-compact"
 import * as R from "ramda"
 import { equivalentStreet } from "./equivalents.js"
-import {stripAffixes} from "./affixes.js"
+import { stripAffixes } from "./affixes.js"
 import { minStreetFrequency, countryRegion } from "./regions.js"
-import { countryFile, availableCountries, pbfFile, inspectFile, rawFile, read, readCountry, writeCountry, then } from "./pills.js"
+import { personsCountryFile, personsCountryRead, personsCountryWrite} from "./persons.js"
+import { fileLocation, read, then } from "./pills.js"
 
-export const downloadOsm = (country) => R.pipe(
+
+export const osmDownload = (country) => R.pipe(
   countryRegion,
   region => `http://download.geofabrik.de/${region}/${country}-latest.osm.pbf`,  
   fetch,
   then(v => v.arrayBuffer()),
   then(Buffer.from),
-  then(buffer => fs.createWriteStream(pbfFile(country)).write(buffer)),  
+  then(buffer => fs.createWriteStream(osmPbfFile(country)).write(buffer)),  
 )(country)
 
-// Get the file modified date from the OS; good enough to get a glimpse of the
-// freshness of osm data; the alternative is to extract the modified date from
-// the osm file (more complicated)
-const modifiedDateOSM = country => R.pipe(
-  pbfFile,
-  fs.statSync,
-  f => f.mtime.toDateString().substring(4),
-)(country)
 
 // Explore the osm data.  I've used this to explore what osm fields contain
 // street data.
-export const inspectOsmData = (country, regex) => fs.createReadStream(pbfFile(country))
-  .on("open", () => fs.writeFileSync(inspectFile(country), "create new file"))
+export const osmInspect = (country, regex) => fs.createReadStream(osmPbfFile(country))
+  .on("open", () => fs.writeFileSync(osmInspectFile(country), "create new file"))
   .pipe(new osm_parser())
   .pipe(new Transform({
     objectMode: true,
@@ -41,17 +35,17 @@ export const inspectOsmData = (country, regex) => fs.createReadStream(pbfFile(co
         // Ignore non-interesting fields
         R.map(R.omit(["id", "lat", "lon", "info", "refs", "members"])),
         out => out.length > 0 ?
-          fs.appendFileSync(inspectFile(country), JSON.stringify(out, null, 2))
+          fs.appendFileSync(osmInspectFile(country), JSON.stringify(out, null, 2))
           : "ignore",
         () => callback(null, null)
       )(chunk)
   }))
 
-export const extractOsmData = (country) => {
-  const streets = fs.createWriteStream(rawFile(country))
+export const osmExtract = (country) => {
+  const streets = fs.createWriteStream(osmRawFile(country))
   // Add metadata; only the osm last modified date, for now
-  streets.write(`[["${modifiedDateOSM(country)}"]`)
-  fs.createReadStream(pbfFile(country))
+  streets.write(`[["${osmPbfFileDate(country)}"]`)
+  fs.createReadStream(osmPbfFile(country))
     .pipe(new osm_parser())
     .pipe(new Transform({
       objectMode: true,
@@ -90,8 +84,8 @@ export const extractOsmData = (country) => {
     })
 }
 
-export const parseOsmData = (country) => R.pipe(
-  R.compose(read, rawFile),
+export const osmParse = (country) => R.pipe(
+  R.compose(read, osmRawFile),
   // Skip the osm modified date
   R.tail,
   // Strip affixes and replace with equivalents;  keep city unchanged
@@ -129,79 +123,41 @@ export const parseOsmData = (country) => R.pipe(
   // Sort by most frequent street names first.
   R.sortWith([R.descend(R.prop(1))]),
   hydrateStreets(country),
-  // Add back the osm modified date R.compose(R.prepend, R.head read, rawFile)
-  R.prepend(R.compose(R.head, read, rawFile)(country)),
-  writeCountry(country),    
+  // Add back the osm modified date
+  R.prepend(R.compose(R.head, read, osmRawFile)(country)),
+  personsCountryWrite(country),    
 )(country)
 
-const hydrateStreets = (country) => streets =>
-  fs.existsSync(countryFile(country)) ?
+// Add previously available wiki links, when available, for country streets
+const hydrateStreets = country => streets =>
+  fs.existsSync(personsCountryFile(country)) ?
     R.pipe(
-      readCountry,
+      personsCountryRead,
       prevStreets =>
         R.map(entry =>
           R.pipe(
             R.find(R.compose(R.equals(R.head(entry)), R.head)),            
-            // Add the existing link, if it exists.  When adding links by hand,
-            // it might happen that the url is encoded during copy/paste
-            // (russia/bulgaria/etc); make sure to save it as decoded to save
-            // space and visuals.
+            // Add the existing link, if it exists.
             prevStreet => R.append(prevStreet ? decodeURI(prevStreet[2]) : "", entry)
           )(prevStreets),
           streets)
     )(country)
     : streets
 
-// Gather all persons from all countries and make a summary of the most frequent
-// persons and the total number of streets they appear on.
-export const personsWorldwide = () => R.pipe(
-  availableCountries,
-  // Remove the last-updated line
-  R.chain(R.compose(R.tail, readCountry)),
-  // Keep name of persons only
-  R.filter(R.compose(R.startsWith("http"), R.prop(2))),
-  R.groupBy(R.prop(2)),  
-  R.mapObjIndexed(R.juxt([R.length, R.reduce((acc, el) => acc + el[1], 0)])),
-  R.toPairs,
-  R.map(R.flatten),
-  R.sortBy(R.prop(1)),
-  R.reverse
-)()
+// Downloaded osm pbf file
+export const osmPbfFile = fileLocation("data/osm/pbf", ".osm.pbf")
 
-// Check the `country`.json file for same link assigned to multiple entries.  If
-// found, manually include them under a single person in the equivalents
-// section.
-export const linkDups = (country) => R.pipe(
-  readCountry,
-  R.groupBy(R.prop(2)),
-  R.mapObjIndexed(R.length),
-  R.toPairs,
-  R.reject(R.propEq(1, 1)),    
-  R.reject(R.propEq('', 0))    
+// Temporary file used to explore the contents of the pbf file.
+export const osmInspectFile = fileLocation("data/osm/inspect", ".json")
+
+// Extracted but not processed output file for country
+export const osmRawFile = fileLocation("data/osm/raw", ".json")
+
+// Get the file modified date from the OS; good enough to get a glimpse of the
+// freshness of osm data; the alternative is to extract the modified date from
+// the osm file (more complicated)
+export const osmPbfFileDate = country => R.pipe(
+  osmPbfFile,
+  fs.statSync,
+  f => f.mtime.toDateString().substring(4),
 )(country)
-
-export const linkDupsAll = R.pipe(  
-  availableCountries,
-  R.map(R.juxt([R.identity, linkDups])),
-  R.reject(R.propEq([], 1)),
-  R.map(R.head)
-)
-
-// Return any links containing special characters for the given country or links
-// other than wikipedia ones.
-export const linksConsistency = R.pipe(
-  readCountry,
-  R.tail,
-  R.map(R.prop(2)),
-  R.reject(R.isEmpty),
-  R.reject(R.compose(R.isEmpty, R.match(/%|^((?!wikipedia).)*$/i))),  
-)
-
-// Check if any of the countries fail to pass the link consistency
-// checks. Return their names if they do not.
-export const linksConsistencyAll = R.pipe(
-  availableCountries,
-  R.map(R.juxt([R.identity, linksConsistency])),
-  R.reject(R.propEq([], 1)),
-  R.map(R.head)
-)

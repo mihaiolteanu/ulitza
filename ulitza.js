@@ -3,15 +3,8 @@ import * as R from "ramda"
 import chalk from "chalk"
 import { equivalentDups, equivalentDupsAll } from "./equivalents.js"
 import { htmlPageCountry, htmlPageWorldwide, htmlPageAllCountries } from "./html_pages.js"
-import { downloadOsm, extractOsmData, inspectOsmData, parseOsmData, linkDups,
-  linksConsistency, linkDupsAll, linksConsistencyAll } from "./osm.js"
-import { occupationsUpdate, updateWiki } from "./wiki.js"
-
-const handleCheck = (message, res) => R.ifElse(
-  () => R.isEmpty(res),
-  R.always("ignore"),
-  () => console.log(chalk.blue(message + ":\n") + res.join("\n") + "\n")
-)(res)
+import { osmDownload, osmExtract, osmInspect, osmParse } from "./osm.js"
+import { occupationsUpdate, updateWiki, linkDups, linkDupsAll, linksConsistency, linksConsistencyAll } from "./persons.js"
 
 program
   .version("1.0")
@@ -19,23 +12,23 @@ program
 program
   .command('download <country>')
   .description("Download the latest osm data for the given <country>.")
-  .action(downloadOsm)
+  .action(osmDownload)
 
 program
   .command('extract <country>')
   .description("Extract a first, raw, version of all the street names for <country>.")
-  .action(extractOsmData)
+  .action(osmExtract)
 
 program
   .command('inspect <country> <regex>')
   .description("Inspect the <country> raw osm data. Useful in finding new osm tags\
  containing possible streets. Only needed if we're going to modify the generator.")
-  .action(inspectOsmData)
+  .action(osmInspect)
 
 program
   .command('update <country>')
   .description("Generate the eponym file for <country>.")
-  .action(parseOsmData)
+  .action(osmParse)
 
 program
   .command('check <country>')
@@ -83,5 +76,11 @@ program
   .description('Update the occupations list for each person in the persons.json\
   file based on the specified "ocupations" and "categories" lists.')
   .action(occupationsUpdate)
+
+const handleCheck = (message, res) => R.ifElse(
+  R.isEmpty,
+  R.always("ignore"),
+  () => console.log(chalk.blue(message + ":\n") + res.join("\n") + "\n")
+)(res)
 
 program.parse()

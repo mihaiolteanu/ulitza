@@ -1,12 +1,25 @@
+// For each country, generate an html page containing all the persons, their
+// summary, number of occurences (frequency) together with a nice picture.
+
+// Additionaly, gather all the persons from all countries and generate an html
+// page with a worldwide overview of "in how many countries does this person"
+// appears in. The same info about each person as above applies.
+
 import * as R from "ramda"
 import M from 'mustache'
 import { readFile, writeFile } from "fs/promises"
-import { occupationsCount, occupationsMerge, readWiki } from "./wiki.js"
-import { personsWorldwide } from "./osm.js"
-import { readCountry, availableCountries } from "./pills.js"
+import {
+  countriesWithPersons,
+  personsCountryRead,
+  personsWorldwide,
+  occupationsCount,
+  occupationsMerge,
+  readWiki
+} from "./persons.js"
+
 
 export const htmlPageCountry = country => R.pipe(
-  readCountry,
+  personsCountryRead,
   // Skip date and skip street names not named after a person
   R.tail,
   R.reject(R.compose(R.isEmpty, R.prop(2))),
@@ -17,7 +30,7 @@ export const htmlPageCountry = country => R.pipe(
 )(country)
 
 export const htmlPageAllCountries = R.pipe(
-  availableCountries,
+  countriesWithPersons,
   R.map(htmlPageCountry)
 )
 
@@ -53,7 +66,7 @@ const htmlPage = country => entries => R.pipe(
 
 // Apply the html template to country and the list of persons and save it.
 const applyHtmlTemplate = country => persons => 
-  readFile("./data/template.html", { encoding: 'utf8' })  
+  readFile("./data/html/template.html", { encoding: 'utf8' })  
     .then(template =>       
       writeFile(`./data/html/${country}.html`, M.render(template, persons), 'utf8'))
 

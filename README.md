@@ -1,96 +1,161 @@
 # ulitza
-The feel-good summary is available at [mihaiolteanu.me/ulitza/about](https://mihaiolteanu.me/ulitza/about).
+Famous persons on street names worldwide.
 
-On the technical side, I've used the functional ramda.js library throughout and
-implemented everything with the ease of adding or editing new data from
-openstreetmap in mind. The cmdline tool is meant to help with that. Below is
-an example from start to finish.
+For the feel-good summary check the [ulitza/about](https://mihaiolteanu.me/ulitza/about) page.
 
-## 1. Download the latest osm pbf data for a country
+On the technical side, the street names are taken from
+[openstreetmap](http://download.geofabrik.de/index.html) (osm), wikipedia links
+are manually added, street prefixes and suffixes are removed and equivalent
+streets are merged into a standard name and their frequencies counted. Each
+person has a summary extracted from wikipedia, together with a list of
+occupations and a pretty picture. The last step is the generation of a html page
+for each country and a worldwide summary with the above data.
+
+The central part of the project is the list of [street
+names](data/persons/countries) for each country, the list of
+[persons](data/persons/persons.json) and their occupations and the json
+structures affecting the way the data is extracted and parsed from osm. That is, the
+[affixes](affixes.js) and [equivalents](equivalents.js) files. All these can be easily
+modified with any text editor without the need to touch code. All else is
+composed of point-free [ramda](https://ramdajs.com/) pipelines that transform,
+evolve, extract and compose this data in new ways. A mere 600 lines of code in all.
+
+I've skipped unit tests and typescript and kept the speed of implementation with
+the idea that what I've started with initially will not be what I'll have
+implemented at the end. That assumption proved correct.
+
+## 1. Download the latest data for a country
 ```
 $ node ulitza.js download <country>
 ```
+The original osm data is in an xml-like format called pbf.
 
-The [openstreetmap](http://download.geofabrik.de/index.html) data is in an
-xml-like format called pbf.
-
-Bring in the latest [openstreetmap](http://download.geofabrik.de/index.html)
-data for the given <country> into the data/osm_pbf folder. There is no data
-handling or processing of any kind at this point. I haven't made this process
-automatically since, if there is no file downloaded I could download one in any
-of the following steps, but if one wants bring in the latest osm data, there
-would still need to be a command to do just that.
+This step saves the latest pbf file to `data/osm/pbf/<country>.osm.pbf`. There
+is no data handling or processing of any kind at in this step.
 
 
 ## 2. Extract a raw list of street names
-
 ```
 $ node ulitza.js extract <country>
 ```
-The prevously downloaded pbf file has tags from which I can figure out what are
-the entries containing street names. This creates a gigantic json file in
-data/osm_raw folder where each entry is the city name and the street name. This
-is the place 
+The previously downloaded pbf file contains all kinds of data that a map usually
+does, like lakes, restaurants and you lover's favorite place to watch the city
+lights at night. This step figures out what entries are actually street names
+and saves them locally (not git-commited) to `data/osm/raw/<country>.json` as
+city and street name pairs without any other parsing or filtering.
 
-
-Parse the previously downloaded pbf file and build an array where each entry is
-a tuple of city_name and street_name based on osm tags such as `"addr:street"`
-and `"is_in:city"` and save this huge array in the data/osm_raw folder. Some of
-the entries are clearly duplicates, like the same city name and same street
-name. Here is the place to check for affixes.
-
-
-Here is an snapshot output from my own country that I know, if not perfectly, at
-least better than all the other countries,
+As an example, here a few entries from one of the countries better known to me,
 ```
-...
-["Focșani",   "Strada Cuza-Vodă"],
-["Focșani",   "Strada Cuza-Vodă"],
-["Focșani",   "Strada Cuza-Vodă"],
-["Domnești",  "Șoseaua Alexandru Ioan Cuza"],
-["Craiova",   "Strada Alexandru Ioan Cuza"],
-["București", "Bulevardul Alexandru Ioan Cuza"],
-["București", "Strada Cuza Vodă"],
-["Constanța", "Strada Cuza Vodă"],
-["Galați",    "Strada Alexandru Ioan Cuza"],
-["Galați",    "Strada A. I. Cuza"]
-...
+["Constanța",   "Strada Mihai Viteazu"],
+["Constanța",   "Strada Mihai Viteazu"],
+["Constanța",   "Strada Mihai Viteazu"],
+["Cluj-Napoca", "Piața Mihai Viteazu"],
+["Cluj-Napoca", "Piața Mihai Viteazul"],
+["București",   "Șoseaua Mihai Bravu"],
+["București",   "Strada Mihai Viteazul"],
+["București",   "Strada Mihai Vodă"],
+```
+I'll be coming back to this sample list in the next section.
+
+## 3. Generate a list of street frequencies
+```
+$ node ulitza.js update <country>
 ```
 
-These entries are for Alexandru Ioan Cuza, the first ruler of the Romanian
-principalities in 1859. What is more interesting for our purposes here is that
-for the city Focșani there are duplicate entries which we'll filter out in the
-next step. Secondly, there is the `Strada`, `Bulevardul` and `Șoseaua` prefixes
-which all basically mean `Street`. So those we strip off. Each country has
-different such prefixes or suffixes (not in our case here). These are all
-gathered in the [affixes.js](affixes.js) file. If you find a new affixes for a
-given country, add it here. 
+The entries from the previous simplified example are all referring to the same
+person, [Mihai
+Viteazul](https://en.wikipedia.org/wiki/Michael_the_Brave). First, for
+Constanța, there is just one entry, the other two are duplicates. We get rid of
+those in the current step. Secondly, `Piața` refers to a city square, while
+`Șoseaua` and `Strada` both mean `Street`. These prefixes also go the way of the
+waste dump at this point. How? They are specified as regexes in the
+[affixes.js](affixes.js) file and each country has a different set of them. With
+these out of the way, there is still the fact that all these names refer to the
+same person. In [equivalents.js](equivalents.js), each country has a list of
+persons' names that have different spellings but refer back to the same
+person. This step replaces all such names with a standard name (the first item
+in the next list) and filters out the duplicates. For our example,
 
-Next, with the prefixes and duplicates removed, we are left with,
 ```
-Cuza-Vodă,
-Alexandru Ioan Cuza,
-Cuza Vodă
-A. I. Cuza
-```
-
-which all refer back to the same person. In [equivalents.js](equivalents.js),
-each country has a set of such affixes. In writing this I've actually discovered
-the last one, `A. I. Cuza`, so I've added this entry, as well,
-```
-["Cuza Vodă", "Alexandru Ioan Cuza",
-              "Cuza-Vodă", 
-              "A. I. Cuza"]
+["Mihai Viteazul", "Mihai Viteazu",
+                   "Mihai Vodă",
+                   "Mihai Vodă Viteazul",
+                   "Mihai Bravu"]
 ```
 
+After removing duplicates, affixes and reducing all the names to the standard
+one, we're left with three instances of `Mihai Viteazul` from the initial list
+(you do the math).
 
-After such edits, continue with the next steps to make sure the changes are
-reflected to the final country's page.
+The output of the current step is saved in
+[data/persons/countries/](data/persons/countries) and includes the
+standard name, the frequency and a wikipedia link, initially empty, but filled
+in in cases where this step has run before and some links are available,
 
-## 2.1 Inspect the raw data
+```
+["Mihai Eminescu",     116, ""],
+["Tudor Vladimirescu", 114, ""],
+["Unirii",             112, ""],
+["Mihai Viteazul",     105, ""],
+["Libertății",         99,  ""],
+["Republicii",         97,  ""],
+```
+
+At this point we're just having street names, be them of persons or of flowers
+and trees. The last ones we ignore. For the persons we manually add the English
+wikipedia entry, if it exists, or the native language one, otherwise. If none,
+we leave it empty. Take a look at one of the countries in
+[data/persons/country](data/persons/country) for a concrete example.
+
+I've only considered street frequencies greater than one. This defends primarily
+against garbage data and also against large output files.
+
+This is also a ripe area of continuous updates and improvements. That is, adding
+new links for streets representing person names, remove them where they are
+plain wrong (it happens!) or update/edit them if you know the country better
+than I do and are confident in your expertise regarding your heroes and poets.
+
+## 4. Add all persons' details in one place
+```
+$ node ulitza.js wiki <country>
+```
+Extract a summary, image and a list of occupations for each person from
+`data/persons/country/<country>.json` based on their wikipedia links and add them
+to [persons.json](data/persons/persons.json), if they don't already exist. This file is a sort of common
+database for persons from all countries.
+
+Not all entries have a meaningful summary from which to extract occupations, the
+occupations might not be complete, or the summary might be in the native
+language. For these cases, I've manually added an `occupations-extra`
+key. Ideally, I would go through each person and fill in the occupation
+manually. But this is a good-enough temporary solution until that happens for
+all persons.
+
+
+## 5. Generate the html pages
+```
+$ node ulitza.js html <country>
+$ node ulitza.js html-worldwide
+$ node ulitza.js html-all-countries
+```
+Last step, generate html pages for each country and a worldwide summary and save
+them in `data/html/countries/<country>.html`. You can also generate all
+countries at once, useful when some change affects everything, like the
+[template.html](data/html/template.html) file. This one takes some time to
+finish.
+
+
+# Extra utilities commands
+
+Slips happen. While developing this project, these utilities have come in handy.
+
+## Inspect the raw data
 ```
 $ node ulitza.js inspect <country> <regex>
 ```
+
+Probably the least used, but to extract only the elements containing street
+names requires knowing what tags contain them
 
 Let's see an output from,
 ```
@@ -117,69 +182,14 @@ and the output,
   }
 ```
 
-## 3. Generate a list of street frequencies
-```
-$ node ulitza.js update <country>
-```
+This happens to be a tag for a cheap bodega, but the interesting parts are it's
+type ("node") and tags. From its tags it is clear this is a city and on a street.
 
-For a brand new country, this is a list of street names and their
-frequencies. The taks is now to find which of the entries are person names, 
-find a wikipedia link to them and manually add it (see other countries as
-examples). For an existing country, the previous wikipedia links are
-preserved. This is the step to rerun if the [equivalents.js](equivalents.js) or
-the [affixes.js](affixes.js) entries for <country> are updated. This will
-increase or decrease the street counts, add new streets or remove some of them. 
+For countries that are least represented, like China, India, Japan, etc, there
+might be different tags. Search your favorite poet and let me know if you
+discover anything new.
 
-Here is a snapshot output from the output step in data/countries/romania.json,
-
-```
-["Ștefan cel Mare",                         96, ""],
-["Cuza Vodă",                               95, ""],
-["Nicolae Bălcescu",                        92, ""],
-["Florilor",                                87, ""],
-["Școlii",                                  84, ""],
-["Avram Iancu",                             83, ""],
-["Traian",                                  83, ""],
-["Trandafirilor",                           82, ""],
-["Primăverii",                              80, ""],
-["1 Mai",                                   78, ""],
-["Victoriei",                               75, ""],
-```
-
-At this point we're just having street names, be them of persons or of flowers
-and landmarks. If the entry looks like a person's name there there must be
-either an English wikipedia article or an article in the country's own language
-(Romanian, in this case) about them. If neither, or the entry is not a person's
-name, then the third field is left empty,
-
-```
-["Ștefan cel Mare",                         96, "https://en.wikipedia.org/wiki/Stephen_the_Great"],
-["Cuza Vodă",                               95, "https://en.wikipedia.org/wiki/Alexandru_Ioan_Cuza"],
-["Nicolae Bălcescu",                        92, "https://en.wikipedia.org/wiki/Nicolae_Bălcescu"],
-["Florilor",                                87, ""],
-["Școlii",                                  84, ""],
-["Avram Iancu",                             83, "https://en.wikipedia.org/wiki/Avram_Iancu"],
-["Traian",                                  83, "https://en.wikipedia.org/wiki/Trajan"],
-["Trandafirilor",                           82, ""],
-["Primăverii",                              80, ""],
-["1 Mai",                                   78, ""],
-["Victoriei",                               75, ""],
-```
-
-The filtering, with the stripping of affixes and the replacement of equivalents
-has worked out. Now Cuza Vodă has 95 towns or villages in which he's in at least
-a street name. The name used in equivalents, "Cuza Vodă" in this case, is not
-that important, since we will use the name from the wikipedia article when the
-name for that person is needed. This makes is consistent across countries in
-cases where a certain person appears in more than one country.
-
-This is also a place where you can nicely contribute without touching any
-code. That is, adding new links for streets representing person names, remove
-them where they are plain wrong (it happens!) or update/edit them if you know
-the country better than I do and are confident in your expertise regarding your
-heroes and poets. 
-
-## 3.1 Check duplicate equivalent names
+## Check duplicate equivalent names
 ```
 $ node ulitza.js check <country>
 ```
@@ -206,16 +216,15 @@ Just make sure all equivalents are under a single entry and that there are no
 duplicate entries. This commands helps in that regard
 
 
-## 3.2 Check duplicate links and link consistencies
+## Check duplicate links and link consistencies
 ```
 $ node ulitza.js check <country>
 ```
 If in the `data/countries/<country>.json` we have duplicate links or not valid
 entries for the link field or not wikipedia links, that should be fixed. For
-example, assuming these entries somehwere in Romania's json file,
+example, assuming these entries somewhere in Romania's json file,
 ```
 ["Cuza Vodă",         95, "https://en.wikipedia.org/wiki/Alexandru_Ioan_Cuza"],
-...
 ["Nicolae Balcescu",  15, "https://en.wikipedia.org/wiki/Alexandru_Ioan_Cuza"],
 ["Titu Maiorescu",    15, "https://news.ycombinator.com/"],
 ```
@@ -232,18 +241,17 @@ https://news.ycombinator.com/
 
 This is helpful, as "Nicolae Balcescu" is a different person and you might want
 to assign a different link to them. Also, the hacker news website is useful but
-not in extracting wiki sumaries nor linking the person to their wikipedia pages
+not in extracting wiki summaries nor linking the person to their wikipedia pages
 (next steps) so that should also be remedied.
 
-## 3.3 Check everything for consistency or errors
+## Check everything for consistency or errors
 ```
 $ node ulitza.js check-all
 ```
 
-Finally, there is an additional helpful command that checks all countries for
-such inconsistencies as mentioned above and outputs their names. You should use
-the `check` command for the respective country to dig in for further details. As
-an example,
+Check all countries for such inconsistencies as mentioned above and output their
+names. You should use the `check` command for the respective country to dig in
+for further details. As an example,
 
 ```
 $ node ulitza.js check-all
@@ -261,28 +269,3 @@ tunisia
 Countries with inconsistent links:
 romania
 ```
-
-
-## 4. Generate the html pages
-```
-$ node ulitza.js html <country>
-$ node ulitza.js html-all-countries
-$ node ulitza.js html-worldwide
-```
-
-
-
-# How
-
-All data is taken from
-[openstreetmap](http://download.geofabrik.de/index.html).
-
-Only one occurence is allowed per city. This makes the data a bit unrealistic,
-since big cities usually have schools, monuments, squares and streets all named
-after that same person. But it's also a way to defend against duplicate entries
-in the osm file, where a single street is sometimes tagged dozens of times.
-
-I've only considered eponym frequencies greater than one. This defends primarly
-against garbage data and also against large output files.
-
-All wikipedia links have been added manually.

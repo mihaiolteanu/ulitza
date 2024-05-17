@@ -6032,6 +6032,7 @@ const equivalents = {
     ["Mihai Eminescu",                "Mihail Eminescu",
                                       "Eminescu"],
     ["Mihai Viteazul",                "Mihai Viteazu",
+                                      "Mihai Vodă",
                                       "Mihai Vodă Viteazul",
                                       "Mihai Bravu"],
     ["Mihail Sadoveanu",              "M. Sadoveanu"],

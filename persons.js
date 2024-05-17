@@ -1,29 +1,86 @@
-// The wikipedia links, manually added for each person, are used to extract a
-// short summary and an image thumbnail using the wikipedia REST API v1. From
-// that short summary I also extract the person's occupation(s), like poet,
-// politician or hero. This is a faster (and a temporary way) to tag each person
-// and enable the filtering-by-occupation feature, though it is not quite
-// exact. The manually added occupations are added under the occupations_extra
-// field (the slow but more accurate way). All this data is saved under a single
-// wiki.json file since there are persons that overlap across countries and can
-// be reused. If a person was a colonel or general, for example, I'm also taking
-// an additional parsing step and add the military occupation to them. Similarly
-// for other occupations (see the end of this file).
+// There are two places to keep persons data. One is the list of street names
+// for each country together with their frequency and the manually added
+// wikipedia links, if any.
+
+// The other place is a single persons.json file with extra details for each
+// person, such as a summary, occupation and a link to a picture. These details
+// are extracted from wikipedia using the above mentioned link.
+
+// The list of occupations is extracted from the summary with a regex.
+// occupations_extra is manually added for those persons where the regex returns
+// nothing.
+
 import * as R from "ramda"
 import fs from 'fs-extra'
-import stringify from "json-stringify-pretty-compact"
-import { readCountry } from "./pills.js"
+import {fileLocation, then, delay, read, write } from "./pills.js"
 
-// RW json data
-const write = file => data =>
-  fs.writeFileSync(file, stringify(data, { maxLength: 120 }))
-const read = R.compose(JSON.parse, fs.readFileSync)
+// Extracted, parsed and manually modified file for country.
+export const personsCountryFile   = fileLocation("data/persons/countries", ".json")
+export const personsCountryWrite  = R.compose(write, personsCountryFile)
+export const personsCountryRead   = R.compose(read, personsCountryFile)
+export const countriesWithPersons = () => R.pipe(  
+  fs.readdirSync,
+  R.map(R.replace(".json", ""))
+)("data/persons/countries")
 
-const writeWiki  = write("data/wiki.json")
-export const readWiki   = () => read("data/wiki.json")
 
-const then = fn => pr => pr.then(fn);
-const delay = ms => new Promise(res => setTimeout(res, ms))
+// Gather all persons from all countries and make a summary of the most frequent
+// persons and the total number of streets they appear on.
+export const personsWorldwide = () => R.pipe(
+  countriesWithPersons,
+  // Remove the last-updated line
+  R.chain(R.compose(R.tail, personsCountryRead)),
+  // Keep name of persons only
+  R.filter(R.compose(R.startsWith("http"), R.prop(2))),
+  R.groupBy(R.prop(2)),  
+  R.mapObjIndexed(R.juxt([R.length, R.reduce((acc, el) => acc + el[1], 0)])),
+  R.toPairs,
+  R.map(R.flatten),
+  R.sortBy(R.prop(1)),
+  R.reverse
+)()
+
+// Check the `country`.json file for same link assigned to multiple entries.  If
+// found, manually include them under a single person in the equivalents
+// section.
+export const linkDups = (country) => R.pipe(
+  personsCountryRead,
+  R.groupBy(R.prop(2)),
+  R.mapObjIndexed(R.length),
+  R.toPairs,
+  R.reject(R.propEq(1, 1)),    
+  R.reject(R.propEq('', 0))    
+)(country)
+
+export const linkDupsAll = R.pipe(  
+  countriesWithPersons,
+  R.map(R.juxt([R.identity, linkDups])),
+  R.reject(R.propEq([], 1)),
+  R.map(R.head)
+)
+
+// Return any links containing special characters for the given country or links
+// other than wikipedia ones.
+export const linksConsistency = R.pipe(
+  personsCountryRead,
+  R.tail,
+  R.map(R.prop(2)),
+  R.reject(R.isEmpty),
+  R.reject(R.compose(R.isEmpty, R.match(/%|^((?!wikipedia).)*$/i))),  
+)
+
+// Check if any of the countries fail to pass the link consistency
+// checks. Return their names if they do not.
+export const linksConsistencyAll = R.pipe(
+  countriesWithPersons,
+  R.map(R.juxt([R.identity, linksConsistency])),
+  R.reject(R.propEq([], 1)),
+  R.map(R.head)
+)
+
+
+const writeWiki  = write("data/persons/persons.json")
+export const readWiki   = () => read("data/persons/persons.json")
 
 // Given a valid wikipedia url, return info about the page, such as name, image
 // and a summary
@@ -54,7 +111,7 @@ const wiki = async url => {
 }
 
 export const updateWiki = (country) => R.pipe(
-  readCountry,
+  personsCountryRead,
   // Skip date
   R.tail,
   // Skip street names not named after a person
