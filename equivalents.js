@@ -9,7 +9,7 @@
 // counting it twice.
 
 // All the data under the equivalents entry is manually added and are based on
-// the street names seen in data/osm_raw/<country>.json files after the "extract
+// the street names seen in data/osm/raw/<country>.json files after the "extract
 // <country>" step.
 
 import * as R from "ramda"

@@ -6,7 +6,7 @@
 // these affixes and keep only the relevant part, which is the name of the
 // person in our case.
 // All the affixes in this file, specified as regexes, are manually added and
-// are based on the street names seen in data/osm_raw/<country>.json files after
+// are based on the street names seen in data/osm/raw/<country>.json files after
 // the "extract <country>" step.
 
 import * as R from "ramda"

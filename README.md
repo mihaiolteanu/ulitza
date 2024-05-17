@@ -1,9 +1,7 @@
 # ulitza
 Famous persons on street names worldwide.
 
-For the feel-good summary check the [ulitza/about](https://mihaiolteanu.me/ulitza/about) page.
-
-On the technical side, the street names are taken from
+All street names are taken from
 [openstreetmap](http://download.geofabrik.de/index.html) (osm), wikipedia links
 are manually added, street prefixes and suffixes are removed and equivalent
 streets are merged into a standard name and their frequencies counted. Each
@@ -11,14 +9,15 @@ person has a summary extracted from wikipedia, together with a list of
 occupations and a pretty picture. The last step is the generation of a html page
 for each country and a worldwide summary with the above data.
 
-The central part of the project is the list of [street
+The core part of the project is the list of [street
 names](data/persons/countries) for each country, the list of
 [persons](data/persons/persons.json) and their occupations and the json
-structures affecting the way the data is extracted and parsed from osm. That is, the
-[affixes](affixes.js) and [equivalents](equivalents.js) files. All these can be easily
-modified with any text editor without the need to touch code. All else is
-composed of point-free [ramda](https://ramdajs.com/) pipelines that transform,
-evolve, extract and compose this data in new ways. A mere 600 lines of code in all.
+structures affecting the way the data is extracted and parsed from osm. That is,
+the [affixes](affixes.js) and [equivalents](equivalents.js) files. All these can
+be easily modified with any text editor without the need to touch code. All else
+is composed of point-free [ramda](https://ramdajs.com/) pipelines that
+transform, evolve, extract and compose this data in new ways. A mere 600 lines
+of code in all.
 
 I've skipped unit tests and typescript and kept the speed of implementation with
 the idea that what I've started with initially will not be what I'll have
