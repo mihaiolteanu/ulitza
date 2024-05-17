@@ -52,12 +52,12 @@ const htmlPage = country => entries => R.pipe(
   })),  
   R.map(occupationsMerge),  
   // If the person is not in the local wiki, do not include it.
-  R.filter(R.has("name")),  
+  R.filter(R.has("name")),
   R.applySpec({
     country:       () => upCase(country),
     persons_count: R.length,
     streets_count: R.compose(R.sum, R.map(R.prop("count"))),
-    occupations:   occupationsCount,
+    occupations:   R.compose(occupationsCount, R.chain(R.props(["occupations"]))),
     // Sometimes the summary is too short and it looks weird on the page
     persons:       R.map(R.evolve({ summary: str => str.padEnd(100, '  ')}))
   }),  
@@ -68,7 +68,7 @@ const htmlPage = country => entries => R.pipe(
 const applyHtmlTemplate = country => persons => 
   readFile("./data/html/template.html", { encoding: 'utf8' })  
     .then(template =>       
-      writeFile(`./data/html/${country}.html`, M.render(template, persons), 'utf8'))
+      writeFile(`./data/html/countries/${country}.html`, M.render(template, persons), 'utf8'))
 
 // upcase first letter
 const upCase = str => str.charAt(0).toUpperCase() + str.slice(1);

@@ -119,9 +119,9 @@ than I do and are confident in your expertise regarding your heroes and poets.
 $ node ulitza.js wiki <country>
 ```
 Extract a summary, image and a list of occupations for each person from
-`data/persons/country/<country>.json` based on their wikipedia links and add them
-to [persons.json](data/persons/persons.json), if they don't already exist. This file is a sort of common
-database for persons from all countries.
+`data/persons/country/<country>.json` based on their wikipedia links and add or
+update the [persons.json](data/persons/persons.json) with the latest info. This
+file is a sort of common database for persons from all countries.
 
 Not all entries have a meaningful summary from which to extract occupations, the
 occupations might not be complete, or the summary might be in the native

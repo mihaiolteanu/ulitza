@@ -164,24 +164,23 @@ export const occupationsUpdate = () => R.pipe(
 )()
 
 // Count the number of occurence for all unique occupations
-export const occupationsCount = (persons) => R.pipe(
-  R.map(R.props(["occupations"])),
-  R.map(R.flatten), 
+export const occupationsCount = (occupations) => R.pipe(  
+  // Extract all ocupations keywords so that we can count them afterwards
   R.reject(R.isNil),
   R.flatten,
-  R.reject(R.isNil),
+  R.reject(R.isNil),  
   R.uniq,  
   a => R.zipObj(a, R.repeat(0, a.length)),  
   R.mapObjIndexed((_, key) => R.pipe(    
     R.map(R.includes(key)),    
-    R.count(R.equals(true)),
+    R.count(R.equals(true)),    
     R.applySpec({
       keyword: R.always(key),
       count: R.identity      
-    })
-  )(persons)),  
-  R.values,
-  R.sortBy(R.prop("count")),
+    }),      
+  )(occupations)),  
+  R.values,  
+  R.sortBy(R.prop("count")),  
   R.reverse,  
 )(occupations)
 
