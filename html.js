@@ -59,10 +59,17 @@ const htmlPage = country => entries => R.pipe(
     streets_count: R.compose(R.sum, R.map(R.prop("count"))),
     occupations:   R.compose(occupationsCount, R.chain(R.props(["occupations"]))),
     // Sometimes the summary is too short and it looks weird on the page
-    persons:       R.map(R.evolve({ summary: str => str.padEnd(100, '  ')}))
+    persons:       R.map(R.evolve({ summary: str => truncateString(str, 200)}))
   }),  
   applyHtmlTemplate(country),
 )(entries)
+
+const truncateString = (str, maxLength) => {
+  if (str.length <= maxLength) return str.padEnd(100, '  ');
+  const truncated = str.slice(0, maxLength);
+  const lastSpace = truncated.lastIndexOf(' ');
+  return lastSpace > 0 ? truncated.slice(0, lastSpace) + "..." : truncated.slice(0, maxLength) + "...";
+};
 
 // Apply the html template to country and the list of persons and save it.
 const applyHtmlTemplate = country => persons => 
@@ -72,3 +79,21 @@ const applyHtmlTemplate = country => persons =>
 
 // upcase first letter
 const upCase = str => str.charAt(0).toUpperCase() + str.slice(1);
+
+
+// calculate the total number of street signs worldwide that bear a person's name; useful
+// as a sort of grand total
+const streetsTotal = () => 
+  R.pipe(  
+    countriesWithPersons,
+    R.map(R.pipe(
+      personsCountryRead,
+      // Skip date and skip street names not named after a person
+      R.tail,
+      R.reject(R.compose(R.isEmpty, R.prop(2))),
+      R.reduce((acc, arr) => acc + arr[1], 0),    
+    )),
+    R.sum,
+    console.log
+
+  )
