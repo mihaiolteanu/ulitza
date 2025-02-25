@@ -5,7 +5,7 @@
                 names based on data extracted from openstreetmap and descriptions from wikipedia">
     <meta name="keywords" content="persons, people, street names, eponyms, {{country}}">
     <title>
-        Famous people on {{country}}'s street names
+        Frequent persons on {{country}}'s street signs
     </title>
     <link rel="stylesheet" type="text/css" href="../../index.css" />
     <link rel="stylesheet" type="text/css" href="../index.css" />
@@ -18,37 +18,26 @@
     <div id="menu"></div>
     <div id="header"></div>
 
-    <div id="contents">
-        <h1 id="title">Famous people on {{country}}'s street names</h1>
+    <div id="all-contents">
+        <div class="title">
+            <h1>Frequent persons on {{country}}'s street signs</h1>
+        </div>
         <div class="flex">
-            <a class="left" href="..">back</a>
-            <div id="reversePersons" onclick="reversePersons()">reverse</div>
-        </div>        
-        <div class="keywords">
-            <details id="details">
-                <summary>                    
-                    filter
-                </summary>
-                {{#occupations}}
-                <button onclick="filterPersons('{{keyword}}')" keyword="{{keyword}}">{{keyword}}({{count}})</button>
-                {{/occupations}}
-            </details>
+            <a class="left" href="..">countries</a>
+            <div class="right"><b>{{persons_count}}</b> names / <b>{{streets_count}}</b> streets</div>
         </div>
 
         <div id="persons">
             {{#persons}}
             <a target="_blank" href="{{{url}}}">
-                <div class="eponym" keywords="{{keywords}}" style="display: inline-block">
+                <div class="eponym" keywords="{{occupations}}" style="display: inline-block">
                     <h2 class="name">{{name}}</h2>
                     <img class="image" loading="lazy" src="{{{image}}}" alt="{{name}}"/>
                     <span class="count">{{count}}</span>
                     <span class="summary">{{summary}}</span>
                 </div>
             </a>
-            
             {{/persons}}
         </div>
-        
-        <div><b>{{persons_count}}</b> unique persons spotted on <b>{{streets_count}}</b> streets</div>
     </div>
 </body>
